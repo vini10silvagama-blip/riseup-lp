@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rise Up Odonto — A Agência que Mais Entende de Odontologia no Brasil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080810;
+      --bg2:       #0D0D18;
+      --cyan:      #00E5FF;
+      --cyan2:     #00BFFF;
+      --blue2:     #0088AA;
+      --blue3:     #004F6E;
+      --white:     #FFFFFF;
+      --gray:      #8B9BB4;
+      --gray-lt:   #B8C6D8;
+      --red:       #EF4444;
+      --green:     #34D399;
+      --orange:    #FB923C;
+      --glass:     rgba(255,255,255,0.03);
+      --glass-b:   rgba(0,229,255,0.10);
+      --glass-bh:  rgba(0,229,255,0.35);
+      --font-d:    'Bricolage Grotesque', sans-serif;
+      --font-b:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-b);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    }
+
+    /* =============================================
+       SCROLL PROGRESS BAR
+    ============================================= */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue2));
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* =============================================
+       CUSTOM CURSOR
+    ============================================= */
+    .cursor-outer {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(0,229,255,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .3s, height .3s, opacity .3s, border-color .3s;
+      mix-blend-mode: screen;
+    }
+    .cursor-inner {
+      position: fixed;
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+    body.cursor-hover .cursor-outer {
+      width: 56px; height: 56px;
+      border-color: rgba(0,229,255,0.8);
+      background: rgba(0,229,255,0.05);
+    }
+    @media (hover: none) { .cursor-outer, .cursor-inner { display: none; } }
+
+    /* =============================================
+       UTILITY
+    ============================================= */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .grad-text {
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-label {
+      font-family: var(--font-b);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      flex-shrink: 0;
+    }
+
+    .section-h2 {
+      font-family: var(--font-d);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+
+    /* pill buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-family: var(--font-b);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--cyan2) 100%);
+      color: #05080A;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 40px rgba(0,229,255,0.5), 0 0 80px rgba(0,229,255,0.15);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: rgba(0,229,255,0.05);
+      color: var(--cyan);
+      border: 1px solid rgba(0,229,255,0.35);
+    }
+    .btn-outline:hover {
+      background: rgba(0,229,255,0.1);
+      box-shadow: 0 0 20px rgba(0,229,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    /* orb base */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(90px);
+    }
+
+    /* reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-l {
+      opacity: 0;
+      transform: translateX(-44px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal-l.in { opacity: 1; transform: translateX(0); }
+    .reveal-r {
+      opacity: 0;
+      transform: translateX(44px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal-r.in { opacity: 1; transform: translateX(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+    .d5 { transition-delay: 0.5s; }
+    .d6 { transition-delay: 0.6s; }
+
+    /* =============================================
+       NAVBAR
+    ============================================= */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 22px 0;
+      transition: all 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(8,8,16,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(0,229,255,0.08);
+      padding: 14px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,16,0.97);
+      backdrop-filter: blur(24px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: var(--font-d);
+      font-size: 28px;
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--cyan); }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 130px 0 90px;
+    }
+
+    /* mesh gradient blobs */
+    .mesh-blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+      opacity: 0.55;
+    }
+    .blob-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,229,255,0.18) 0%, transparent 70%);
+      top: -150px; left: -200px;
+      animation: blob-move1 12s ease-in-out infinite alternate;
+    }
+    .blob-2 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%);
+      bottom: -100px; right: -150px;
+      animation: blob-move2 14s ease-in-out infinite alternate;
+    }
+    .blob-3 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,191,255,0.1) 0%, transparent 70%);
+      top: 40%; left: 40%;
+      transform: translate(-50%,-50%);
+      animation: blob-move3 10s ease-in-out infinite alternate;
+    }
+    @keyframes blob-move1 {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(60px, 40px) scale(1.15); }
+    }
+    @keyframes blob-move2 {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(-50px, -30px) scale(1.1); }
+    }
+    @keyframes blob-move3 {
+      0%   { transform: translate(-50%,-50%) scale(0.9); }
+      100% { transform: translate(-50%,-50%) scale(1.2); }
+    }
+
+    .particles-wrap {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 1;
+    }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(0,229,255,0.9);
+      animation: p-float var(--dur) var(--delay) infinite ease-in-out;
+      left: var(--x); top: var(--y);
+      opacity: 0;
+    }
+    @keyframes p-float {
+      0%   { transform: translate(0,0); opacity: 0; }
+      15%  { opacity: 0.9; }
+      50%  { transform: translate(var(--dx),var(--dy)); opacity: 0.4; }
+      85%  { opacity: 0.9; }
+      100% { transform: translate(0,0); opacity: 0; }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .hero-h1 {
+      font-family: var(--font-d);
+      font-size: clamp(36px, 3.8vw, 62px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+    .hero-h1 .line { display: block; }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--gray);
+      max-width: 480px;
+      margin-bottom: 44px;
+      line-height: 1.75;
+    }
+
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* floating badges */
+    .fbadge {
+      position: absolute;
+      background: rgba(10,10,20,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,229,255,0.2);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,229,255,0.06);
+      animation: fb-float 4s ease-in-out infinite;
+    }
+    .fbadge-1 { top: -20px; left: -20px; animation-delay: 0s; }
+    .fbadge-2 { bottom: 60px; left: -32px; animation-delay: 1.5s; }
+    .fbadge-3 { top: 36px; right: -24px; animation-delay: 0.8s; }
+    @keyframes fb-float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-9px); }
+    }
+    .fbadge-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .fbadge-icon.g { background: rgba(52,211,153,0.15); }
+    .fbadge-icon.c { background: rgba(0,229,255,0.12); }
+    .fbadge-icon.o { background: rgba(251,146,60,0.15); }
+    .fbadge-text strong { display: block; font-family: var(--font-d); font-size: 14px; font-weight: 800; line-height: 1.2; }
+    .fbadge-text span { font-size: 11px; color: var(--gray); }
+
+    /* dashboard mockup */
+    .hero-mockup { position: relative; }
+    .mockup-glow {
+      position: absolute;
+      width: 120%; height: 120%;
+      top: -10%; left: -10%;
+      background: radial-gradient(ellipse, rgba(0,229,255,0.1) 0%, transparent 65%);
+      pointer-events: none;
+      filter: blur(40px);
+    }
+    .dash-card {
+      background: rgba(255,255,255,0.035);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,229,255,0.07);
+      animation: dash-float 7s ease-in-out infinite;
+      position: relative; z-index: 2;
+    }
+    @keyframes dash-float {
+      0%,100% { transform: translateY(0) rotate(-0.8deg); }
+      50%      { transform: translateY(-14px) rotate(-0.8deg); }
+    }
+    .dash-hdr {
+      background: rgba(255,255,255,0.025);
+      border-bottom: 1px solid rgba(0,229,255,0.08);
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dots { display: flex; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot:nth-child(1) { background: #FF5F57; }
+    .dot:nth-child(2) { background: #FEBC2E; }
+    .dot:nth-child(3) { background: #28C840; }
+    .dash-title-bar {
+      font-size: 11px; color: var(--gray);
+      margin: 0 auto;
+      letter-spacing: 0.05em;
+      font-family: var(--font-b);
+    }
+    .dash-body { padding: 18px; }
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric-cell {
+      background: rgba(0,229,255,0.04);
+      border: 1px solid rgba(0,229,255,0.12);
+      border-radius: 10px;
+      padding: 11px 9px;
+      text-align: center;
+    }
+    .metric-lbl { font-size: 10px; color: var(--gray); margin-bottom: 4px; }
+    .metric-val { font-family: var(--font-d); font-size: 15px; font-weight: 800; color: var(--cyan); }
+    .chart-wrap {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(0,229,255,0.07);
+      border-radius: 10px;
+      padding: 11px;
+      margin-bottom: 11px;
+    }
+    .chart-lbl { font-size: 10px; color: var(--gray); margin-bottom: 8px; }
+    .prog-row { margin-bottom: 7px; }
+    .prog-lbl-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .prog-lbl-row span { font-size: 10px; color: var(--gray); }
+    .prog-lbl-row strong { font-size: 10px; color: var(--cyan); }
+    .prog-bg { background: rgba(255,255,255,0.05); border-radius: 99px; height: 5px; overflow: hidden; }
+    .prog-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--cyan), var(--blue2)); }
+    .status-row { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+    .chip {
+      font-size: 10px; font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: var(--font-b);
+    }
+    .chip-g { background: rgba(52,211,153,0.12); color: #34D399; border: 1px solid rgba(52,211,153,0.25); }
+    .chip-c { background: rgba(0,229,255,0.08); color: var(--cyan); border: 1px solid rgba(0,229,255,0.2); }
+    .chip-o { background: rgba(251,146,60,0.1); color: #FB923C; border: 1px solid rgba(251,146,60,0.25); }
+
+    /* =============================================
+       STATS BANNER
+    ============================================= */
+    #stats {
+      background: linear-gradient(135deg, #009FB5 0%, #00C9CF 50%, #00ADBA 100%);
+      padding: 52px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #stats::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      position: relative; z-index: 2;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 14px 16px;
+      position: relative;
+    }
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 15%;
+      height: 70%; width: 1px;
+      background: rgba(0,0,0,0.15);
+    }
+    .stat-num {
+      font-family: var(--font-d);
+      font-size: clamp(34px, 3.8vw, 52px);
+      font-weight: 800;
+      color: #050A0A;
+      line-height: 1;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .stat-lbl {
+      font-size: 12px; font-weight: 600;
+      color: rgba(5,10,10,0.65);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* =============================================
+       PROBLEMA
+    ============================================= */
+    #problema {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .prob-orb {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%);
+      top: -100px; right: -150px;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 20px;
+    }
+    .pain-card {
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(239,68,68,0.08);
+      border-left: 3px solid rgba(220,38,38,0.6);
+      border-radius: 18px;
+      padding: 28px;
+      transition: all 0.35s ease;
+    }
+    .pain-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(239,68,68,0.25);
+      border-left-color: var(--red);
+      box-shadow: 0 0 40px rgba(220,38,38,0.1), 0 24px 60px rgba(0,0,0,0.35);
+    }
+    .pain-dot {
+      width: 10px; height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      margin-bottom: 16px;
+      box-shadow: 0 0 14px rgba(239,68,68,0.6);
+      animation: pulse-red 2s ease-in-out infinite;
+    }
+    @keyframes pulse-red {
+      0%,100% { box-shadow: 0 0 14px rgba(239,68,68,0.6); }
+      50%      { box-shadow: 0 0 24px rgba(239,68,68,0.9), 0 0 36px rgba(239,68,68,0.3); }
+    }
+    .pain-title {
+      font-family: var(--font-d);
+      font-size: 17px; font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pain-desc { color: var(--gray); font-size: 14px; line-height: 1.7; }
+    .prob-close {
+      margin-top: 80px;
+      text-align: center;
+      position: relative;
+    }
+    .prob-close::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: 50%;
+      transform: translateX(-50%);
+      width: 1px; height: 40px;
+      background: linear-gradient(180deg, transparent, rgba(0,229,255,0.3));
+    }
+    .close-stmt {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(17px, 2vw, 24px);
+      font-weight: 700;
+      line-height: 1.55;
+      max-width: 640px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.88);
+    }
+
+    /* =============================================
+       SOBRE
+    ============================================= */
+    #sobre {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .sobre-wm {
+      position: absolute;
+      font-family: var(--font-d);
+      font-size: 220px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.025);
+      right: 60px; top: 50%;
+      transform: translateY(-50%);
+      user-select: none;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .sobre-card {
+      background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, rgba(124,58,237,0.04) 100%);
+      border: 1px solid rgba(0,229,255,0.12);
+      border-radius: 24px;
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+    .sobre-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, rgba(8,8,16,0.6) 100%);
+    }
+    .sobre-qm {
+      font-family: var(--font-d);
+      font-size: 180px;
+      font-weight: 800;
+      color: rgba(0,229,255,0.1);
+      position: absolute;
+      top: -30px; left: 20px;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .sobre-label {
+      position: relative; z-index: 2;
+      padding: 24px; width: 100%;
+    }
+    .sobre-label strong {
+      font-family: var(--font-d);
+      font-size: 22px; font-weight: 800;
+      display: block;
+    }
+    .sobre-label span { color: var(--cyan); font-size: 13px; }
+    .sobre-pills {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .sobre-pill {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(0,229,255,0.04);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.3s;
+    }
+    .sobre-pill:hover {
+      background: rgba(0,229,255,0.08);
+      transform: translateX(6px);
+    }
+    .sobre-pill-dot {
+      width: 8px; height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(0,229,255,0.7);
+    }
+
+    /* =============================================
+       SOLUÇÕES
+    ============================================= */
+    #solucoes {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--bg) 0%, #0A0A18 100%);
+    }
+    .sol-orb {
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 60%);
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .sol-header { text-align: center; margin-bottom: 72px; }
+    .pilares-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 24px;
+    }
+    .pilar-card {
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(0,229,255,0.08);
+      border-radius: 22px;
+      padding: 38px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .pilar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--blue2), transparent);
+      opacity: 0.4;
+      transition: opacity 0.4s;
+    }
+    .pilar-card::after {
+      content: attr(data-num);
+      position: absolute;
+      right: 24px; bottom: 16px;
+      font-family: var(--font-d);
+      font-size: 120px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.025);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .pilar-card:hover {
+      transform: translateY(-9px);
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: 0 0 60px rgba(0,229,255,0.08), 0 32px 72px rgba(0,0,0,0.45);
+    }
+    .pilar-card:hover::before { opacity: 1; }
+    .pilar-hdr {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .pilar-num {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0,229,255,0.15) 0%, rgba(124,58,237,0.1) 100%);
+      border: 1px solid rgba(0,229,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-d);
+      font-size: 18px; font-weight: 800;
+      color: var(--cyan);
+    }
+    .pilar-arr {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(0,229,255,0.05);
+      border: 1px solid rgba(0,229,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan);
+      transition: all 0.3s;
+    }
+    .pilar-card:hover .pilar-arr {
+      background: rgba(0,229,255,0.12);
+      border-color: rgba(0,229,255,0.35);
+      transform: rotate(-45deg);
+    }
+    .pilar-title {
+      font-family: var(--font-d);
+      font-size: 22px; font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .pilar-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .pilar-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      color: var(--gray-lt);
+      font-size: 14px; line-height: 1.55;
+    }
+    .pilar-list li::before {
+      content: '—';
+      color: var(--cyan);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       COMO FUNCIONA
+    ============================================= */
+    #como {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .como-hdr { text-align: center; margin-bottom: 80px; }
+    .steps-wrap { position: relative; }
+    .steps-line {
+      position: absolute;
+      top: 32px;
+      left: 12.5%; right: 12.5%;
+      height: 2px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(0,229,255,0.45) 0, rgba(0,229,255,0.45) 8px,
+        transparent 8px, transparent 18px
+      );
+      animation: dash-anim 2s linear infinite;
+    }
+    @keyframes dash-anim {
+      0%   { background-position: 0 0; }
+      100% { background-position: 40px 0; }
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 32px;
+      position: relative; z-index: 2;
+    }
+    .step { text-align: center; }
+    .step:nth-child(even) { margin-top: 80px; }
+    .step-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0,229,255,0.15) 0%, rgba(124,58,237,0.1) 100%);
+      border: 2px solid rgba(0,229,255,0.45);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-d);
+      font-size: 22px; font-weight: 800;
+      color: var(--cyan);
+      margin: 0 auto 22px;
+      box-shadow: 0 0 30px rgba(0,229,255,0.18), 0 0 60px rgba(0,229,255,0.06);
+      transition: all 0.3s;
+    }
+    .step:hover .step-circle {
+      box-shadow: 0 0 50px rgba(0,229,255,0.4), 0 0 80px rgba(0,229,255,0.15);
+      transform: scale(1.1);
+    }
+    .step-title {
+      font-family: var(--font-d);
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step-desc { color: var(--gray); font-size: 14px; line-height: 1.7; }
+
+    /* =============================================
+       CASES
+    ============================================= */
+    #cases {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(0 48px, 100% 0, 100% 100%, 0 100%);
+      margin-top: -48px;
+      background: linear-gradient(180deg, #0A0A18 0%, var(--bg) 100%);
+    }
+    .cases-hdr { text-align: center; margin-bottom: 64px; }
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+    .case-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,229,255,0.1);
+      border-radius: 22px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .case-card:hover {
+      transform: scale(1.03) translateY(-7px);
+      box-shadow: 0 0 60px rgba(0,229,255,0.1), 0 32px 72px rgba(0,0,0,0.45);
+      border-color: rgba(0,229,255,0.28);
+    }
+    .case-top {
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--blue2), transparent);
+    }
+    .case-body { padding: 32px; }
+    .case-spec {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 6px;
+    }
+    .case-clinic {
+      font-family: var(--font-d);
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .case-metric {
+      font-family: var(--font-d);
+      font-size: clamp(44px,5vw,68px);
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--blue2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+    .case-metric-lbl { color: var(--gray); font-size: 13px; margin-bottom: 18px; }
+    .case-desc { color: var(--gray-lt); font-size: 14px; line-height: 1.65; margin-bottom: 18px; }
+    .cases-cta { text-align: center; }
+
+    /* =============================================
+       PLATAFORMA
+    ============================================= */
+    #plataforma {
+      padding: 130px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .plat-stripe {
+      position: absolute;
+      left: 0; top: 100px; bottom: 100px;
+      width: 3px;
+      background: linear-gradient(180deg, transparent, var(--cyan), transparent);
+    }
+    .plat-orb {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+      right: -100px; top: 50%;
+      transform: translateY(-50%);
+    }
+    .plat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feat-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 16px;
+      margin-top: 32px;
+    }
+    .feat-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 15px; line-height: 1.65;
+      color: var(--gray-lt);
+    }
+    .feat-dot {
+      width: 8px; height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+      box-shadow: 0 0 12px rgba(0,229,255,0.6);
+    }
+    .app-win {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,229,255,0.14);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.55), 0 0 40px rgba(0,229,255,0.05);
+    }
+    .app-bar {
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 11px 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tdots { display: flex; gap: 6px; }
+    .tdot { width: 10px; height: 10px; border-radius: 50%; }
+    .tdot:nth-child(1) { background: #FF5F57; }
+    .tdot:nth-child(2) { background: #FEBC2E; }
+    .tdot:nth-child(3) { background: #28C840; }
+    .app-body-inner {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+    }
+    .app-sb {
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.04);
+      padding: 14px 10px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .sb-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: rgba(0,229,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sb-icon.on {
+      background: rgba(0,229,255,0.18);
+      box-shadow: 0 0 12px rgba(0,229,255,0.2);
+    }
+    .app-main-inner { padding: 14px; }
+    .app-mini-row {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+    .app-mini {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,229,255,0.09);
+      border-radius: 8px;
+      padding: 9px;
+    }
+    .app-mini-l { font-size: 9px; color: var(--gray); margin-bottom: 3px; }
+    .app-mini-v { font-family: var(--font-d); font-size: 13px; font-weight: 800; color: var(--cyan); }
+    .app-chart {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(0,229,255,0.07);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .app-chart-l { font-size: 9px; color: var(--gray); margin-bottom: 7px; }
+
+    /* =============================================
+       FAQ
+    ============================================= */
+    #faq { padding: 130px 0; position: relative; overflow: hidden; }
+    .faq-hdr { text-align: center; margin-bottom: 64px; }
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .faq-item {
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,229,255,0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .faq-item.open {
+      border-left: 3px solid var(--cyan);
+      border-color: rgba(0,229,255,0.22);
+      background: rgba(0,229,255,0.02);
+    }
+    .faq-q {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px;
+      cursor: pointer;
+      gap: 20px;
+      user-select: none;
+    }
+    .faq-q-text {
+      font-family: var(--font-d);
+      font-size: 16px; font-weight: 700;
+      line-height: 1.4;
+    }
+    .faq-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.3s, background 0.3s;
+      color: var(--cyan);
+      font-size: 18px; font-weight: 300; line-height: 1;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: rgba(0,229,255,0.14);
+    }
+    .faq-ans { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .faq-ans-inner {
+      padding: 0 24px 22px;
+      color: var(--gray-lt);
+      font-size: 15px; line-height: 1.75;
+    }
+
+    /* =============================================
+       CTA FORM
+    ============================================= */
+    #cta-form {
+      padding: 150px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta-form::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,229,255,0.07) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 50%, rgba(124,58,237,0.07) 0%, transparent 50%);
+    }
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .cta-h2 {
+      font-family: var(--font-d);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 24px;
+    }
+    .cta-sub {
+      color: var(--gray);
+      font-size: 17px; line-height: 1.75;
+      margin-bottom: 36px;
+    }
+    .check-list {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .check-item {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--gray-lt); font-size: 14px;
+    }
+    .form-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.45), 0 0 60px rgba(0,229,255,0.05);
+      position: relative; z-index: 2;
+    }
+    .form-ttl {
+      font-family: var(--font-d);
+      font-size: 22px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .form-sub { color: var(--gray); font-size: 13px; margin-bottom: 28px; }
+    .fg { margin-bottom: 16px; }
+    .fg label {
+      display: block;
+      font-size: 11px; font-weight: 600;
+      color: var(--gray);
+      margin-bottom: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .fg input, .fg select, .fg textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,229,255,0.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-family: var(--font-b);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .fg select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300E5FF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-color: rgba(255,255,255,0.04);
+      padding-right: 40px;
+    }
+    .fg select option { background: #0D1520; color: var(--white); }
+    .fg input::placeholder, .fg textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      border-color: rgba(0,229,255,0.45);
+      background: rgba(0,229,255,0.04);
+      box-shadow: 0 0 20px rgba(0,229,255,0.07);
+    }
+    .fg textarea { resize: vertical; min-height: 80px; }
+    .form-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--cyan2) 100%);
+      color: #050A0A;
+      font-family: var(--font-b);
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.3s;
+    }
+    .form-btn:hover {
+      box-shadow: 0 0 40px rgba(0,229,255,0.55), 0 0 80px rgba(0,229,255,0.2);
+      transform: translateY(-2px);
+    }
+    .form-success { display: none; text-align: center; padding: 40px 20px; }
+    .form-success.vis { display: block; }
+    .s-check { width: 72px; height: 72px; margin: 0 auto 20px; }
+    .s-circle {
+      stroke-dasharray: 166; stroke-dashoffset: 166;
+      stroke-width: 2; stroke: var(--cyan);
+      fill: none;
+      animation: s-draw 0.6s cubic-bezier(0.65,0,0.45,1) 0.3s forwards;
+    }
+    .s-mark {
+      stroke-dasharray: 48; stroke-dashoffset: 48;
+      stroke-width: 3; stroke: var(--cyan);
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+      animation: s-draw 0.4s cubic-bezier(0.65,0,0.45,1) 0.9s forwards;
+    }
+    @keyframes s-draw { 100% { stroke-dashoffset: 0; } }
+    .s-ttl { font-family: var(--font-d); font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+    .s-txt { color: var(--gray); font-size: 15px; }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    #footer {
+      background: #050508;
+      border-top: 1px solid rgba(0,229,255,0.12);
+      padding: 64px 0 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 48px;
+    }
+    .footer-logo { height: 34px; width: auto; display: block; margin-bottom: 16px; }
+    .footer-tag { color: var(--gray); font-size: 14px; line-height: 1.7; max-width: 280px; }
+    .footer-hd {
+      font-family: var(--font-d);
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .soc-links { display: flex; gap: 10px; margin-top: 8px; }
+    .soc-link {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(0,229,255,0.04);
+      border: 1px solid rgba(0,229,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      color: var(--gray);
+      text-decoration: none;
+    }
+    .soc-link:hover {
+      background: rgba(0,229,255,0.1);
+      border-color: rgba(0,229,255,0.35);
+      color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0,229,255,0.15);
+    }
+    .footer-bot {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .footer-copy { color: rgba(255,255,255,0.28); font-size: 13px; }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 56px; }
+      .hero-mockup { max-width: 520px; margin: 0 auto; }
+      .sobre-grid { grid-template-columns: 1fr; gap: 48px; }
+      .plat-grid { grid-template-columns: 1fr; gap: 48px; }
+      .cta-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero-h1 { font-size: clamp(28px,7vw,42px); }
+      .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .stats-grid .stat-item:nth-child(5) { grid-column: span 2; }
+      .stats-grid .stat-item:not(:last-child)::after { display: none; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .pilares-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: repeat(2,1fr); }
+      .steps-line { display: none; }
+      .step:nth-child(even) { margin-top: 0; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .footer-bot { flex-direction: column; text-align: center; }
+      .sobre-wm { display: none; }
+      .container { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-outer" id="cursorOuter"></div>
+  <div class="cursor-inner" id="cursorInner"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <img src="LOGO/LOGO RISEUP TEXTO BRANCO.png" alt="Rise Up Odonto" />
+        </a>
+        <ul class="nav-links">
+          <li><a href="#solucoes">Soluções</a></li>
+          <li><a href="#cases">Resultados</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#plataforma">Plataforma</a></li>
+        </ul>
+        <a href="#cta-form" class="btn btn-primary nav-cta">Diagnóstico Gratuito</a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#solucoes">Soluções</a>
+    <a href="#cases">Resultados</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#plataforma">Plataforma</a>
+    <a href="#cta-form" class="btn btn-primary">Diagnóstico Gratuito</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="mesh-blob blob-1"></div>
+    <div class="mesh-blob blob-2"></div>
+    <div class="mesh-blob blob-3"></div>
+    <div class="particles-wrap" id="particles"></div>
+
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Text -->
+        <div class="hero-text">
+          <div class="hero-eyebrow reveal">A agência que mais entende de odontologia no Brasil</div>
+          <h1 class="hero-h1">
+            <span class="line reveal d1">Sua clínica lotada de</span>
+            <span class="line reveal d2">pacientes de alto valor.</span>
+            <span class="line grad-text reveal d3">Com previsibilidade.</span>
+          </h1>
+          <p class="hero-sub reveal d4">
+            Combinamos tráfego pago, CRM inteligente e automação de atendimento para transformar a jornada do paciente — do clique ao agendamento confirmado.
+          </p>
+          <div class="hero-ctas reveal d5">
+            <a href="#cta-form" class="btn btn-primary magnetic">
+              Quero Minha Clínica Lotada
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#cases" class="btn btn-outline">Ver Resultados</a>
+          </div>
+        </div>
+
+        <!-- Mockup -->
+        <div class="hero-mockup reveal-r d2">
+          <!-- Badges -->
+          <div class="fbadge fbadge-1">
+            <div class="fbadge-icon g">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="#34D399" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="fbadge-text">
+              <strong style="color:#34D399">+120 Clínicas</strong>
+              <span>atendidas com sucesso</span>
+            </div>
+          </div>
+          <div class="fbadge fbadge-2">
+            <div class="fbadge-icon o">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8l6-6 6 6" stroke="#FB923C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="fbadge-text">
+              <strong style="color:#FB923C">R$25M+</strong>
+              <span>faturamento gerado</span>
+            </div>
+          </div>
+          <div class="fbadge fbadge-3">
+            <div class="fbadge-icon c">
+              <!-- dente icon -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C9.5 2 7 4 7 7c0 2 .5 3.5 1 5 .5 1.5.8 3.2.8 5 0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-.5 0-1 .8-1s.8.5.8 1c0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-1.8.3-3.5.8-5 .5-1.5 1-3 1-5 0-3-2.5-5-5-5z" stroke="#00E5FF" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="fbadge-text">
+              <strong style="color:#00E5FF">38% conversão</strong>
+              <span>de leads em pacientes</span>
+            </div>
+          </div>
+
+          <div class="mockup-glow"></div>
+          <div class="dash-card">
+            <!-- Header bar -->
+            <div class="dash-hdr">
+              <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="dash-title-bar">Rise Up · Painel da Clínica</div>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34D399;box-shadow:0 0 6px #34D399;"></div>
+                <span style="font-size:9px;color:#34D399;font-family:var(--font-b);">ao vivo</span>
+              </div>
+            </div>
+
+            <div style="display:flex;">
+              <!-- Sidebar icons -->
+              <div style="width:38px;background:rgba(0,0,0,0.2);border-right:1px solid rgba(0,229,255,0.07);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:14px;">
+                <!-- tooth -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="opacity:.85"><path d="M12 2C9.5 2 7 4 7 7c0 2 .5 3.5 1 5 .5 1.5.8 3.2.8 5 0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-.5 0-1 .8-1s.8.5.8 1c0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-1.8.3-3.5.8-5 .5-1.5 1-3 1-5 0-3-2.5-5-5-5z" stroke="#00E5FF" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <!-- chart bar -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="opacity:.4"><rect x="3" y="12" width="4" height="9" rx="1" stroke="#8B9BB4" stroke-width="1.5"/><rect x="10" y="7" width="4" height="14" rx="1" stroke="#8B9BB4" stroke-width="1.5"/><rect x="17" y="3" width="4" height="18" rx="1" stroke="#8B9BB4" stroke-width="1.5"/></svg>
+                <!-- calendar -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="opacity:.4"><rect x="3" y="5" width="18" height="16" rx="2" stroke="#8B9BB4" stroke-width="1.5"/><path d="M16 3v4M8 3v4M3 9h18" stroke="#8B9BB4" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <!-- user -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="opacity:.4"><circle cx="12" cy="8" r="4" stroke="#8B9BB4" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#8B9BB4" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <div style="flex:1"></div>
+                <!-- settings -->
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="opacity:.3"><circle cx="12" cy="12" r="3" stroke="#8B9BB4" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="#8B9BB4" stroke-width="1.5"/></svg>
+              </div>
+
+              <!-- Main content -->
+              <div class="dash-body" style="flex:1;min-width:0;">
+                <!-- Top metrics -->
+                <div class="metric-row">
+                  <div class="metric-cell">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-8 0v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="#00E5FF" stroke-width="2" stroke-linecap="round"/></svg>
+                      <div class="metric-lbl" style="margin:0">Novos Pacientes</div>
+                    </div>
+                    <div class="metric-val">347</div>
+                    <div style="font-size:9px;color:#34D399;margin-top:2px;">↑ 42% vs mês ant.</div>
+                  </div>
+                  <div class="metric-cell">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 2C9.5 2 7 4 7 7c0 2 .5 3.5 1 5 .5 1.5.8 3.2.8 5 0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-.5 0-1 .8-1s.8.5.8 1c0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-1.8.3-3.5.8-5 .5-1.5 1-3 1-5 0-3-2.5-5-5-5z" stroke="#00E5FF" stroke-width="1.5"/></svg>
+                      <div class="metric-lbl" style="margin:0">Tratamentos</div>
+                    </div>
+                    <div class="metric-val">38%</div>
+                    <div style="font-size:9px;color:#34D399;margin-top:2px;">↑ taxa de fechamento</div>
+                  </div>
+                  <div class="metric-cell">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:3px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#00E5FF" stroke-width="2" stroke-linecap="round"/></svg>
+                      <div class="metric-lbl" style="margin:0">Faturamento</div>
+                    </div>
+                    <div class="metric-val">R$210k</div>
+                    <div style="font-size:9px;color:#34D399;margin-top:2px;">↑ R$63k este mês</div>
+                  </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-wrap">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                    <div class="chart-lbl" style="margin:0">Crescimento de Pacientes</div>
+                    <div style="display:flex;gap:4px;">
+                      <span style="font-size:9px;padding:1px 6px;border-radius:4px;background:rgba(0,229,255,0.1);color:#00E5FF;border:1px solid rgba(0,229,255,0.2);">6 meses</span>
+                    </div>
+                  </div>
+                  <svg viewBox="0 0 260 68" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+                    <defs>
+                      <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#003D50" stop-opacity="0.02"/>
+                      </linearGradient>
+                    </defs>
+                    <!-- Grid lines -->
+                    <line x1="0" y1="17" x2="260" y2="17" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                    <line x1="0" y1="34" x2="260" y2="34" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                    <line x1="0" y1="51" x2="260" y2="51" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                    <!-- Area fill -->
+                    <path d="M0 62 C20 58 40 52 65 46 C90 40 115 30 140 24 C165 18 195 10 225 6 L260 2 L260 68 L0 68 Z" fill="url(#hg)"/>
+                    <!-- Line -->
+                    <path d="M0 62 C20 58 40 52 65 46 C90 40 115 30 140 24 C165 18 195 10 225 6 L260 2" stroke="#00E5FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Dots -->
+                    <circle cx="65" cy="46" r="3" fill="#00E5FF" fill-opacity="0.6"/>
+                    <circle cx="140" cy="24" r="3" fill="#00E5FF" fill-opacity="0.6"/>
+                    <circle cx="260" cy="2" r="4" fill="#00E5FF"/>
+                    <circle cx="260" cy="2" r="8" fill="#00E5FF" fill-opacity="0.15"/>
+                  </svg>
+                  <!-- Month labels -->
+                  <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Out</span>
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Nov</span>
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Dez</span>
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Jan</span>
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Fev</span>
+                    <span style="font-size:8px;color:rgba(139,155,180,0.5)">Mar</span>
+                  </div>
+                </div>
+
+                <!-- Treatment breakdown -->
+                <div style="margin-bottom:10px;">
+                  <div style="font-size:9px;color:var(--gray);margin-bottom:7px;letter-spacing:.05em;text-transform:uppercase;">Tratamentos de alto valor</div>
+                  <div class="prog-row">
+                    <div class="prog-lbl-row">
+                      <span style="display:flex;align-items:center;gap:4px;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M12 2C9.5 2 7 4 7 7c0 2 .5 3.5 1 5 .5 1.5.8 3.2.8 5 0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-.5 0-1 .8-1s.8.5.8 1c0 1.5.4 3 1.2 3s1.2-1.5 1.2-3c0-1.8.3-3.5.8-5 .5-1.5 1-3 1-5 0-3-2.5-5-5-5z" stroke="#8B9BB4" stroke-width="2"/></svg>Implantes</span><strong>78%</strong>
+                    </div>
+                    <div class="prog-bg"><div class="prog-fill" style="width:78%"></div></div>
+                  </div>
+                  <div class="prog-row">
+                    <div class="prog-lbl-row">
+                      <span style="display:flex;align-items:center;gap:4px;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#8B9BB4" stroke-width="2"/></svg>Invisalign</span><strong>54%</strong>
+                    </div>
+                    <div class="prog-bg"><div class="prog-fill" style="width:54%;opacity:.7"></div></div>
+                  </div>
+                  <div class="prog-row">
+                    <div class="prog-lbl-row">
+                      <span style="display:flex;align-items:center;gap:4px;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#8B9BB4" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="#8B9BB4" stroke-width="2" stroke-linecap="round"/></svg>Lentes</span><strong>91%</strong>
+                    </div>
+                    <div class="prog-bg"><div class="prog-fill" style="width:91%"></div></div>
+                  </div>
+                </div>
+
+                <!-- Status chips -->
+                <div class="status-row">
+                  <span class="chip chip-g">+163% crescimento</span>
+                  <span class="chip chip-c">Atendimento 24h</span>
+                  <span class="chip chip-o">7 agendamentos hoje</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-num" data-target="120" data-prefix="+" data-suffix="">0</span>
+          <div class="stat-lbl">Clínicas atendidas</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="25" data-prefix="R$" data-suffix="M+">0</span>
+          <div class="stat-lbl">Gerados para clientes</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="45" data-prefix="+" data-suffix="k">0</span>
+          <div class="stat-lbl">Leads qualificados</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="8" data-prefix="R$" data-suffix="M+">0</span>
+          <div class="stat-lbl">Em mídia gerenciada</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="8" data-prefix="4." data-suffix="★">0</span>
+          <div class="stat-lbl">Avaliação média</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEMA ===== -->
+  <section id="problema">
+    <div class="orb prob-orb"></div>
+    <div class="container">
+      <div class="section-label reveal">O problema</div>
+      <h2 class="section-h2 reveal d1">Por que sua agenda<br/>ainda não está cheia?</h2>
+      <p style="color:var(--gray);font-size:17px;max-width:600px;margin-bottom:60px;line-height:1.75;" class="reveal d2">
+        Clínicas incríveis perdem pacientes todos os dias por falhas que poucos conseguem enxergar. Você reconhece alguma dessas situações?
+      </p>
+      <div class="pain-grid">
+        <div class="pain-card reveal d1">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Tráfego sem retorno</div>
+          <p class="pain-desc">Investe em anúncios, gera cliques, mas as conversões em agendamentos são poucas e imprevisíveis.</p>
+        </div>
+        <div class="pain-card reveal d2">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Leads que somem</div>
+          <p class="pain-desc">O paciente entra em contato mas a resposta demora, o follow-up não existe e ele agenda na concorrência.</p>
+        </div>
+        <div class="pain-card reveal d3">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Pacientes de baixo valor</div>
+          <p class="pain-desc">A agenda enche de consultas simples enquanto tratamentos de alto valor ficam sem demanda consistente.</p>
+        </div>
+        <div class="pain-card reveal d4">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Agência genérica</div>
+          <p class="pain-desc">Trabalha com quem não entende de odontologia — resultado: criativos errados, público errado, dinheiro perdido.</p>
+        </div>
+        <div class="pain-card reveal d5">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Sem previsibilidade</div>
+          <p class="pain-desc">Meses bons e meses ruins sem entender o porquê. Impossível planejar contratações, equipamentos e expansão.</p>
+        </div>
+        <div class="pain-card reveal d6">
+          <div class="pain-dot"></div>
+          <div class="pain-title">Tecnologia fragmentada</div>
+          <p class="pain-desc">CRM aqui, WhatsApp ali, planilha acolá. Cada ferramenta no seu mundo, nenhuma integrada para funcionar de verdade.</p>
+        </div>
+      </div>
+      <div class="prob-close reveal">
+        <p class="close-stmt">
+          "O problema raramente é a qualidade do tratamento —<br/>é a <span class="grad-text">invisibilidade estratégica</span> da sua clínica."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="sobre">
+    <div class="sobre-wm">01</div>
+    <div class="container">
+      <div class="sobre-grid">
+        <div class="reveal-l">
+          <div class="sobre-card">
+            <div class="sobre-qm">"</div>
+            <div class="sobre-label">
+              <strong>Rise Up Odonto</strong>
+              <span>Sistema de crescimento para clínicas</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-r">
+          <div class="section-label">Sobre nós</div>
+          <h2 class="section-h2" style="margin-bottom:16px;">Nascemos dentro<br/>de clínicas.</h2>
+          <p style="color:var(--gray);font-size:16px;line-height:1.8;margin-bottom:12px;">
+            A Rise Up não é uma agência de marketing que decidiu atender dentistas. Somos um sistema construído <strong style="color:var(--white);">de dentro para fora</strong> da odontologia — com experiência real no setor, entendendo a jornada do paciente, a linguagem dos tratamentos e a dinâmica de cada especialidade.
+          </p>
+          <p style="color:var(--gray);font-size:16px;line-height:1.8;margin-bottom:28px;">
+            Combinamos estratégia de marketing especializada, tecnologia de ponta e automação inteligente para entregar crescimento previsível e escalável.
+          </p>
+          <div class="sobre-pills">
+            <div class="sobre-pill">
+              <div class="sobre-pill-dot"></div>
+              100% especializados em clínicas odontológicas
+            </div>
+            <div class="sobre-pill">
+              <div class="sobre-pill-dot"></div>
+              Time multidisciplinar: marketing, tech e IA
+            </div>
+            <div class="sobre-pill">
+              <div class="sobre-pill-dot"></div>
+              Método proprietário com resultados comprovados
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOLUÇÕES ===== -->
+  <section id="solucoes">
+    <div class="orb sol-orb"></div>
+    <div class="container">
+      <div class="sol-header">
+        <div class="section-label reveal" style="justify-content:center;">Os 4 Pilares</div>
+        <h2 class="section-h2 reveal d1">Nosso sistema completo<br/>de crescimento</h2>
+        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:560px;" class="reveal d2">
+          Cada pilar foi desenhado para funcionar de forma integrada, criando um ecossistema de crescimento com resultados compounding.
+        </p>
+      </div>
+      <div class="pilares-grid">
+        <div class="pilar-card reveal d1" data-num="01">
+          <div class="pilar-hdr">
+            <div class="pilar-num">01</div>
+            <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="pilar-title">Tráfego de Alta Performance</div>
+          <ul class="pilar-list">
+            <li>Meta Ads e Google Ads especializados em odontologia</li>
+            <li>Criativos com linguagem que converte pacientes de alto valor</li>
+            <li>Segmentação por especialidade e ticket médio desejado</li>
+            <li>Otimização contínua baseada em dados reais de agendamento</li>
+          </ul>
+        </div>
+        <div class="pilar-card reveal d2" data-num="02">
+          <div class="pilar-hdr">
+            <div class="pilar-num">02</div>
+            <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="pilar-title">CRM & Automação Inteligente</div>
+          <ul class="pilar-list">
+            <li>Pipeline de atendimento do lead ao paciente fidelizado</li>
+            <li>Automações de WhatsApp, e-mail e SMS integradas</li>
+            <li>Follow-up automático para leads que não agendaram</li>
+            <li>Dashboards em tempo real para decisões rápidas</li>
+          </ul>
+        </div>
+        <div class="pilar-card reveal d3" data-num="03">
+          <div class="pilar-hdr">
+            <div class="pilar-num">03</div>
+            <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="pilar-title">Atendimento Automatizado 24h</div>
+          <ul class="pilar-list">
+            <li>Agente de IA que responde leads instantaneamente</li>
+            <li>Qualificação automática por especialidade e intenção</li>
+            <li>Agendamento direto na agenda da clínica</li>
+            <li>Follow-up pós-consulta e reativação de pacientes inativos</li>
+          </ul>
+        </div>
+        <div class="pilar-card reveal d4" data-num="04">
+          <div class="pilar-hdr">
+            <div class="pilar-num">04</div>
+            <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="pilar-title">Estratégia & Conteúdo</div>
+          <ul class="pilar-list">
+            <li>Posicionamento da clínica como referência na região</li>
+            <li>Produção de conteúdo para Instagram e YouTube</li>
+            <li>Scripts de atendimento e vendas para a equipe</li>
+            <li>Treinamento mensal da equipe de front desk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <section id="como">
+    <div class="container">
+      <div class="como-hdr">
+        <div class="section-label reveal" style="justify-content:center;">Processo</div>
+        <h2 class="section-h2 reveal d1">Como funciona</h2>
+        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:520px;" class="reveal d2">
+          Do primeiro contato à clínica escalando com previsibilidade — um processo claro em 4 etapas.
+        </p>
+      </div>
+      <div class="steps-wrap">
+        <div class="steps-line"></div>
+        <div class="steps-grid">
+          <div class="step reveal d1">
+            <div class="step-circle">01</div>
+            <div class="step-title">Diagnóstico Estratégico</div>
+            <p class="step-desc">Analisamos sua clínica, concorrência local, especialidades e oportunidades de crescimento imediato.</p>
+          </div>
+          <div class="step reveal d2">
+            <div class="step-circle">02</div>
+            <div class="step-title">Implantação do Sistema</div>
+            <p class="step-desc">Configuramos tráfego, CRM, IA e automações. Primeiros leads chegam em até 7 dias.</p>
+          </div>
+          <div class="step reveal d3">
+            <div class="step-circle">03</div>
+            <div class="step-title">Otimização Contínua</div>
+            <p class="step-desc">Acompanhamento diário de métricas, testes A/B e ajustes para maximizar ROI a cada semana.</p>
+          </div>
+          <div class="step reveal d4">
+            <div class="step-circle">04</div>
+            <div class="step-title">Escala Previsível</div>
+            <p class="step-desc">Com o sistema maduro, escalamos o investimento com segurança e previsibilidade de retorno.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CASES ===== -->
+  <section id="cases">
+    <div class="container">
+      <div class="cases-hdr">
+        <div class="section-label reveal" style="justify-content:center;">Resultados reais</div>
+        <h2 class="section-h2 reveal d1">Clínicas que transformaram<br/>sua operação com a Rise Up</h2>
+      </div>
+      <div class="cases-grid">
+        <div class="case-card reveal d1">
+          <div class="case-top"></div>
+          <div class="case-body">
+            <div class="case-spec">Implantodontia · São Paulo/SP</div>
+            <div class="case-clinic">Clínica Sorriso Perfeito</div>
+            <div class="case-metric">+163%</div>
+            <div class="case-metric-lbl">de aumento no faturamento em 90 dias</div>
+            <p class="case-desc">Partiu de R$45k/mês para R$118k. Implantamos tráfego segmentado + IA de atendimento 24h. Agenda lotada em 30 dias.</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+              <defs><linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
+              <path d="M0 55 L40 48 L80 40 L120 25 L160 14 L200 4 L200 60 L0 60Z" fill="url(#cg1)"/>
+              <path d="M0 55 L40 48 L80 40 L120 25 L160 14 L200 4" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="case-card reveal d2">
+          <div class="case-top"></div>
+          <div class="case-body">
+            <div class="case-spec">Ortodontia · Curitiba/PR</div>
+            <div class="case-clinic">Orto Premium</div>
+            <div class="case-metric">+287</div>
+            <div class="case-metric-lbl">leads qualificados no primeiro mês</div>
+            <p class="case-desc">Aligner e aparelho estético como foco. Criativos especializados + funil completo geraram 287 leads, 94 consultas agendadas.</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+              <defs><linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
+              <path d="M0 58 L40 50 L80 44 L120 30 L160 16 L200 6 L200 60 L0 60Z" fill="url(#cg2)"/>
+              <path d="M0 58 L40 50 L80 44 L120 30 L160 16 L200 6" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="case-card reveal d3">
+          <div class="case-top"></div>
+          <div class="case-body">
+            <div class="case-spec">Odontologia Estética · Rio/RJ</div>
+            <div class="case-clinic">Studio Dental RJ</div>
+            <div class="case-metric">R$38k</div>
+            <div class="case-metric-lbl">de lentes de contato vendidas em 2 semanas</div>
+            <p class="case-desc">Campanha focada em lentes de contato dental. ROI de 12x no primeiro mês. IA qualificou e fechou 11 casos de alto valor.</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+              <defs><linearGradient id="cg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
+              <path d="M0 56 L40 52 L80 42 L120 28 L160 12 L200 2 L200 60 L0 60Z" fill="url(#cg3)"/>
+              <path d="M0 56 L40 52 L80 42 L120 28 L160 12 L200 2" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="cases-cta reveal">
+        <a href="#cta-form" class="btn btn-primary magnetic">Quero Resultados como Esses</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLATAFORMA ===== -->
+  <section id="plataforma">
+    <div class="plat-stripe"></div>
+    <div class="orb plat-orb"></div>
+    <div class="container">
+      <div class="plat-grid">
+        <div>
+          <div class="section-label reveal">Tecnologia</div>
+          <h2 class="section-h2 reveal d1">Uma plataforma.<br/>Tudo integrado.</h2>
+          <p class="reveal d2" style="color:var(--gray);font-size:16px;line-height:1.8;margin-top:16px;">
+            Pare de usar 10 ferramentas diferentes. Nossa plataforma centraliza tráfego, CRM, IA e analytics em um único dashboard criado especificamente para clínicas odontológicas.
+          </p>
+          <ul class="feat-list">
+            <li class="reveal d2"><div class="feat-dot"></div>Dashboard unificado com métricas de marketing e vendas em tempo real</li>
+            <li class="reveal d3"><div class="feat-dot"></div>Agente de IA integrado ao WhatsApp Business para atendimento 24h</li>
+            <li class="reveal d4"><div class="feat-dot"></div>Pipeline visual de leads com automações de follow-up inteligente</li>
+            <li class="reveal d5"><div class="feat-dot"></div>Relatórios automáticos semanais entregues por WhatsApp</li>
+            <li class="reveal d6"><div class="feat-dot"></div>Integração nativa com principais softwares de gestão odontológica</li>
+          </ul>
+        </div>
+        <div class="reveal-r d2">
+          <div class="app-win">
+            <div class="app-bar">
+              <div class="tdots">
+                <div class="tdot"></div>
+                <div class="tdot"></div>
+                <div class="tdot"></div>
+              </div>
+              <span style="font-size:11px;color:var(--gray);margin:0 auto;font-family:var(--font-b);">Rise Up Platform</span>
+            </div>
+            <div class="app-body-inner">
+              <div class="app-sb">
+                <div class="sb-icon on">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="#00E5FF"/><rect x="8" y="1" width="5" height="5" rx="1" fill="#00E5FF" opacity="0.35"/><rect x="1" y="8" width="5" height="5" rx="1" fill="#00E5FF" opacity="0.35"/><rect x="8" y="8" width="5" height="5" rx="1" fill="#00E5FF" opacity="0.35"/></svg>
+                </div>
+                <div class="sb-icon">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 4v6l6 3 6-3V4L7 1z" stroke="#8B9BB4" stroke-width="1.2"/></svg>
+                </div>
+                <div class="sb-icon">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="#8B9BB4" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#8B9BB4" stroke-width="1.2"/></svg>
+                </div>
+                <div class="sb-icon">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10L5 6 8 8 12 3" stroke="#8B9BB4" stroke-width="1.2" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+              <div class="app-main-inner">
+                <div class="app-mini-row">
+                  <div class="app-mini">
+                    <div class="app-mini-l">Leads hoje</div>
+                    <div class="app-mini-v">24</div>
+                  </div>
+                  <div class="app-mini">
+                    <div class="app-mini-l">Agendamentos</div>
+                    <div class="app-mini-v">11</div>
+                  </div>
+                  <div class="app-mini">
+                    <div class="app-mini-l">Taxa</div>
+                    <div class="app-mini-v">46%</div>
+                  </div>
+                </div>
+                <div class="app-chart">
+                  <div class="app-chart-l">Performance semanal</div>
+                  <svg viewBox="0 0 240 70" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+                    <defs>
+                      <linearGradient id="acg" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.3"/>
+                        <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.02"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0 60 L34 52 L68 44 L102 35 L136 22 L170 12 L204 6 L240 2 L240 70 L0 70Z" fill="url(#acg)"/>
+                    <path d="M0 60 L34 52 L68 44 L102 35 L136 22 L170 12 L204 6 L240 2" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+                    <span class="chip chip-c" style="font-size:9px;">IA: 87 respostas</span>
+                    <span class="chip chip-g" style="font-size:9px;">+34% vs semana passada</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="container">
+      <div class="faq-hdr">
+        <div class="section-label reveal" style="justify-content:center;">Dúvidas frequentes</div>
+        <h2 class="section-h2 reveal d1">Perguntas &amp;<br/>respostas</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal d1">
+          <div class="faq-q">
+            <span class="faq-q-text">Vocês só atendem clínicas odontológicas?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Sim. Somos 100% focados em odontologia. Isso nos permite dominar cada detalhe do seu mercado, da linguagem dos pacientes aos tratamentos de alto valor.</div></div>
+        </div>
+        <div class="faq-item reveal d2">
+          <div class="faq-q">
+            <span class="faq-q-text">Já tentei com outras agências. Por que seria diferente?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Porque não somos uma agência. Somos um sistema de crescimento especializado. Entregamos tráfego + CRM + IA + scripts de atendimento — tudo integrado e sob medida para clínicas odontológicas.</div></div>
+        </div>
+        <div class="faq-item reveal d3">
+          <div class="faq-q">
+            <span class="faq-q-text">Qual o investimento mínimo em mídia?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Trabalhamos com clínicas a partir de R$3.000/mês em mídia paga, com estratégia montada para maximizar cada centavo investido.</div></div>
+        </div>
+        <div class="faq-item reveal d4">
+          <div class="faq-q">
+            <span class="faq-q-text">Em quanto tempo vejo resultado?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Os primeiros leads chegam em até 7 dias. Resultados consistentes e escaláveis entre 60-90 dias de operação completa.</div></div>
+        </div>
+        <div class="faq-item reveal d5">
+          <div class="faq-q">
+            <span class="faq-q-text">Como funciona a automação de atendimento?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Nossos agentes de IA respondem no WhatsApp 24h, qualificam leads, agendam consultas e fazem follow-up automático — como um funcionário que nunca dorme.</div></div>
+        </div>
+        <div class="faq-item reveal d6">
+          <div class="faq-q">
+            <span class="faq-q-text">Preciso ter contrato de fidelidade?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-ans"><div class="faq-ans-inner">Trabalhamos com contratos de 3 meses para garantir resultados sólidos. Após isso, renovação mensal sem burocracia.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FORM ===== -->
+  <section id="cta-form">
+    <div class="container">
+      <div class="cta-grid">
+        <div>
+          <div class="section-label reveal">Vamos começar</div>
+          <h2 class="cta-h2 reveal d1">
+            Sua clínica pode<br/>ser a <span class="grad-text">próxima</span><br/>história de sucesso.
+          </h2>
+          <p class="cta-sub reveal d2">
+            Agende um diagnóstico gratuito. Em 30 minutos, identificamos as maiores oportunidades de crescimento para sua clínica — sem compromisso.
+          </p>
+          <div class="check-list reveal d3">
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Diagnóstico 100% gratuito e sem compromisso
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Resposta em até 24 horas úteis
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Estratégia personalizada para sua especialidade
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-r d2">
+          <div class="form-card">
+            <div id="formContent">
+              <div class="form-ttl">Diagnóstico Gratuito</div>
+              <div class="form-sub">Preencha abaixo e entraremos em contato em até 24h</div>
+              <form id="leadForm" novalidate>
+                <div class="fg">
+                  <label>Nome completo *</label>
+                  <input type="text" id="f-nome" placeholder="Dr. João Silva" required />
+                </div>
+                <div class="fg">
+                  <label>Nome da clínica *</label>
+                  <input type="text" id="f-clinica" placeholder="Clínica Exemplo Odonto" required />
+                </div>
+                <div class="fg">
+                  <label>Cidade / Estado *</label>
+                  <input type="text" id="f-cidade" placeholder="São Paulo, SP" required />
+                </div>
+                <div class="fg">
+                  <label>Faturamento mensal atual</label>
+                  <select id="f-fat">
+                    <option value="" disabled selected>Selecione uma faixa</option>
+                    <option>Até R$20.000</option>
+                    <option>R$20.000 – R$50.000</option>
+                    <option>R$50.000 – R$100.000</option>
+                    <option>R$100.000 – R$250.000</option>
+                    <option>Acima de R$250.000</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label>WhatsApp *</label>
+                  <input type="tel" id="f-whatsapp" placeholder="(00) 00000-0000" required maxlength="15" />
+                </div>
+                <div class="fg">
+                  <label>Principal desafio da sua clínica</label>
+                  <textarea id="f-desafio" placeholder="Ex: Tenho poucos pacientes de alto valor, minha agenda fica inconstante..."></textarea>
+                </div>
+                <button type="submit" class="form-btn magnetic">Quero Meu Diagnóstico Gratuito →</button>
+              </form>
+            </div>
+            <div class="form-success" id="formSuccess">
+              <svg class="s-check" viewBox="0 0 72 72">
+                <circle class="s-circle" cx="36" cy="36" r="34"/>
+                <path class="s-mark" d="M20 36 L31 47 L52 26"/>
+              </svg>
+              <div class="s-ttl">Diagnóstico enviado!</div>
+              <p class="s-txt">Nossa equipe entrará em contato pelo WhatsApp em até 24 horas úteis. Prepare-se para transformar sua clínica.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="LOGO/LOGO RISEUP TEXTO BRANCO.png" alt="Rise Up Odonto" class="footer-logo" />
+          <p class="footer-tag">O sistema de crescimento mais especializado em odontologia do Brasil. Transformamos clínicas em negócios previsíveis e escaláveis.</p>
+        </div>
+        <div>
+          <div class="footer-hd">Navegação</div>
+          <ul class="footer-links">
+            <li><a href="#solucoes">Soluções</a></li>
+            <li><a href="#cases">Resultados</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#plataforma">Plataforma</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#cta-form">Diagnóstico Gratuito</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-hd">Redes sociais</div>
+          <div class="soc-links">
+            <a href="#" class="soc-link" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="soc-link" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="soc-link" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bot">
+        <p class="footer-copy">© 2025 Rise Up Odonto. Todos os direitos reservados.</p>
+        <p class="footer-copy">Política de Privacidade</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+  (function() {
+
+    /* ---- Scroll Progress Bar ---- */
+    var bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', function() {
+      var h = document.documentElement;
+      var pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      bar.style.width = pct + '%';
+    }, { passive: true });
+
+    /* ---- Custom Cursor ---- */
+    var co = document.getElementById('cursorOuter');
+    var ci = document.getElementById('cursorInner');
+    var mx = 0, my = 0, ox = 0, oy = 0;
+    window.addEventListener('mousemove', function(e) {
+      mx = e.clientX; my = e.clientY;
+      ci.style.left = mx + 'px';
+      ci.style.top  = my + 'px';
+    });
+    function animCursor() {
+      ox += (mx - ox) * 0.12;
+      oy += (my - oy) * 0.12;
+      co.style.left = ox + 'px';
+      co.style.top  = oy + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+    document.querySelectorAll('a, button, .pain-card, .pilar-card, .case-card, .faq-q').forEach(function(el) {
+      el.addEventListener('mouseenter', function() { document.body.classList.add('cursor-hover'); });
+      el.addEventListener('mouseleave', function() { document.body.classList.remove('cursor-hover'); });
+    });
+
+    /* ---- Navbar scroll ---- */
+    var nav = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    /* ---- Mobile Menu ---- */
+    var ham = document.getElementById('hamburger');
+    var mm  = document.getElementById('mobileMenu');
+    ham.addEventListener('click', function() {
+      ham.classList.toggle('open');
+      mm.classList.toggle('open');
+    });
+    mm.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        ham.classList.remove('open');
+        mm.classList.remove('open');
+      });
+    });
+
+    /* ---- Particles ---- */
+    var pc = document.getElementById('particles');
+    for (var i = 0; i < 20; i++) {
+      var p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = [
+        '--x:' + Math.random()*100 + '%',
+        '--y:' + Math.random()*100 + '%',
+        '--dx:' + (Math.random()*60-30) + 'px',
+        '--dy:' + (Math.random()*60-30) + 'px',
+        '--dur:' + (4+Math.random()*6) + 's',
+        '--delay:-' + (Math.random()*8) + 's'
+      ].join(';');
+      pc.appendChild(p);
+    }
+
+    /* ---- Scroll Reveal ---- */
+    var revEls = document.querySelectorAll('.reveal, .reveal-l, .reveal-r');
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revEls.forEach(function(el) { io.observe(el); });
+
+    /* ---- Counter Animation ---- */
+    var counters = document.querySelectorAll('.stat-num');
+    var cio = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var target = parseFloat(el.getAttribute('data-target'));
+        var prefix = el.getAttribute('data-prefix') || '';
+        var suffix = el.getAttribute('data-suffix') || '';
+        var isDecimal = el.getAttribute('data-decimal') === 'true';
+        var start = 0;
+        var dur = 2000;
+        var startTime = null;
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var prog = Math.min((ts - startTime) / dur, 1);
+          var ease = 1 - Math.pow(1 - prog, 3);
+          var val = Math.round(target * ease);
+          if (isDecimal) {
+            el.textContent = prefix + (val / 10).toFixed(1) + suffix;
+          } else {
+            el.textContent = prefix + val + suffix;
+          }
+          if (prog < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        cio.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function(c) { cio.observe(c); });
+
+    /* ---- FAQ Accordion ---- */
+    document.querySelectorAll('.faq-q').forEach(function(q) {
+      q.addEventListener('click', function() {
+        var item = q.parentElement;
+        var ans  = item.querySelector('.faq-ans');
+        var open = item.classList.contains('open');
+        // close all
+        document.querySelectorAll('.faq-item.open').forEach(function(i) {
+          i.classList.remove('open');
+          i.querySelector('.faq-ans').style.maxHeight = '0';
+        });
+        if (!open) {
+          item.classList.add('open');
+          ans.style.maxHeight = ans.scrollHeight + 'px';
+        }
+      });
+    });
+
+    /* ---- WhatsApp Mask ---- */
+    var wInput = document.getElementById('f-whatsapp');
+    if (wInput) {
+      wInput.addEventListener('input', function() {
+        var v = this.value.replace(/\D/g,'');
+        if (v.length <= 10) {
+          v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, function(_,a,b,c){ return '('+a+') '+b+(c?'-'+c:''); });
+        } else {
+          v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, function(_,a,b,c){ return '('+a+') '+b+(c?'-'+c:''); });
+        }
+        this.value = v;
+      });
+    }
+
+    /* ---- Form Submit ---- */
+    var form = document.getElementById('leadForm');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var nome = document.getElementById('f-nome').value.trim();
+        var clinica = document.getElementById('f-clinica').value.trim();
+        var cidade = document.getElementById('f-cidade').value.trim();
+        var whats = document.getElementById('f-whatsapp').value.trim();
+        if (!nome || !clinica || !cidade || !whats) {
+          alert('Por favor, preencha todos os campos obrigatórios.');
+          return;
+        }
+        document.getElementById('formContent').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('vis');
+      });
+    }
+
+    /* ---- Magnetic Buttons ---- */
+    document.querySelectorAll('.magnetic').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var r = btn.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width/2)) * 0.22;
+        var dy = (e.clientY - (r.top  + r.height/2)) * 0.22;
+        btn.style.transform = 'translate('+dx+'px,'+dy+'px) translateY(-2px)';
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+      });
+    });
+
+    /* ---- Parallax Orbs ---- */
+    var orbs = document.querySelectorAll('.mesh-blob');
+    window.addEventListener('scroll', function() {
+      var sy = window.scrollY;
+      orbs.forEach(function(o, i) {
+        var speed = [0.05, -0.04, 0.03][i] || 0.03;
+        o.style.transform = 'translateY(' + (sy * speed) + 'px)';
+      });
+    }, { passive: true });
+
+  })();
+  </script>
+</body>
+</html>
