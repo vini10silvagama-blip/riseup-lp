@@ -6,7 +6,7 @@
   <title>Rise Up Odonto — A Agência que Mais Entende de Odontologia no Brasil</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* =============================================
        RESET & BASE
@@ -29,8 +29,8 @@
       --glass:     rgba(255,255,255,0.03);
       --glass-b:   rgba(0,229,255,0.10);
       --glass-bh:  rgba(0,229,255,0.35);
-      --font-d:    'Bricolage Grotesque', sans-serif;
-      --font-b:    'DM Sans', sans-serif;
+      --font-d:    'Sora', sans-serif;
+      --font-b:    'Inter', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -409,11 +409,12 @@
 
     .hero-h1 {
       font-family: var(--font-d);
-      font-size: clamp(36px, 3.8vw, 62px);
+      font-size: clamp(32px, 3.5vw, 56px);
       font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
       margin-bottom: 28px;
+      word-break: keep-all;
     }
     .hero-h1 .line { display: block; }
 
@@ -761,14 +762,47 @@
     }
 
     /* =============================================
-       SOLUÇÕES
+       SOBRE — fundo branco (wireframe)
+    ============================================= */
+    #sobre { background: #FFFFFF; color: #141414; }
+    #sobre .section-label { color: #29D9D5; }
+    #sobre .section-h2 { color: #141414; }
+    #sobre .sobre-qm { color: rgba(41,217,213,0.18); }
+    #sobre .sobre-pill { background: #F0FFFE; border: 1px solid rgba(41,217,213,0.3); color: #141414; }
+    #sobre .sobre-pill-dot { background: #29D9D5; box-shadow: 0 0 8px rgba(41,217,213,0.5); }
+    #sobre .sobre-card { background: linear-gradient(135deg,#E8FFFE 0%,#D0F9F7 100%); border: 1px solid rgba(41,217,213,0.2); }
+    #sobre .sobre-label strong { color: #141414; }
+    #sobre .sobre-label span { color: #29D9D5; }
+
+    /* =============================================
+       SOLUÇÕES — fundo branco (wireframe)
     ============================================= */
     #solucoes {
       padding: 130px 0;
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, var(--bg) 0%, #0A0A18 100%);
+      background: #FFFFFF;
+      color: #141414;
     }
+    #solucoes .section-label { color: #29D9D5; }
+    #solucoes .section-h2 { color: #141414; }
+    #solucoes .sol-orb { display: none; }
+    #solucoes .pilar-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      backdrop-filter: none;
+    }
+    #solucoes .pilar-card:hover {
+      box-shadow: 0 8px 40px rgba(41,217,213,0.15);
+      border-color: rgba(41,217,213,0.4);
+    }
+    #solucoes .pilar-card::after { color: rgba(0,0,0,0.04); }
+    #solucoes .pilar-title { color: #141414; }
+    #solucoes .pilar-list li { color: #555555; }
+    #solucoes .pilar-list li::before { color: #29D9D5; }
+    #solucoes .pilar-num { background: rgba(41,217,213,0.1); border-color: rgba(41,217,213,0.3); color: #29D9D5; }
+    #solucoes .pilar-arr { background: rgba(41,217,213,0.06); border-color: rgba(41,217,213,0.2); color: #29D9D5; }
     .sol-orb {
       width: 900px; height: 900px;
       background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 60%);
@@ -867,32 +901,54 @@
       flex-shrink: 0;
       margin-top: 1px;
     }
+    .pilar-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: rgba(41,217,213,0.08);
+      border: 1px solid rgba(41,217,213,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: #29D9D5;
+      margin-bottom: 16px;
+    }
 
     /* =============================================
-       COMO FUNCIONA
+       COMO FUNCIONA — fundo branco (wireframe)
     ============================================= */
     #como {
       padding: 130px 0;
       position: relative;
       overflow: hidden;
+      background: #FFFFFF;
+      color: #141414;
+    }
+    #como .section-label { color: #29D9D5; }
+    #como .section-h2 { color: #141414; }
+    #como .step-title { color: #141414; }
+    #como .step-desc { color: #555555; }
+    #como .step-circle {
+      background: rgba(41,217,213,0.1);
+      border-color: rgba(41,217,213,0.45);
+      color: #29D9D5;
+      box-shadow: 0 0 20px rgba(41,217,213,0.15);
     }
     .como-hdr { text-align: center; margin-bottom: 80px; }
     .steps-wrap { position: relative; }
     .steps-line {
       position: absolute;
       top: 32px;
-      left: 12.5%; right: 12.5%;
+      left: calc(12.5% + 32px); right: calc(12.5% + 32px);
       height: 2px;
       background: repeating-linear-gradient(
         90deg,
-        rgba(0,229,255,0.45) 0, rgba(0,229,255,0.45) 8px,
+        rgba(41,217,213,0.5) 0, rgba(41,217,213,0.5) 8px,
         transparent 8px, transparent 18px
       );
-      animation: dash-anim 2s linear infinite;
+      background-size: 26px 2px;
+      animation: dash-anim 1.5s linear infinite;
     }
     @keyframes dash-anim {
       0%   { background-position: 0 0; }
-      100% { background-position: 40px 0; }
+      100% { background-position: 26px 0; }
     }
     .steps-grid {
       display: grid;
@@ -901,7 +957,7 @@
       position: relative; z-index: 2;
     }
     .step { text-align: center; }
-    .step:nth-child(even) { margin-top: 80px; }
+    .step:nth-child(even) { margin-top: 0; }
     .step-circle {
       width: 64px; height: 64px;
       border-radius: 50%;
@@ -961,7 +1017,18 @@
       height: 3px;
       background: linear-gradient(90deg, var(--cyan), var(--blue2), transparent);
     }
-    .case-body { padding: 32px; }
+    .case-logo-area { padding: 20px 24px 0; }
+    .case-logo-placeholder {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: rgba(255,255,255,0.35);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .case-body { padding: 20px 24px 24px; }
     .case-spec {
       font-size: 11px; font-weight: 600;
       letter-spacing: 0.14em;
@@ -1095,9 +1162,11 @@
     .app-chart-l { font-size: 9px; color: var(--gray); margin-bottom: 7px; }
 
     /* =============================================
-       FAQ
+       FAQ — fundo branco (wireframe)
     ============================================= */
-    #faq { padding: 130px 0; position: relative; overflow: hidden; }
+    #faq { padding: 130px 0; position: relative; overflow: hidden; background: #FFFFFF; color: #141414; }
+    #faq .section-label { color: #29D9D5; }
+    #faq .section-h2 { color: #141414; }
     .faq-hdr { text-align: center; margin-bottom: 64px; }
     .faq-list {
       max-width: 800px;
@@ -1105,17 +1174,16 @@
       display: flex; flex-direction: column; gap: 12px;
     }
     .faq-item {
-      background: rgba(255,255,255,0.025);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0,229,255,0.08);
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5;
       border-radius: 14px;
       overflow: hidden;
       transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
     }
     .faq-item.open {
-      border-left: 3px solid var(--cyan);
-      border-color: rgba(0,229,255,0.22);
-      background: rgba(0,229,255,0.02);
+      border-left: 3px solid #29D9D5;
+      border-color: rgba(41,217,213,0.3);
     }
     .faq-q {
       display: flex;
@@ -1149,9 +1217,11 @@
     .faq-ans { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
     .faq-ans-inner {
       padding: 0 24px 22px;
-      color: var(--gray-lt);
+      color: #555555;
       font-size: 15px; line-height: 1.75;
     }
+    .faq-q { color: #141414; }
+    .faq-icon { color: #29D9D5; border-color: rgba(41,217,213,0.25); background: rgba(41,217,213,0.06); }
 
     /* =============================================
        CTA FORM
@@ -1357,16 +1427,40 @@
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
-      .hero-h1 { font-size: clamp(28px,7vw,42px); }
+
+      /* Hero mobile */
+      #hero { padding: 100px 0 60px; }
+      .hero-grid { grid-template-columns: 1fr !important; gap: 40px; }
+      .hero-text { text-align: center; }
+      .hero-eyebrow { justify-content: center; font-size: 11px; }
+      .hero-h1 { font-size: clamp(26px, 7vw, 38px); }
+      .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+      .hero-ctas .btn { width: 100%; justify-content: center; }
+      .hero-mockup { max-width: 100%; }
+
+      /* Stats */
       .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
       .stats-grid .stat-item:nth-child(5) { grid-column: span 2; }
       .stats-grid .stat-item:not(:last-child)::after { display: none; }
+
+      /* Sections */
       .pain-grid { grid-template-columns: 1fr; }
+      .sobre-grid { grid-template-columns: 1fr !important; gap: 32px; }
       .pilares-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: repeat(2,1fr); }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
       .steps-line { display: none; }
       .step:nth-child(even) { margin-top: 0; }
       .cases-grid { grid-template-columns: 1fr; }
+      .plat-grid { grid-template-columns: 1fr !important; gap: 40px; }
+
+      /* FAQ */
+      .faq-list { padding: 0 4px; }
+
+      /* Form */
+      .form-row { grid-template-columns: 1fr !important; }
+      .cta-grid { grid-template-columns: 1fr !important; gap: 40px; }
+
+      /* Footer */
       .footer-grid { grid-template-columns: 1fr; gap: 40px; }
       .footer-bot { flex-direction: column; text-align: center; }
       .sobre-wm { display: none; }
@@ -1749,6 +1843,7 @@
             <div class="pilar-num">01</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
           <div class="pilar-title">Tráfego de Alta Performance</div>
           <ul class="pilar-list">
             <li>Meta Ads e Google Ads especializados em odontologia</li>
@@ -1762,6 +1857,7 @@
             <div class="pilar-num">02</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div class="pilar-title">CRM & Automação Inteligente</div>
           <ul class="pilar-list">
             <li>Pipeline de atendimento do lead ao paciente fidelizado</li>
@@ -1775,6 +1871,7 @@
             <div class="pilar-num">03</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="2"/><path d="M8 10h.01M16 10h.01"/></svg></div>
           <div class="pilar-title">Atendimento Automatizado 24h</div>
           <ul class="pilar-list">
             <li>Agente de IA que responde leads instantaneamente</li>
@@ -1788,6 +1885,7 @@
             <div class="pilar-num">04</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <div class="pilar-title">Estratégia & Conteúdo</div>
           <ul class="pilar-list">
             <li>Posicionamento da clínica como referência na região</li>
@@ -1848,6 +1946,7 @@
       <div class="cases-grid">
         <div class="case-card reveal d1">
           <div class="case-top"></div>
+          <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
             <div class="case-spec">Implantodontia · São Paulo/SP</div>
             <div class="case-clinic">Clínica Sorriso Perfeito</div>
@@ -1863,6 +1962,7 @@
         </div>
         <div class="case-card reveal d2">
           <div class="case-top"></div>
+          <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
             <div class="case-spec">Ortodontia · Curitiba/PR</div>
             <div class="case-clinic">Orto Premium</div>
@@ -1878,6 +1978,7 @@
         </div>
         <div class="case-card reveal d3">
           <div class="case-top"></div>
+          <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
             <div class="case-spec">Odontologia Estética · Rio/RJ</div>
             <div class="case-clinic">Studio Dental RJ</div>
