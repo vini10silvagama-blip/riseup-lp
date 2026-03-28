@@ -597,6 +597,45 @@
     }
 
     /* =============================================
+       TRUST BAR
+    ============================================= */
+    #trust-bar {
+      padding: 36px 0;
+      position: relative;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(0,0,0,0.15);
+    }
+    .trust-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 20px;
+    }
+    .trust-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .trust-logo-ph {
+      width: 120px;
+      height: 40px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+      .trust-logos { gap: 10px; }
+      .trust-logo-ph { width: 90px; height: 32px; }
+    }
+
+    /* =============================================
        PROBLEMA
     ============================================= */
     #problema {
@@ -611,7 +650,7 @@
     }
     .pain-grid {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(2,1fr);
       gap: 20px;
     }
     .pain-card {
@@ -936,7 +975,7 @@
     .steps-line {
       position: absolute;
       top: 32px;
-      left: calc(12.5% + 32px); right: calc(12.5% + 32px);
+      left: calc(10% + 32px); right: calc(10% + 32px);
       height: 2px;
       background: repeating-linear-gradient(
         90deg,
@@ -952,8 +991,8 @@
     }
     .steps-grid {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
-      gap: 32px;
+      grid-template-columns: repeat(5,1fr);
+      gap: 20px;
       position: relative; z-index: 2;
     }
     .step { text-align: center; }
@@ -1447,7 +1486,7 @@
       .pain-grid { grid-template-columns: 1fr; }
       .sobre-grid { grid-template-columns: 1fr !important; gap: 32px; }
       .pilares-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
       .steps-line { display: none; }
       .step:nth-child(even) { margin-top: 0; }
       .cases-grid { grid-template-columns: 1fr; }
@@ -1518,25 +1557,22 @@
       <div class="hero-grid">
         <!-- Text -->
         <div class="hero-text">
-          <div class="hero-eyebrow reveal">Parceiro de crescimento para clínicas odontológicas</div>
+          <div class="hero-eyebrow reveal">Marketing especializado para clínicas odontológicas</div>
           <h1 class="hero-h1">
             <span class="line reveal d1">Sua clínica com agenda cheia</span>
-            <span class="line reveal d2">e faturamento previsível</span>
-            <span class="line grad-text reveal d3">todos os meses.</span>
+            <span class="line reveal d2">e faturamento previsível.</span>
+            <span class="line grad-text reveal d3">Todos os meses.</span>
           </h1>
           <p class="hero-sub reveal d4">
-            Ajudamos clínicas odontológicas a atrair pacientes de alto valor todos os dias com estratégia, tráfego e automação.
+            Atraímos, convertemos e fidelizamos pacientes para a sua clínica com um sistema completo de marketing digital — da captação ao retorno na cadeira.
           </p>
           <div class="hero-ctas reveal d5">
             <a href="#cta-form" class="btn btn-primary magnetic">
-              Quero descobrir onde estou perdendo pacientes
+              Agendar diagnóstico gratuito
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <a href="#cases" class="btn btn-outline">Ver Resultados</a>
+            <a href="#como" class="btn btn-outline">Ver como funciona ↓</a>
           </div>
-          <p class="reveal d6" style="font-size:13px;color:var(--gray);margin-top:20px;font-style:italic;">
-            Atendemos poucas clínicas por região para garantir resultado e exclusividade de mercado.
-          </p>
         </div>
 
         <!-- Mockup -->
@@ -1710,6 +1746,21 @@
     </div>
   </section>
 
+  <!-- ===== TRUST BAR ===== -->
+  <section id="trust-bar">
+    <div class="container">
+      <p class="trust-label reveal">Clínicas que confiam na Rise Up</p>
+      <div class="trust-logos">
+        <div class="trust-logo-ph reveal d1"></div>
+        <div class="trust-logo-ph reveal d2"></div>
+        <div class="trust-logo-ph reveal d3"></div>
+        <div class="trust-logo-ph reveal d4"></div>
+        <div class="trust-logo-ph reveal d5"></div>
+        <div class="trust-logo-ph reveal d6"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== STATS ===== -->
   <section id="stats">
     <div class="container">
@@ -1719,24 +1770,24 @@
       </div>
       <div class="stats-grid">
         <div class="stat-item">
-          <span class="stat-num" data-target="120" data-prefix="+" data-suffix="">0</span>
+          <span class="stat-num" data-target="37" data-prefix="+" data-suffix="">0</span>
           <div class="stat-lbl">Clínicas atendidas</div>
         </div>
         <div class="stat-item">
-          <span class="stat-num" data-target="25" data-prefix="R$" data-suffix="M+">0</span>
-          <div class="stat-lbl">Em receita gerada</div>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="45" data-prefix="+" data-suffix="k">0</span>
-          <div class="stat-lbl">Leads qualificados</div>
-        </div>
-        <div class="stat-item">
           <span class="stat-num" data-target="8" data-prefix="R$" data-suffix="M+">0</span>
-          <div class="stat-lbl">Em faturamento gerado</div>
+          <div class="stat-lbl">Em faturamento gerado para clínicas</div>
         </div>
         <div class="stat-item">
-          <span class="stat-num" data-target="8" data-prefix="4." data-suffix="x">0</span>
-          <div class="stat-lbl">de ROAS médio</div>
+          <span class="stat-num" data-target="14" data-prefix="+" data-suffix="k">0</span>
+          <div class="stat-lbl">Novos pacientes captados</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="2" data-prefix="R$" data-suffix="M+">0</span>
+          <div class="stat-lbl">Investidos em mídia com retorno positivo</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="2" data-prefix="4." data-suffix="x">0</span>
+          <div class="stat-lbl">ROAS médio das campanhas</div>
         </div>
       </div>
     </div>
@@ -1746,46 +1797,36 @@
   <section id="problema">
     <div class="orb prob-orb"></div>
     <div class="container">
-      <div class="section-label reveal">O problema</div>
-      <h2 class="section-h2 reveal d1">Se sua clínica não cresce,<br/>provavelmente é por isso:</h2>
-      <p style="color:var(--gray);font-size:17px;max-width:600px;margin-bottom:60px;line-height:1.75;" class="reveal d2">
-        Os principais gargalos que impedem clínicas odontológicas de ter previsibilidade, agenda cheia e crescimento consistente.
+      <div class="section-label reveal">O cenário atual</div>
+      <h2 class="section-h2 reveal d1">Se sua clínica não cresce, o problema<br/>não é a sua odontologia.</h2>
+      <p style="color:var(--gray);font-size:17px;max-width:620px;margin-bottom:60px;line-height:1.75;" class="reveal d2">
+        A maioria das clínicas enfrenta os mesmos gargalos — e nenhum deles tem a ver com a qualidade do seu trabalho.
       </p>
       <div class="pain-grid">
         <div class="pain-card reveal d1">
           <div class="pain-dot"></div>
-          <div class="pain-title">Tráfego sem direção</div>
-          <p class="pain-desc">Você investe em anúncios, mas não sabe exatamente de onde vêm os pacientes e o que realmente gera retorno.</p>
+          <div class="pain-title">Depende só de indicação</div>
+          <p class="pain-desc">Sem um sistema ativo de captação, o fluxo de pacientes fica imprevisível e fora do seu controle.</p>
         </div>
         <div class="pain-card reveal d2">
           <div class="pain-dot"></div>
-          <div class="pain-title">Baixa conversão no atendimento</div>
-          <p class="pain-desc">Os pacientes entram em contato, mas não avançam no agendamento ou não fecham o tratamento.</p>
+          <div class="pain-title">Investe em marketing sem retorno</div>
+          <p class="pain-desc">Gasta com agências genéricas, impulsionamentos ou panfletos que não trazem pacientes reais para a cadeira.</p>
         </div>
         <div class="pain-card reveal d3">
           <div class="pain-dot"></div>
-          <div class="pain-title">Falta de posicionamento</div>
-          <p class="pain-desc">Sua clínica parece mais uma no mercado e não transmite valor suficiente para atrair pacientes de maior ticket.</p>
+          <div class="pain-title">Agenda com buracos</div>
+          <p class="pain-desc">Horários vagos, faltas recorrentes e nenhum processo para reativar pacientes que sumiram.</p>
         </div>
         <div class="pain-card reveal d4">
           <div class="pain-dot"></div>
-          <div class="pain-title">Agenda inconsistente</div>
-          <p class="pain-desc">Algumas semanas vêm cheias, outras vazias — sem previsibilidade para crescer com segurança.</p>
-        </div>
-        <div class="pain-card reveal d5">
-          <div class="pain-dot"></div>
-          <div class="pain-title">Falta de processo comercial</div>
-          <p class="pain-desc">Sem um fluxo claro de atendimento e follow-up, oportunidades se perdem todos os dias.</p>
-        </div>
-        <div class="pain-card reveal d6">
-          <div class="pain-dot"></div>
-          <div class="pain-title">Crescimento sem estrutura</div>
-          <p class="pain-desc">Mesmo quando entram pacientes, a operação não está preparada para sustentar a escala.</p>
+          <div class="pain-title">Não sabe seus números</div>
+          <p class="pain-desc">Sem dados claros de custo por paciente, taxa de conversão ou retorno sobre investimento.</p>
         </div>
       </div>
       <div class="prob-close reveal">
         <p class="close-stmt">
-          O problema raramente é só divulgação.<br/>Na maioria dos casos, a clínica precisa de um <span class="grad-text">sistema de crescimento completo.</span>
+          O problema não é falta de divulgação — é falta de um sistema.<br/>E é exatamente isso que a Rise Up entrega.
         </p>
       </div>
     </div>
@@ -1806,30 +1847,23 @@
           </div>
         </div>
         <div class="reveal-r">
-          <div class="section-label">Sobre nós</div>
-          <h2 class="section-h2" style="margin-bottom:16px;">Nascemos dentro<br/>de clínicas.</h2>
-          <p style="color:var(--gray);font-size:16px;line-height:1.8;margin-bottom:12px;">
-            A Rise Up não foi criada por quem olha o mercado da saúde de fora. Nossa estrutura nasceu dentro da realidade das clínicas, entendendo na prática o que impede o crescimento e o que realmente faz uma operação escalar com previsibilidade.
-          </p>
+          <div class="section-label">Quem somos</div>
+          <h2 class="section-h2" style="margin-bottom:16px;">Nascemos dentro de clínicas.<br/>Sabemos o que funciona na prática.</h2>
           <p style="color:var(--gray);font-size:16px;line-height:1.8;margin-bottom:28px;">
-            Sabemos que não basta gerar leads. É preciso atrair os pacientes certos, aumentar a taxa de conversão, estruturar o atendimento e transformar marketing em faturamento real.
+            A Rise Up não é uma agência genérica que também atende dentistas. Fomos criados dentro do ambiente clínico — entendemos a rotina, os desafios e a linguagem do seu dia a dia. Cada estratégia que aplicamos foi testada e validada com clínicas reais antes de chegar até você.
           </p>
           <div class="sobre-pills">
             <div class="sobre-pill">
               <div class="sobre-pill-dot"></div>
-              Entendemos a jornada real do paciente odontológico
+              ✓ Equipe com vivência real em clínicas odontológicas
             </div>
             <div class="sobre-pill">
               <div class="sobre-pill-dot"></div>
-              Crescimento com visão de operação, não só de marketing
+              ✓ Estratégias testadas com clínicas de diferentes portes
             </div>
             <div class="sobre-pill">
               <div class="sobre-pill-dot"></div>
-              Foco em previsibilidade, conversão e aumento de ticket
-            </div>
-            <div class="sobre-pill">
-              <div class="sobre-pill-dot"></div>
-              Estratégias adaptadas à realidade de clínicas odontológicas
+              ✓ Foco 100% no mercado odontológico — sem distrações
             </div>
           </div>
         </div>
@@ -1842,13 +1876,10 @@
     <div class="orb sol-orb"></div>
     <div class="container">
       <div class="sol-header">
-        <div class="section-label reveal" style="justify-content:center;">Os 4 Pilares</div>
-        <h2 class="section-h2 reveal d1">Nosso sistema completo<br/>de crescimento</h2>
-        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:560px;" class="reveal d2">
-          Um ecossistema integrado para atrair pacientes, aumentar conversão e gerar previsibilidade na sua clínica.
-        </p>
-        <p style="color:var(--gray);font-size:15px;margin:12px auto 0;text-align:center;max-width:560px;" class="reveal d3">
-          Tudo isso funcionando em conjunto para gerar pacientes todos os dias e transformar crescimento em rotina.
+        <div class="section-label reveal" style="justify-content:center;">O Método Rise Up</div>
+        <h2 class="section-h2 reveal d1">Um sistema completo que transforma sua<br/>clínica em uma máquina de captação.</h2>
+        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:600px;" class="reveal d2">
+          Não fazemos apenas anúncios. Construímos um ecossistema integrado que atrai, converte, retém e escala seus resultados.
         </p>
       </div>
       <div class="pilares-grid">
@@ -1857,12 +1888,12 @@
             <div class="pilar-num">01</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
-          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-          <div class="pilar-title">Aquisição de pacientes</div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+          <div class="pilar-title">Captação Inteligente</div>
           <ul class="pilar-list">
-            <li>Campanhas e estratégias para atrair pacientes qualificados com potencial real de fechamento</li>
+            <li>Anúncios estratégicos no Google e Instagram que colocam sua clínica na frente de pacientes prontos para agendar</li>
             <li>Criativos com linguagem que converte pacientes de alto valor</li>
-            <li>Segmentação por especialidade e ticket médio desejado</li>
+            <li>Sem desperdício de verba — cada real investido com propósito</li>
           </ul>
         </div>
         <div class="pilar-card reveal d2" data-num="02">
@@ -1871,11 +1902,11 @@
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
           <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <div class="pilar-title">Conversão automática</div>
+          <div class="pilar-title">Conversão Automatizada</div>
           <ul class="pilar-list">
-            <li>CRM, automações e fluxos para reduzir perda de oportunidades e acelerar respostas</li>
-            <li>Follow-up automático para leads que não agendaram</li>
-            <li>Visão centralizada da operação comercial em tempo real</li>
+            <li>Funis de agendamento com WhatsApp, landing pages otimizadas e follow-up automático</li>
+            <li>Transformamos cliques em pacientes na cadeira</li>
+            <li>Nenhuma oportunidade perdida por falta de resposta</li>
           </ul>
         </div>
         <div class="pilar-card reveal d3" data-num="03">
@@ -1883,12 +1914,12 @@
             <div class="pilar-num">03</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
-          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="2"/><path d="M8 10h.01M16 10h.01"/></svg></div>
-          <div class="pilar-title">Atendimento e follow-up 24h</div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-7.85"/></svg></div>
+          <div class="pilar-title">Reativação e Fidelização</div>
           <ul class="pilar-list">
-            <li>Mais consistência no relacionamento com leads, recuperação de contatos e acompanhamento inteligente</li>
-            <li>Agendamento direto na agenda da clínica</li>
-            <li>Follow-up pós-consulta e reativação de pacientes inativos</li>
+            <li>Campanhas de reativação para pacientes inativos com alto potencial de retorno</li>
+            <li>Estratégias de relacionamento que aumentam o ticket médio e a recorrência</li>
+            <li>Follow-up pós-consulta para gerar indicações</li>
           </ul>
         </div>
         <div class="pilar-card reveal d4" data-num="04">
@@ -1896,12 +1927,12 @@
             <div class="pilar-num">04</div>
             <div class="pilar-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
-          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div class="pilar-title">Estratégia e conteúdo</div>
+          <div class="pilar-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div class="pilar-title">Dados e Controle Total</div>
           <ul class="pilar-list">
-            <li>Posicionamento, comunicação e direção estratégica para sua clínica crescer com valor percebido</li>
-            <li>Produção de conteúdo para Instagram e YouTube</li>
-            <li>Scripts de atendimento e treinamento da equipe comercial</li>
+            <li>Dashboard com métricas em tempo real: custo por lead, taxa de agendamento e ROAS</li>
+            <li>Relatórios semanais claros e objetivos</li>
+            <li>Previsibilidade financeira — você no controle do crescimento</li>
           </ul>
         </div>
       </div>
@@ -1912,10 +1943,10 @@
   <section id="como">
     <div class="container">
       <div class="como-hdr">
-        <div class="section-label reveal" style="justify-content:center;">Processo</div>
-        <h2 class="section-h2 reveal d1">Como funciona</h2>
-        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:520px;" class="reveal d2">
-          Do primeiro contato à clínica escalando com previsibilidade — um processo claro em 4 etapas.
+        <div class="section-label reveal" style="justify-content:center;">Sua Jornada</div>
+        <h2 class="section-h2 reveal d1">Do diagnóstico aos resultados<br/>em 5 passos.</h2>
+        <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:540px;" class="reveal d2">
+          Um processo claro e sem surpresas. Você sabe exatamente o que vai acontecer em cada etapa.
         </p>
       </div>
       <div class="steps-wrap">
@@ -1923,23 +1954,28 @@
         <div class="steps-grid">
           <div class="step reveal d1">
             <div class="step-circle">01</div>
-            <div class="step-title">Diagnóstico estratégico</div>
-            <p class="step-desc">Mapeamos gargalos, oportunidades e os pontos que mais travam o crescimento da clínica.</p>
+            <div class="step-title">Diagnóstico Gratuito</div>
+            <p class="step-desc">Analisamos sua presença digital, concorrência local e oportunidades. Você recebe um raio-X completo — sem compromisso.</p>
           </div>
           <div class="step reveal d2">
             <div class="step-circle">02</div>
-            <div class="step-title">Planejamento de crescimento</div>
-            <p class="step-desc">Definimos a estratégia ideal para aquisição, posicionamento, conversão e escala.</p>
+            <div class="step-title">Estratégia Personalizada</div>
+            <p class="step-desc">Montamos um plano sob medida com canais, investimento, metas e cronograma. Nada de pacote pronto.</p>
           </div>
           <div class="step reveal d3">
             <div class="step-circle">03</div>
-            <div class="step-title">Execução e aceleração</div>
-            <p class="step-desc">Colocamos o plano em prática com campanhas, automações e estrutura comercial.</p>
+            <div class="step-title">Implementação Rápida</div>
+            <p class="step-desc">Em até 7 dias, seus anúncios, funis e automações estão rodando. Sua clínica começa a receber leads.</p>
           </div>
           <div class="step reveal d4">
             <div class="step-circle">04</div>
-            <div class="step-title">Otimização contínua</div>
-            <p class="step-desc">Acompanhamos os números, refinamos a operação e buscamos evolução constante.</p>
+            <div class="step-title">Otimização Contínua</div>
+            <p class="step-desc">Monitoramos diariamente e ajustamos campanhas, criativos e segmentações para maximizar cada real investido.</p>
+          </div>
+          <div class="step reveal d5">
+            <div class="step-circle">05</div>
+            <div class="step-title">Escala e Crescimento</div>
+            <p class="step-desc">Com os números validados, escalamos o investimento de forma segura e previsível. Mais pacientes, mais faturamento.</p>
           </div>
         </div>
       </div>
@@ -1950,10 +1986,10 @@
   <section id="cases">
     <div class="container">
       <div class="cases-hdr">
-        <div class="section-label reveal" style="justify-content:center;">Resultados reais</div>
-        <h2 class="section-h2 reveal d1">Clínicas que transformaram<br/>sua operação com a Rise Up</h2>
+        <div class="section-label reveal" style="justify-content:center;">Resultados Reais</div>
+        <h2 class="section-h2 reveal d1">Números que falam por si.</h2>
         <p style="color:var(--gray);font-size:17px;margin:16px auto 0;text-align:center;max-width:560px;" class="reveal d2">
-          Histórias reais de clínicas que saíram da inconsistência para o crescimento previsível.
+          Veja como clínicas reais multiplicaram seus resultados com o método Rise Up.
         </p>
       </div>
       <div class="cases-grid">
@@ -1961,13 +1997,12 @@
           <div class="case-top"></div>
           <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
-            <div class="case-spec">Implantodontia · São Paulo/SP</div>
-            <div class="case-clinic">Clínica Sorriso Perfeito</div>
+            <div class="case-spec">Clínica de Implantes · São Paulo, SP</div>
             <div class="case-metric">+163%</div>
-            <div class="case-metric-lbl">de aumento no faturamento em 90 dias</div>
-            <p class="case-desc">Antes: agenda inconsistente e baixa previsibilidade. Depois: crescimento de +163% no faturamento em 90 dias com tráfego segmentado e atendimento 24h.</p>
-            <p style="font-size:12px;color:var(--cyan);font-weight:600;margin-top:8px;">Agenda inconsistente → crescimento previsível</p>
-            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <div class="case-metric-lbl">de aumento em agendamentos nos primeiros 90 dias</div>
+            <p class="case-desc">Clínica saiu de agenda inconsistente para crescimento previsível com tráfego segmentado e funil de conversão automatizado.</p>
+            <p style="font-size:13px;color:var(--cyan);font-weight:700;margin-top:12px;">ROAS 5.2x</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:12px;">
               <defs><linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
               <path d="M0 55 L40 48 L80 40 L120 25 L160 14 L200 4 L200 60 L0 60Z" fill="url(#cg1)"/>
               <path d="M0 55 L40 48 L80 40 L120 25 L160 14 L200 4" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
@@ -1978,13 +2013,12 @@
           <div class="case-top"></div>
           <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
-            <div class="case-spec">Ortodontia · Curitiba/PR</div>
-            <div class="case-clinic">Orto Premium</div>
+            <div class="case-spec">Clínica Geral · Belo Horizonte, MG</div>
             <div class="case-metric">+287</div>
-            <div class="case-metric-lbl">leads qualificados no primeiro mês</div>
-            <p class="case-desc">Antes: captação fraca e sem processo de conversão. Depois: 287 leads qualificados e 94 consultas agendadas no primeiro mês.</p>
-            <p style="font-size:12px;color:var(--cyan);font-weight:600;margin-top:8px;">Captação fraca → mais volume com qualidade</p>
-            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <div class="case-metric-lbl">novos pacientes captados em 6 meses</div>
+            <p class="case-desc">Captação estruturada do zero gerou volume consistente de pacientes qualificados com custo por lead otimizado.</p>
+            <p style="font-size:13px;color:var(--cyan);font-weight:700;margin-top:12px;">Custo por lead: R$12</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:12px;">
               <defs><linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
               <path d="M0 58 L40 50 L80 44 L120 30 L160 16 L200 6 L200 60 L0 60Z" fill="url(#cg2)"/>
               <path d="M0 58 L40 50 L80 44 L120 30 L160 16 L200 6" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
@@ -1995,13 +2029,12 @@
           <div class="case-top"></div>
           <div class="case-logo-area"><div class="case-logo-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg><span>Logo</span></div></div>
           <div class="case-body">
-            <div class="case-spec">Odontologia Estética · Rio/RJ</div>
-            <div class="case-clinic">Studio Dental RJ</div>
+            <div class="case-spec">Ortodontia Premium · Curitiba, PR</div>
             <div class="case-metric">R$38k</div>
-            <div class="case-metric-lbl">de lentes de contato vendidas em 2 semanas</div>
-            <p class="case-desc">Antes: dificuldade para transformar demanda em faturamento. Depois: R$38k em tratamentos de alto valor fechados em 2 semanas.</p>
-            <p style="font-size:12px;color:var(--cyan);font-weight:600;margin-top:8px;">Baixa conversão → operação mais estruturada</p>
-            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <div class="case-metric-lbl">de faturamento mensal adicionado com marketing</div>
+            <p class="case-desc">Estratégia de captação premium posicionou a clínica para alto ticket e lotou a agenda com o perfil certo de paciente.</p>
+            <p style="font-size:13px;color:var(--cyan);font-weight:700;margin-top:12px;">Agenda 94% ocupada</p>
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:12px;">
               <defs><linearGradient id="cg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/><stop offset="100%" stop-color="#7C3AED" stop-opacity="0.05"/></linearGradient></defs>
               <path d="M0 56 L40 52 L80 42 L120 28 L160 12 L200 2 L200 60 L0 60Z" fill="url(#cg3)"/>
               <path d="M0 56 L40 52 L80 42 L120 28 L160 12 L200 2" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round"/>
@@ -2010,7 +2043,7 @@
         </div>
       </div>
       <div class="cases-cta reveal">
-        <a href="#cta-form" class="btn btn-primary magnetic">Quero aplicar isso na minha clínica</a>
+        <a href="#cta-form" class="btn btn-primary magnetic">Agendar diagnóstico gratuito</a>
       </div>
     </div>
   </section>
@@ -2023,16 +2056,17 @@
       <div class="plat-grid">
         <div>
           <div class="section-label reveal">Tecnologia</div>
-          <h2 class="section-h2 reveal d1">Uma plataforma.<br/>Tudo integrado.</h2>
+          <h2 class="section-h2 reveal d1">Tudo o que sua clínica<br/>precisa. Em uma plataforma.</h2>
           <p class="reveal d2" style="color:var(--gray);font-size:16px;line-height:1.8;margin-top:16px;">
-            Você não precisa contratar várias ferramentas, integrar sistemas por conta própria ou depender de processos soltos. A Rise Up organiza marketing, acompanhamento e inteligência comercial em uma estrutura mais simples, centralizada e voltada para crescimento.
+            Chega de ficar pulando entre ferramentas. Com a Rise Up, você acompanha seus resultados em um painel único e intuitivo — com tudo integrado e funcionando.
           </p>
           <ul class="feat-list">
-            <li class="reveal d2"><div class="feat-dot"></div>Gestão mais clara dos leads e atendimentos</li>
-            <li class="reveal d3"><div class="feat-dot"></div>Visão centralizada da operação comercial</li>
-            <li class="reveal d4"><div class="feat-dot"></div>Menos perda de oportunidades</li>
-            <li class="reveal d5"><div class="feat-dot"></div>Mais velocidade nas respostas e nos acompanhamentos</li>
-            <li class="reveal d6"><div class="feat-dot"></div>Mais previsibilidade para decidir com segurança</li>
+            <li class="reveal d2"><div class="feat-dot"></div>📊 Dashboard de resultados em tempo real</li>
+            <li class="reveal d3"><div class="feat-dot"></div>📱 Integração com WhatsApp Business</li>
+            <li class="reveal d4"><div class="feat-dot"></div>📋 Relatórios semanais automáticos</li>
+            <li class="reveal d5"><div class="feat-dot"></div>🎯 Funis de conversão sob medida</li>
+            <li class="reveal d6"><div class="feat-dot"></div>🔄 Automações de follow-up e reativação</li>
+            <li class="reveal d6"><div class="feat-dot"></div>📈 Métricas claras: CPL, ROAS, taxa de agendamento</li>
           </ul>
         </div>
         <div class="reveal-r d2">
@@ -2110,46 +2144,50 @@
       <div class="faq-list">
         <div class="faq-item reveal d1">
           <div class="faq-q">
-            <span class="faq-q-text">Em quanto tempo começo a ver resultado?</span>
+            <span class="faq-q-text">Quanto tempo até ver os primeiros resultados?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">O prazo varia conforme a estrutura atual da clínica, oferta e investimento, mas já nas primeiras semanas conseguimos identificar gargalos, otimizar o processo e iniciar a geração de oportunidades com mais consistência.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">A maioria das clínicas começa a receber leads qualificados nos primeiros 7 a 14 dias. Resultados consistentes de agendamento geralmente se estabilizam entre 60 e 90 dias.</div></div>
         </div>
         <div class="faq-item reveal d2">
           <div class="faq-q">
-            <span class="faq-q-text">A Rise Up atende clínicas de qualquer cidade?</span>
+            <span class="faq-q-text">Preciso de um orçamento alto para começar?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">Sim. Atendemos clínicas em diferentes regiões, sempre avaliando potencial, momento da operação e possibilidade de exclusividade local.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">Não. Trabalhamos com clínicas de diferentes portes e orçamentos. O mais importante é a estratégia certa — e isso a gente cuida pra você.</div></div>
         </div>
         <div class="faq-item reveal d3">
           <div class="faq-q">
-            <span class="faq-q-text">Preciso investir alto em anúncios para funcionar?</span>
+            <span class="faq-q-text">Vocês atendem só dentistas?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">Não necessariamente. O mais importante é ter uma estratégia bem estruturada, boa oferta, processo de conversão e acompanhamento dos indicadores certos.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">Sim, somos especializados exclusivamente em clínicas odontológicas. Esse foco é o que nos permite entregar resultados superiores a agências genéricas.</div></div>
         </div>
         <div class="faq-item reveal d4">
           <div class="faq-q">
-            <span class="faq-q-text">Funciona para clínicas menores ou em fase de crescimento?</span>
+            <span class="faq-q-text">Como funciona o acompanhamento?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">Sim, desde que exista estrutura mínima para atendimento e interesse real em construir um crescimento previsível.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">Você tem acesso a um dashboard em tempo real e recebe relatórios semanais. Além disso, tem um gerente de conta dedicado disponível via WhatsApp para qualquer dúvida.</div></div>
         </div>
         <div class="faq-item reveal d5">
           <div class="faq-q">
-            <span class="faq-q-text">Vocês fazem só tráfego pago?</span>
+            <span class="faq-q-text">Tem contrato de fidelidade?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">Não. Nosso trabalho envolve estratégia, aquisição, conversão, acompanhamento e organização da operação para gerar crescimento com mais previsibilidade.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">Recomendamos um período mínimo de 3 meses para validar a estratégia, mas não trabalhamos com multas. Você fica porque quer, não porque é obrigado.</div></div>
         </div>
         <div class="faq-item reveal d6">
           <div class="faq-q">
-            <span class="faq-q-text">Como saber se minha clínica faz sentido para a Rise Up?</span>
+            <span class="faq-q-text">O que diferencia a Rise Up de outras agências?</span>
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-ans"><div class="faq-ans-inner">Pelo diagnóstico inicial. Avaliamos cenário, potencial e momento da clínica para entender se conseguimos gerar um projeto forte e sustentável.</div></div>
+          <div class="faq-ans"><div class="faq-ans-inner">Três coisas: foco exclusivo em odontologia, sistema completo (não fazemos só anúncios) e transparência total com dados e métricas. Nascemos dentro de clínicas — sabemos o que funciona.</div></div>
         </div>
+      </div>
+      <div style="text-align:center;margin-top:48px;" class="reveal">
+        <p style="color:var(--gray);font-size:16px;margin-bottom:20px;">Ainda tem dúvidas? Fale diretamente com um especialista.</p>
+        <a href="#cta-form" class="btn btn-outline">Tirar minha dúvida no WhatsApp</a>
       </div>
     </div>
   </section>
@@ -2159,25 +2197,25 @@
     <div class="container">
       <div class="cta-grid">
         <div>
-          <div class="section-label reveal">Vamos começar</div>
+          <div class="section-label reveal">Pronto para crescer?</div>
           <h2 class="cta-h2 reveal d1">
-            Sua clínica pode<br/>ser a <span class="grad-text">próxima</span><br/>história de sucesso.
+            Sua clínica pode ser<br/>a <span class="grad-text">próxima</span> a lotar<br/>a agenda.
           </h2>
           <p class="cta-sub reveal d2">
-            Vamos analisar sua operação e mostrar onde sua clínica está perdendo pacientes, oportunidades e faturamento.
+            Agende um diagnóstico gratuito e descubra o potencial de crescimento da sua clínica com a Rise Up.
           </p>
           <div class="check-list reveal d3">
             <div class="check-item">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Diagnóstico estratégico da operação
+              Diagnóstico completo sem custo
             </div>
             <div class="check-item">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Identificação dos principais gargalos
+              Estratégia personalizada para sua clínica
             </div>
             <div class="check-item">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00E5FF" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Direcionamento de crescimento para sua clínica
+              Sem contrato de fidelidade
             </div>
           </div>
         </div>
@@ -2219,7 +2257,7 @@
                   <label>Principal desafio da sua clínica</label>
                   <textarea id="f-desafio" placeholder="Ex: Tenho poucos pacientes de alto valor, minha agenda fica inconstante..."></textarea>
                 </div>
-                <button type="submit" class="form-btn magnetic">Quero minha análise gratuita →</button>
+                <button type="submit" class="form-btn magnetic">Agendar meu diagnóstico gratuito →</button>
               </form>
             </div>
             <div class="form-success" id="formSuccess">
