@@ -172,6 +172,20 @@
       box-shadow: 0 0 40px rgba(0,229,255,0.5), 0 0 80px rgba(0,229,255,0.15);
       transform: translateY(-2px);
     }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+    .btn-primary:hover::after {
+      left: 100%;
+    }
     .btn-outline {
       background: rgba(0,229,255,0.05);
       color: var(--cyan);
@@ -194,20 +208,20 @@
     /* reveal animation */
     .reveal {
       opacity: 0;
-      transform: translateY(36px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .reveal.in { opacity: 1; transform: translateY(0); }
     .reveal-l {
       opacity: 0;
       transform: translateX(-44px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .reveal-l.in { opacity: 1; transform: translateX(0); }
     .reveal-r {
       opacity: 0;
       transform: translateX(44px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .reveal-r.in { opacity: 1; transform: translateX(0); }
     .d1 { transition-delay: 0.1s; }
@@ -483,6 +497,7 @@
       box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,229,255,0.07);
       animation: dash-float 7s ease-in-out infinite;
       position: relative; z-index: 2;
+      will-change: transform;
     }
     @keyframes dash-float {
       0%,100% { transform: translateY(0) rotate(-0.8deg); }
@@ -619,8 +634,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 40px;
       flex-wrap: wrap;
+      opacity: 0.55;
+      transition: opacity 0.3s ease;
+    }
+    .trust-logos:hover {
+      opacity: 0.75;
     }
     .trust-logo-ph {
       width: 120px;
@@ -631,7 +651,7 @@
       flex-shrink: 0;
     }
     @media (max-width: 768px) {
-      .trust-logos { gap: 10px; }
+      .trust-logos { gap: 20px; }
       .trust-logo-ph { width: 90px; height: 32px; }
     }
 
@@ -862,7 +882,11 @@
       padding: 38px;
       position: relative;
       overflow: hidden;
-      transition: all 0.4s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @supports not (backdrop-filter: blur(24px)) {
+      .pilar-card { background: rgba(12, 12, 22, 0.96); }
+      .case-card  { background: rgba(12, 12, 22, 0.96); }
     }
     .pilar-card::before {
       content: '';
@@ -1040,17 +1064,31 @@
       margin-bottom: 56px;
     }
     .case-card {
-      background: rgba(255,255,255,0.03);
+      background: linear-gradient(170deg, rgba(0,229,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(0,229,255,0.1);
       border-radius: 22px;
       overflow: hidden;
-      transition: all 0.4s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
     }
+    .case-card::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .case-card > * { position: relative; z-index: 1; }
     .case-card:hover {
       transform: scale(1.03) translateY(-7px);
       box-shadow: 0 0 60px rgba(0,229,255,0.1), 0 32px 72px rgba(0,0,0,0.45);
-      border-color: rgba(0,229,255,0.28);
+      border-color: rgba(0,229,255,0.22);
     }
     .case-top {
       height: 3px;
@@ -1102,6 +1140,18 @@
       padding: 130px 0;
       position: relative;
       overflow: hidden;
+    }
+    #plataforma::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,229,255,0.05) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
     }
     .plat-stripe {
       position: absolute;
@@ -1453,6 +1503,17 @@
     .footer-copy { color: rgba(255,255,255,0.28); font-size: 13px; }
 
     /* =============================================
+       SECTION DIVIDER
+    ============================================= */
+    .section-divider {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.12) 50%, transparent 100%);
+    }
+
+    /* =============================================
        RESPONSIVE
     ============================================= */
     @media (max-width: 1024px) {
@@ -1560,7 +1621,7 @@
           <div class="hero-eyebrow reveal">Marketing especializado para clínicas odontológicas</div>
           <h1 class="hero-h1">
             <span class="line reveal d1">Sua clínica com agenda cheia</span>
-            <span class="line reveal d2">e faturamento previsível.</span>
+            <span class="line reveal d2">e faturamento <span class="grad-text">previsível.</span></span>
             <span class="line grad-text reveal d3">Todos os meses.</span>
           </h1>
           <p class="hero-sub reveal d4">
@@ -1761,6 +1822,7 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
   <!-- ===== STATS ===== -->
   <section id="stats">
     <div class="container">
@@ -2048,6 +2110,7 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
   <!-- ===== PLATAFORMA ===== -->
   <section id="plataforma">
     <div class="plat-stripe"></div>
