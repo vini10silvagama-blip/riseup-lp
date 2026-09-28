@@ -1,20 +1,22 @@
 ---
 // 11. FAQ em acordeão (primeira pergunta aberta)
 import { faq } from '../content/conteudo';
+import Divisor from './ui/Divisor.astro';
 import Icone from './ui/Icone.astro';
 ---
 
 <section class="secao bg-branco" aria-labelledby="titulo-faq">
   <div class="container-lp flex flex-col items-center gap-10">
     <div class="flex max-w-[900px] flex-col items-center gap-3 text-center" data-revelar>
+      <Divisor icone="pergunta" />
       <p class="text-[15px] font-bold text-ciano-escuro md:text-base">{faq.sobretitulo}</p>
       <h2 id="titulo-faq" class="text-[30px] leading-[1.18] tracking-[-0.02em] md:text-[42px]">{faq.titulo}</h2>
     </div>
 
-    <div class="flex w-full max-w-[880px] flex-col gap-2.5" data-revelar>
+    <div class="flex w-full max-w-[880px] flex-col gap-2.5" data-revelar-filhos>
       {
         faq.perguntas.map((item, i) => (
-          <details class="acordeao group rounded-[14px] bg-cinza-claro" name="faq" open={i === 0}>
+          <details class="acordeao group rounded-[14px] border border-transparent bg-cinza-claro transition-[background-color,border-color] duration-300 open:border-ciano/40 open:bg-ciano-suave" name="faq" open={i === 0}>
             <summary class="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-base font-bold md:px-6 md:text-[17px] [&::-webkit-details-marker]:hidden">
               {item.q}
               <Icone

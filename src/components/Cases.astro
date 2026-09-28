@@ -8,7 +8,7 @@ import Placeholder from './ui/Placeholder.astro';
 
 <section id="resultados" class="secao overflow-hidden bg-branco" aria-labelledby="titulo-resultados">
   <div class="container-lp flex flex-col gap-10 md:gap-12">
-    <Cabecalho id="titulo-resultados" sobretitulo={cases.sobretitulo} titulo={cases.titulo} />
+    <Cabecalho id="titulo-resultados" icone="foguete" sobretitulo={cases.sobretitulo} titulo={cases.titulo} />
 
     <!-- Carrossel de cases -->
     <div class="flex flex-col gap-6" data-revelar>
@@ -33,7 +33,7 @@ import Placeholder from './ui/Placeholder.astro';
           {
             cases.itens.map((c, i) => (
               <article
-                class="slide-case grid w-full shrink-0 snap-center items-center gap-7 rounded-3xl bg-cinza-claro p-6 md:p-10 lg:grid-cols-[140px_1fr_240px] lg:gap-8 xl:grid-cols-[160px_1fr_280px] xl:gap-9"
+                class="slide-case grid w-full transition-[opacity,scale] duration-500 ease-suave shrink-0 snap-center items-center gap-7 rounded-3xl bg-cinza-claro p-6 md:p-10 lg:grid-cols-[140px_1fr_240px] lg:gap-8 xl:grid-cols-[160px_1fr_280px] xl:gap-9"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} de ${cases.itens.length}`}
               >
@@ -58,18 +58,18 @@ import Placeholder from './ui/Placeholder.astro';
                   </dl>
                   <p class="flex flex-wrap items-baseline gap-x-3">
                     <span class="text-sm font-bold text-ciano-escuro">{cases.rotuloFaturamento}</span>
-                    <span class="text-[26px] font-bold md:text-[30px]">{c.faturamento}</span>
+                    <span class="text-[26px] font-bold tabular-nums md:text-[30px]" data-contar>{c.faturamento}</span>
                   </p>
                 </div>
                 <div class="relative h-[260px] md:h-[300px]">
-                  <Placeholder texto={cases.colagem[0]} class="absolute top-5 left-0 h-[220px] w-[60%] md:h-[260px]" />
+                  <Placeholder texto={cases.colagem[0]} class="absolute top-5 left-0 h-[220px] w-[60%] -rotate-3 shadow-[0_18px_36px_-12px_rgba(20,20,20,0.22)] md:h-[260px]" />
                   <Placeholder
                     texto={cases.colagem[1]}
-                    class="absolute top-0 right-0 h-[160px] w-[42%] shadow-[0_10px_24px_rgba(20,20,20,0.1)] md:h-[190px]"
+                    class="absolute top-0 right-0 h-[160px] w-[42%] rotate-3 shadow-[0_18px_36px_-12px_rgba(20,20,20,0.22)] md:h-[190px]"
                   />
                   <Placeholder
                     texto={cases.colagem[2]}
-                    class="absolute right-5 bottom-0 h-[100px] w-[48%] shadow-[0_10px_24px_rgba(20,20,20,0.1)] md:h-[110px]"
+                    class="absolute right-5 bottom-0 h-[100px] w-[48%] rotate-2 shadow-[0_18px_36px_-12px_rgba(20,20,20,0.22)] md:h-[110px]"
                   />
                 </div>
               </article>
@@ -138,6 +138,14 @@ import Placeholder from './ui/Placeholder.astro';
     </div>
   </div>
 </section>
+
+<style>
+  /* Troca de case: o slide que sai esmaece e encolhe um pouco (fade + deslize do trilho) */
+  .slide-case[inert] {
+    opacity: 0.35;
+    scale: 0.97;
+  }
+</style>
 
 <script>
   // Carrossel: setas, pontos e arrasto (scroll-snap nativo)

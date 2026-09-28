@@ -8,25 +8,25 @@ import Tag from './ui/Tag.astro';
 
 <section id="solucoes" class="secao bg-cinza-claro" aria-labelledby="titulo-solucoes">
   <div class="container-lp flex flex-col gap-12 md:gap-14">
-    <Cabecalho id="titulo-solucoes" sobretitulo={pilares.sobretitulo} titulo={pilares.titulo} subtitulo={pilares.subtitulo} />
+    <Cabecalho id="titulo-solucoes" icone="pilar" sobretitulo={pilares.sobretitulo} titulo={pilares.titulo} subtitulo={pilares.subtitulo} />
 
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" data-revelar>
+    <!-- Etiquetas "Pilar N" na borda de cima dos cards, ligadas por uma linha
+         (horizontal no computador, vertical à esquerda no celular) -->
+    <ul class="pilares relative grid gap-9 pt-4 pl-7 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4 lg:gap-5 lg:pl-0" data-revelar-filhos>
       {
         pilares.itens.map((pilar, i) => (
           <li
             class:list={[
-              'flex flex-col gap-4 rounded-card border-2 bg-branco p-6 transition-[transform,box-shadow] duration-500 ease-suave hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(20,20,20,0.4)] md:p-7',
-              pilar.destaque ? 'border-ciano' : 'border-transparent',
+              'pilar card-hover relative flex flex-col gap-4 rounded-card border-2 bg-branco p-6 pt-8 md:p-7 md:pt-9',
+              pilar.destaque ? 'brilho border-ciano' : 'border-transparent',
             ]}
           >
-            <div class="flex items-center justify-between">
-              <span class="flex size-[52px] items-center justify-center rounded-[14px] bg-ciano-suave text-ciano-escuro">
-                <Icone nome={pilar.icone as 'estrela'} class="size-[26px]" />
-              </span>
-              <span class="rounded-pilula bg-ciano px-3.5 py-1.5 text-[13px] font-bold">
-                {pilares.rotuloPilar} {i + 1}
-              </span>
-            </div>
+            <span class="absolute -top-4 left-5 z-[2] rounded-pilula bg-ciano px-3.5 py-1.5 text-[13px] font-bold md:left-6">
+              {pilares.rotuloPilar} {i + 1}
+            </span>
+            <span class="flex size-[52px] items-center justify-center rounded-[14px] bg-ciano-suave text-ciano-escuro">
+              <Icone nome={pilar.icone as 'estrela'} class="size-[26px]" />
+            </span>
             <h3 class="font-texto text-sm font-bold tracking-[0.06em] text-ciano-escuro uppercase">{pilar.nome}</h3>
             <p class="font-titulo text-xl leading-[1.35] font-medium">{pilar.frase}</p>
 
@@ -34,7 +34,7 @@ import Tag from './ui/Tag.astro';
               <div class="flex flex-col gap-1.5 rounded-xl bg-ciano-suave p-3">
                 <a
                   href={pilar.destaque.href}
-                  class="group inline-flex min-h-9 items-center gap-1.5 self-start rounded-pilula bg-ciano px-3.5 text-[13px] font-bold text-preto transition-colors hover:bg-[#4be3df]"
+                  class="group inline-flex min-h-9 items-center gap-1.5 self-start rounded-pilula bg-ciano px-3.5 text-[13px] font-bold text-preto transition-shadow hover:shadow-[var(--shadow-brilho-forte)]"
                 >
                   {pilar.destaque.botao}
                   <Icone nome="seta" class="size-4 transition-transform group-hover:translate-x-0.5" espessura={2.2} />
@@ -60,3 +60,66 @@ import Tag from './ui/Tag.astro';
     </ul>
   </div>
 </section>
+
+<style>
+  /* Linha que liga as etiquetas: vertical à esquerda no celular */
+  .pilares::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 10px;
+    top: 16px;
+    bottom: 24px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--color-ciano), var(--color-ciano-escuro));
+    transform-origin: top;
+  }
+  /* Ponto na linha na altura de cada etiqueta */
+  .pilar::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -23px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-ciano);
+    box-shadow: 0 0 0 4px var(--color-cinza-claro);
+  }
+  @media (min-width: 640px) {
+    .pilares::before,
+    .pilar::before {
+      display: none;
+    }
+  }
+  /* Computador: linha horizontal atravessando os 4 cards na altura das etiquetas */
+  @media (min-width: 1024px) {
+    .pilares::before {
+      display: block;
+      left: 0;
+      right: 0;
+      top: 15px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+      background: linear-gradient(to right, var(--color-ciano), var(--color-ciano-escuro));
+      box-shadow: 0 0 12px rgba(41, 217, 213, 0.5);
+      transform-origin: left;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .pilares::before {
+      scale: 1 0;
+      transition: scale 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+    }
+    @media (min-width: 1024px) {
+      :global(.js) .pilares::before {
+        scale: 0 1;
+      }
+    }
+    .pilares:global(.visivel)::before {
+      scale: 1 1;
+    }
+  }
+</style>

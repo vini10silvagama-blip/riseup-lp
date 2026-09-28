@@ -19,10 +19,10 @@ const { conversa, cardLead } = riseConnect;
       </h2>
       <p class="text-base leading-[1.55] text-cinza-escuro-texto md:text-lg">{riseConnect.texto}</p>
 
-      <ul class="grid gap-3 sm:grid-cols-3">
+      <ul class="grid gap-3 sm:grid-cols-3" data-revelar-filhos>
         {
           riseConnect.classificacoes.map((item, i) => (
-            <li class:list={['rounded-[14px] p-[18px]', i === 0 ? 'bg-ciano text-preto' : 'border border-borda-escura bg-[#1E2020]']}>
+            <li class:list={['rounded-[14px] p-[18px]', i === 0 ? 'brilho bg-ciano text-preto' : 'border border-borda-escura bg-[#1E2020]']}>
               <h3 class:list={['font-texto text-[13px] font-bold tracking-wide uppercase', i !== 0 && 'text-ciano']}>{item.nome}</h3>
               <p class:list={['mt-1.5 text-sm leading-[1.45]', i !== 0 && 'text-cinza-escuro-texto']}>{item.texto}</p>
             </li>
@@ -87,7 +87,7 @@ const { conversa, cardLead } = riseConnect;
         </div>
       </div>
       <div
-        class="absolute bottom-0 left-0 flex w-[280px] flex-col gap-2 rounded-2xl bg-branco p-4 text-preto shadow-[0_20px_40px_rgba(0,0,0,0.35)] lg:-left-10"
+        class="card-lead absolute bottom-0 left-0 flex w-[280px] flex-col gap-2 rounded-2xl bg-branco p-4 text-preto shadow-[0_20px_40px_rgba(0,0,0,0.35)] lg:-left-10"
       >
         <div class="flex items-center justify-between gap-2">
           <span class="rounded-pilula bg-ciano px-2.5 py-0.5 text-xs font-bold">{cardLead.etiqueta}</span>
@@ -102,6 +102,17 @@ const { conversa, cardLead } = riseConnect;
 </section>
 
 <style>
+  /* Card do lead flutua devagar (6px, 6s) */
+  @media (prefers-reduced-motion: no-preference) {
+    .card-lead {
+      animation: flutua-lead 6s ease-in-out infinite;
+    }
+    @keyframes flutua-lead {
+      50% {
+        translate: 0 -6px;
+      }
+    }
+  }
   /* Mensagens aparecem uma a uma quando o celular entra na tela */
   @media (prefers-reduced-motion: no-preference) {
     :global(.js) .mensagem {

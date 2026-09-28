@@ -1,21 +1,27 @@
 ---
-// Cabeçalho de seção: sobretítulo + título + subtítulo (centralizado)
+// Cabeçalho de seção: divisor (opcional) + sobretítulo + título + subtítulo (centralizado)
 import type { TituloDestaque } from '../../content/conteudo';
 import Destaque from './Destaque.astro';
+import Divisor from './Divisor.astro';
 
 interface Props {
   sobretitulo?: string;
   titulo: string | TituloDestaque;
   subtitulo?: string;
   id?: string;
+  icone?: Parameters<typeof Divisor>[0]['icone'];
   class?: string;
+  classeTitulo?: string;
 }
-const { sobretitulo, titulo, subtitulo, id, class: classe = '' } = Astro.props;
+const { sobretitulo, titulo, subtitulo, id, icone, class: classe = '', classeTitulo = 'titulo-secao' } = Astro.props;
+// Largura padrão de 900px, a menos que a seção peça outra (ex.: frase gigante)
+const largura = classe.includes('max-w-') ? '' : 'max-w-[900px]';
 ---
 
-<div class={`mx-auto flex max-w-[900px] flex-col items-center gap-4 text-center ${classe}`} data-revelar>
+<div class={`mx-auto flex ${largura} flex-col items-center gap-4 text-center ${classe}`} data-revelar>
+  {icone && <Divisor icone={icone} />}
   {sobretitulo && <p class="sobretitulo">{sobretitulo}</p>}
-  <h2 id={id} class="titulo-secao">
+  <h2 id={id} class={classeTitulo}>
     {typeof titulo === 'string' ? titulo : <Destaque texto={titulo} cor="text-ciano-escuro" />}
   </h2>
   {subtitulo && <p class="subtitulo max-w-[800px]">{subtitulo}</p>}

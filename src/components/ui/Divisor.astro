@@ -1,0 +1,40 @@
+---
+// Divisor de seção: linha vertical fina + ícone em traço num quadrado arredondado
+import Icone from './Icone.astro';
+
+interface Props {
+  icone: Parameters<typeof Icone>[0]['nome'];
+  escuro?: boolean;
+}
+const { icone, escuro = false } = Astro.props;
+---
+
+<div class="divisor flex flex-col items-center" aria-hidden="true">
+  <span
+    class:list={[
+      'divisor-linha block h-12 w-px origin-top',
+      escuro ? 'bg-linear-to-b from-transparent to-ciano' : 'bg-linear-to-b from-transparent to-ciano-escuro',
+    ]}
+  ></span>
+  <span
+    class:list={[
+      'flex size-12 items-center justify-center rounded-[14px] border',
+      escuro ? 'border-ciano/40 bg-[#1E2020] text-ciano' : 'border-ciano/50 bg-branco text-ciano-escuro shadow-[0_8px_24px_-12px_rgba(41,217,213,0.5)]',
+    ]}
+  >
+    <Icone nome={icone} class="size-[22px]" />
+  </span>
+</div>
+
+<style>
+  /* A linha "desce" até o ícone quando a seção entra na tela */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .divisor-linha {
+      scale: 1 0;
+      transition: scale 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s;
+    }
+    :global(.visivel) .divisor-linha {
+      scale: 1 1;
+    }
+  }
+</style>

@@ -10,8 +10,12 @@ const campo =
 const rotulo = 'flex flex-col gap-1.5 text-sm font-semibold';
 ---
 
-<section id="diagnostico" class="secao bg-ciano" aria-labelledby="titulo-diagnostico">
-  <div class="container-lp grid items-start gap-10 lg:grid-cols-[1fr_520px] lg:gap-16">
+<section id="diagnostico" class="secao bg-branco" aria-labelledby="titulo-diagnostico">
+  <!-- Bloco ciano com gradiente sutil, cantos de 28px e brilho suave -->
+  <div class="container-lp">
+  <div
+    class="bloco-cta grid items-start gap-10 rounded-[28px] bg-linear-to-br from-ciano to-[#5FE3E0] px-5 py-10 shadow-[0_30px_80px_-30px_rgba(41,217,213,0.7)] sm:px-8 md:p-12 lg:grid-cols-[1fr_480px] lg:gap-14 lg:p-16"
+  >
     <div class="flex flex-col gap-5 lg:pt-3" data-revelar>
       <p class="text-[13px] font-bold tracking-[0.08em] uppercase md:text-sm">{diagnostico.sobretitulo}</p>
       <h2 id="titulo-diagnostico" class="text-[32px] leading-[1.12] tracking-[-0.02em] md:text-[46px]">{diagnostico.titulo}</h2>
@@ -147,6 +151,7 @@ const rotulo = 'flex flex-col gap-1.5 text-sm font-semibold';
         </button>
       </div>
     </div>
+  </div>
   </div>
 </section>
 

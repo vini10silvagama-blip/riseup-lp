@@ -7,14 +7,14 @@ import Icone from './ui/Icone.astro';
 
 <section class="secao bg-cinza-claro" aria-labelledby="titulo-problema">
   <div class="container-lp flex flex-col gap-12 md:gap-14">
-    <Cabecalho id="titulo-problema" sobretitulo={problema.sobretitulo} titulo={problema.titulo} subtitulo={problema.subtitulo} />
+    <Cabecalho id="titulo-problema" icone="gota" sobretitulo={problema.sobretitulo} titulo={problema.titulo} subtitulo={problema.subtitulo} />
 
     <div class="flex flex-col gap-4" data-revelar>
       <h3 class="font-texto text-sm font-bold text-cinza-texto">{problema.jornadaTitulo}</h3>
 
       <!-- Celular: linha vertical · Computador: linha horizontal com 7 etapas -->
       <ol
-        class="relative grid gap-5 pt-2 before:absolute before:top-6 before:bottom-6 before:left-[21px] before:w-0.5 before:bg-preto lg:grid-cols-7 lg:gap-3.5 lg:before:top-[30px] lg:before:right-[calc(100%/14)] lg:before:bottom-auto lg:before:left-[calc(100%/14)] lg:before:h-0.5 lg:before:w-auto"
+        class="linha-tempo relative grid gap-5 pt-2 before:absolute before:top-6 before:bottom-6 before:left-[21px] before:w-0.5 before:bg-preto lg:grid-cols-7 lg:gap-3.5 lg:before:top-[30px] lg:before:right-[calc(100%/14)] lg:before:bottom-auto lg:before:left-[calc(100%/14)] lg:before:h-0.5 lg:before:w-auto"
       >
         {
           problema.etapas.map((etapa, i) => (
@@ -37,7 +37,7 @@ import Icone from './ui/Icone.astro';
 
     <div class="fundo-escuro flex flex-col gap-4 rounded-card bg-preto p-6 text-branco md:px-8 md:py-7" data-revelar>
       <h3 class="font-texto text-[15px] font-bold text-ciano">{problema.porTrasTitulo}</h3>
-      <ul class="grid gap-3 text-[15px] leading-[1.45] sm:grid-cols-2 lg:grid-cols-4 lg:gap-3.5">
+      <ul class="grid gap-3 text-[15px] leading-[1.45] sm:grid-cols-2 lg:grid-cols-4 lg:gap-3.5" data-revelar-filhos>
         {problema.porTras.map((item) => <li class="rounded-xl bg-preto-2 p-4">{item}</li>)}
       </ul>
     </div>
@@ -45,11 +45,37 @@ import Icone from './ui/Icone.astro';
 </section>
 
 <style>
-  /* Gota "pingando" em sequência, sugerindo o vazamento etapa por etapa */
   @media (prefers-reduced-motion: no-preference) {
-    .gota {
-      animation: pinga 3.6s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.35s);
+    /* A linha do tempo se desenha (de cima para baixo no celular, da esquerda para a direita no computador) */
+    :global(.js) .linha-tempo::before {
+      scale: 1 0;
+      transform-origin: top;
+      transition: scale 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+    }
+    @media (min-width: 1024px) {
+      :global(.js) .linha-tempo::before {
+        scale: 0 1;
+        transform-origin: left;
+      }
+    }
+    :global(.visivel) .linha-tempo::before {
+      scale: 1 1;
+    }
+
+    /* As gotas caem em sequência e depois "pingam" devagar, sugerindo o vazamento */
+    :global(.js [data-revelar]:not(.visivel)) .gota {
+      opacity: 0;
+    }
+    :global(.visivel) .gota {
+      animation:
+        cai 0.55s cubic-bezier(0.3, 0, 0.3, 1.4) calc(0.5s + var(--i) * 0.18s) backwards,
+        pinga 3.6s ease-in-out calc(2.2s + var(--i) * 0.35s) infinite;
+    }
+    @keyframes cai {
+      from {
+        opacity: 0;
+        translate: 0 -14px;
+      }
     }
     @keyframes pinga {
       0%,

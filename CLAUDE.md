@@ -108,6 +108,7 @@ public/
 **Skills disponíveis neste projeto** (`.claude/skills`):
 - `frontend-design` — use ao construir ou refinar qualquer seção.
 - `web-design-guidelines` — use para revisar acessibilidade e boas práticas ao final de cada etapa.
+- `rise-up-design` — use em qualquer ajuste de design, animação ou efeitos visuais (referência: odontorise.com, adaptada à identidade clara da Rise Up).
 
 ---
 

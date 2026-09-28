@@ -8,9 +8,18 @@ import Icone from './ui/Icone.astro';
 const { painel, funil, equacao } = dashboard;
 ---
 
-<section class="secao bg-cinza-claro" aria-labelledby="titulo-dashboard">
+<section class="secao overflow-x-clip bg-cinza-claro" aria-labelledby="titulo-dashboard">
   <div class="container-lp flex flex-col gap-10 md:gap-12">
-    <Cabecalho id="titulo-dashboard" sobretitulo={dashboard.sobretitulo} titulo={dashboard.titulo} subtitulo={dashboard.subtitulo} />
+    <!-- Frase gigante com leve deslocamento horizontal ao rolar -->
+    <Cabecalho
+      id="titulo-dashboard"
+      icone="grafico"
+      sobretitulo={dashboard.sobretitulo}
+      titulo={dashboard.titulo}
+      subtitulo={dashboard.subtitulo}
+      class="max-w-none"
+      classeTitulo="titulo-gigante"
+    />
 
     <!-- Notebook com o painel (dados ilustrativos) + cards -->
     <div class="grid items-center gap-8 lg:grid-cols-[1fr_380px] lg:gap-12">
@@ -34,7 +43,7 @@ const { painel, funil, equacao } = dashboard;
                   painel.indicadores.map((ind) => (
                     <div class:list={['rounded-lg p-2 md:p-3', ind.escuro ? 'bg-preto text-branco' : 'border border-borda']}>
                       <p class:list={['text-[9px] leading-tight md:text-[10px]', ind.escuro ? 'text-cinza-escuro-texto' : 'text-cinza-texto']}>{ind.rotulo}</p>
-                      <p class="mt-1 text-sm font-bold tabular-nums md:text-[21px]">{ind.valor}</p>
+                      <p class="mt-1 text-sm font-bold tabular-nums md:text-[21px]" data-contar>{ind.valor}</p>
                       <p class:list={['mt-0.5 text-[9px] leading-tight md:text-[10px]', ind.escuro ? 'text-ciano' : 'text-ciano-escuro']}>{ind.nota}</p>
                     </div>
                   ))
@@ -80,10 +89,10 @@ const { painel, funil, equacao } = dashboard;
         <div class="h-3 w-[calc(100%+24px)] max-w-[790px] rounded-b-[14px] bg-[#D5DDDD] md:h-[18px]" aria-hidden="true"></div>
       </figure>
 
-      <ul class="grid gap-3 text-base leading-[1.45] sm:grid-cols-2 lg:grid-cols-1 lg:gap-3.5" data-revelar>
+      <ul class="grid gap-3 text-base leading-[1.45] sm:grid-cols-2 lg:grid-cols-1 lg:gap-3.5" data-revelar-filhos>
         {
           dashboard.cards.map((card) => (
-            <li class="rounded-[14px] bg-branco p-[18px]">
+            <li class="card-hover rounded-[14px] bg-branco p-[18px]">
               <strong>{card.forte}</strong>
               {card.resto}
             </li>
@@ -114,7 +123,7 @@ const { painel, funil, equacao } = dashboard;
               aria-controls={`painel-funil-${i}`}
               aria-selected={i === funil.etapaInicial ? 'true' : 'false'}
               tabindex={i === funil.etapaInicial ? 0 : -1}
-              class="min-h-11 shrink-0 snap-start rounded-[10px] border border-borda-escura bg-[#1E2020] px-4 text-sm font-bold whitespace-nowrap text-borda transition-colors duration-300 hover:border-ciano aria-selected:border-ciano aria-selected:bg-ciano aria-selected:text-preto"
+              class="min-h-11 shrink-0 snap-start rounded-[10px] border border-borda-escura bg-[#1E2020] px-4 text-sm font-bold whitespace-nowrap text-borda transition-[background-color,border-color,color,box-shadow] duration-300 hover:border-ciano aria-selected:border-ciano aria-selected:bg-ciano aria-selected:text-preto aria-selected:shadow-[var(--shadow-brilho)]"
             >
               {etapa.nome}
             </button>
@@ -122,6 +131,8 @@ const { painel, funil, equacao } = dashboard;
         }
       </div>
 
+      <div class="grid items-center gap-8 lg:grid-cols-[1fr_240px]">
+      <div>
       {
         funil.etapas.map((etapa, i) => (
           <div
@@ -160,6 +171,24 @@ const { painel, funil, equacao } = dashboard;
           </div>
         ))
       }
+      </div>
+
+      <!-- Funil em camadas (decorativo): a etapa ativa acende junto com a aba -->
+      <div class="funil-camadas hidden flex-col items-center gap-1.5 lg:flex" aria-hidden="true">
+        {
+          funil.etapas.map((_, i) => (
+            <div
+              class:list={['camada', i === funil.etapaInicial && 'ativa']}
+              data-camada={i}
+              style={`width:${100 - i * 10}%;--i:${i}`}
+            >
+              <span class="camada-forma camada-base" style={`opacity:${0.22 + i * 0.07}`} />
+              <span class="camada-forma camada-cheia" />
+            </div>
+          ))
+        }
+      </div>
+      </div>
     </div>
 
     <!-- Equação do faturamento -->
@@ -185,8 +214,8 @@ const { painel, funil, equacao } = dashboard;
               equacao.linhas.map((linha) => (
                 <tr class="border-b border-borda">
                   <th scope="row" class="px-3 py-[11px] font-normal text-cinza-texto md:px-4">{linha[0]}</th>
-                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4">{linha[1]}</td>
-                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4">{linha[2]}</td>
+                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4" data-contar>{linha[1]}</td>
+                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4" data-contar>{linha[2]}</td>
                 </tr>
               ))
             }
@@ -194,8 +223,8 @@ const { painel, funil, equacao } = dashboard;
           <tfoot>
             <tr class="bg-ciano-suave text-base font-bold md:text-[17px]">
               <th scope="row" class="px-3 py-3.5 md:px-4">{equacao.total[0]}</th>
-              <td class="px-3 py-3.5 whitespace-nowrap md:px-4">{equacao.total[1]}</td>
-              <td class="px-3 py-3.5 whitespace-nowrap text-ciano-escuro md:px-4">{equacao.total[2]}</td>
+              <td class="px-3 py-3.5 whitespace-nowrap md:px-4" data-contar>{equacao.total[1]}</td>
+              <td class="px-3 py-3.5 whitespace-nowrap text-ciano-escuro md:px-4" data-contar>{equacao.total[2]}</td>
             </tr>
           </tfoot>
         </table>
@@ -219,6 +248,8 @@ const { painel, funil, equacao } = dashboard;
         const painel = document.getElementById(aba.getAttribute('aria-controls')!);
         if (painel) painel.hidden = !ativa;
       });
+      const indice = abas.indexOf(alvo);
+      document.querySelectorAll('.camada').forEach((c, i) => c.classList.toggle('ativa', i === indice));
       if (focar) alvo.focus();
       mostrarAba(alvo, 'smooth');
     };
@@ -252,6 +283,62 @@ const { painel, funil, equacao } = dashboard;
 </script>
 
 <style>
+  /* Frase gigante: grande, em uma linha no computador, deslizando levemente ao rolar */
+  :global(.titulo-gigante) {
+    font-size: clamp(38px, 4.9vw, 96px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+  @media (min-width: 1024px) {
+    :global(.titulo-gigante) {
+      white-space: nowrap;
+    }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+      :global(.titulo-gigante) {
+        animation: desliza linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      @keyframes desliza {
+        from {
+          transform: translateX(3%);
+        }
+        to {
+          transform: translateX(-3%);
+        }
+      }
+    }
+  }
+
+  /* Funil em camadas: trapézios do mais largo ao mais estreito */
+  .camada {
+    position: relative;
+    height: 34px;
+    transition: filter 0.3s ease;
+  }
+  .camada-forma {
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+    border-radius: 4px;
+  }
+  .camada-base {
+    background: linear-gradient(to right, rgba(41, 217, 213, 0.55), rgba(41, 217, 213, 0.9));
+  }
+  .camada-cheia {
+    background: var(--color-ciano);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .camada.ativa {
+    filter: drop-shadow(0 0 14px rgba(41, 217, 213, 0.6));
+  }
+  .camada.ativa .camada-cheia {
+    opacity: 1;
+  }
+
   .painel-funil:not([hidden]) {
     animation: aparece 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
