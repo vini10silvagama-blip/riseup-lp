@@ -1,0 +1,120 @@
+---
+// 6. Rise Connect — uma solução Rise Up (versão enxuta)
+import { riseConnect } from '../content/conteudo';
+import Botao from './ui/Botao.astro';
+import Destaque from './ui/Destaque.astro';
+import Icone from './ui/Icone.astro';
+
+const { conversa, cardLead } = riseConnect;
+---
+
+<section id="rise-connect" class="fundo-escuro overflow-hidden bg-preto py-20 text-branco md:py-24" aria-labelledby="titulo-rise-connect">
+  <div class="container-lp grid items-center gap-14 lg:grid-cols-[1fr_400px] lg:gap-16">
+    <div class="flex flex-col gap-6" data-revelar>
+      <p class="self-start rounded-pilula border border-ciano px-3.5 py-1.5 text-xs font-bold tracking-wide text-ciano uppercase md:text-[13px]">
+        {riseConnect.etiqueta}
+      </p>
+      <h2 id="titulo-rise-connect" class="text-[30px] leading-[1.15] tracking-[-0.02em] md:text-[42px]">
+        <Destaque texto={riseConnect.titulo} />
+      </h2>
+      <p class="text-base leading-[1.55] text-cinza-escuro-texto md:text-lg">{riseConnect.texto}</p>
+
+      <ul class="grid gap-3 sm:grid-cols-3">
+        {
+          riseConnect.classificacoes.map((item, i) => (
+            <li class:list={['rounded-[14px] p-[18px]', i === 0 ? 'bg-ciano text-preto' : 'border border-borda-escura bg-[#1E2020]']}>
+              <h3 class:list={['font-texto text-[13px] font-bold tracking-wide uppercase', i !== 0 && 'text-ciano']}>{item.nome}</h3>
+              <p class:list={['mt-1.5 text-sm leading-[1.45]', i !== 0 && 'text-cinza-escuro-texto']}>{item.texto}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ul class="flex flex-col gap-2 text-[15px] text-cinza-escuro-texto">
+        {
+          riseConnect.lista.map((item) => (
+            <li class="flex gap-2.5">
+              <Icone nome="check" class="mt-0.5 size-[18px] shrink-0 text-ciano" espessura={2.2} />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex items-start gap-3.5 rounded-[14px] border border-borda-escura px-[18px] py-4 sm:items-center">
+        <Icone nome="escudo" class="size-[26px] shrink-0 text-ciano" espessura={2} />
+        <p class="text-sm leading-normal text-cinza-escuro-texto">{riseConnect.etica}</p>
+      </div>
+
+      <Botao href={riseConnect.botao.href} seta class="self-stretch sm:self-start">{riseConnect.botao.texto}</Botao>
+    </div>
+
+    <!-- Celular com conversa + card do lead no CRM -->
+    <figure class="relative mx-auto h-[600px] w-full max-w-[360px] sm:max-w-[400px]" data-revelar>
+      <figcaption class="sr-only">{conversa.rotulo}</figcaption>
+      <div
+        class="pointer-events-none absolute top-1/2 left-1/2 size-[520px] -translate-1/2 rounded-full bg-[radial-gradient(circle,rgba(41,217,213,0.25),rgba(41,217,213,0)_68%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="absolute top-0 left-1/2 h-[580px] w-[290px] -translate-x-1/2 rounded-[44px] border border-borda-escura bg-[#0A0A0A] p-2.5 lg:left-[50px] lg:translate-x-0">
+        <div class="flex h-full flex-col overflow-hidden rounded-[34px] bg-[#F2F5F5] text-preto">
+          <div class="flex items-center gap-2.5 border-b border-borda bg-branco px-4 pt-9 pb-3">
+            <span class="size-8 rounded-full bg-ciano" aria-hidden="true"></span>
+            <div>
+              <p class="text-[13px] font-bold">{conversa.clinica}</p>
+              <p class="text-[10px] text-ciano-escuro">{conversa.status}</p>
+            </div>
+          </div>
+          <ol class="flex flex-col gap-2 p-3 text-[11.5px] leading-[1.4]">
+            {
+              conversa.mensagens.map((msg, i) => (
+                <li
+                  class:list={[
+                    'mensagem max-w-[82%] px-2.5 py-2',
+                    msg.de === 'paciente'
+                      ? 'self-start rounded-[12px_12px_12px_4px] bg-branco'
+                      : 'self-end rounded-[12px_12px_4px_12px] bg-[#CFF6F5]',
+                  ]}
+                  style={`--i:${i}`}
+                >
+                  {msg.texto}
+                  <span class="block text-right text-[9px] text-cinza-texto">{msg.hora}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+      <div
+        class="absolute bottom-0 left-0 flex w-[280px] flex-col gap-2 rounded-2xl bg-branco p-4 text-preto shadow-[0_20px_40px_rgba(0,0,0,0.35)] lg:-left-10"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <span class="rounded-pilula bg-ciano px-2.5 py-0.5 text-xs font-bold">{cardLead.etiqueta}</span>
+          <span class="text-[10px] text-cinza-texto">{cardLead.local}</span>
+        </div>
+        <p class="text-sm font-bold">{cardLead.nome}</p>
+        <p class="text-xs leading-normal text-cinza-texto">{cardLead.detalhes}</p>
+        <p class="text-xs font-bold text-ciano-escuro">{cardLead.proximaAcao}</p>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  /* Mensagens aparecem uma a uma quando o celular entra na tela */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .mensagem {
+      opacity: 0;
+      translate: 0 8px;
+      transition:
+        opacity 0.5s ease,
+        translate 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: calc(0.35s + var(--i) * 0.45s);
+    }
+    :global(.visivel) .mensagem {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+</style>

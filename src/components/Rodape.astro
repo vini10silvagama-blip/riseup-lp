@@ -1,0 +1,33 @@
+---
+// Rodapé escuro
+import { rodape, site } from '../content/conteudo';
+import Icone from './ui/Icone.astro';
+---
+
+<footer class="fundo-escuro bg-preto py-10 text-sm text-cinza-escuro-texto">
+  <div class="container-lp flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+    <a href="#inicio" class="self-start" aria-label={`${site.nomeMarca} — voltar ao início`}>
+      <img src="/img/logo-riseup-branco.png" alt={site.nomeMarca} width="600" height="174" loading="lazy" class="h-10 w-auto" />
+    </a>
+    <nav aria-label="Rodapé">
+      <ul class="flex flex-wrap gap-x-7 gap-y-3">
+        {
+          rodape.links.map((link) => (
+            <li>
+              <a href={link.href} class="transition-colors hover:text-branco">
+                {link.texto}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={site.instagramUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 transition-colors hover:text-branco">
+            <Icone nome="instagram" class="size-4" />
+            {site.instagram}
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <p>{rodape.direitos}</p>
+  </div>
+</footer>

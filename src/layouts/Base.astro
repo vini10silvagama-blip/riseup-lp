@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { site } from '../content/conteudo';
+
+const urlBase = Astro.site ?? Astro.url;
+// Provisório: logo como imagem de compartilhamento até existir uma arte própria (1200×630)
+const imagemOg = new URL('/img/logo-riseup.png', urlBase);
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.titulo}</title>
+    <meta name="description" content={site.descricao} />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="icon" type="image/png" href="/img/logo-riseup.png" />
+
+    <!-- Open Graph (compartilhamento em redes e WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.nomeMarca} />
+    <meta property="og:title" content={site.titulo} />
+    <meta property="og:description" content={site.descricao} />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={imagemOg.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fontes: Poppins (títulos) e Archivo (texto), com display=swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Poppins:wght@400;500&display=swap"
+    />
+
+    <!-- Marca que o JS está ativo (as animações de entrada só rodam com JS) -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-pilula focus:bg-preto focus:px-5 focus:py-3 focus:text-branco"
+      >Pular para o conteúdo</a
+    >
+    <slot />
+
+    <script>
+      // Revela os blocos marcados com data-revelar quando entram na tela
+      const alvos = document.querySelectorAll<HTMLElement>('[data-revelar]');
+      if ('IntersectionObserver' in window) {
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((entrada) => {
+              if (entrada.isIntersecting) {
+                entrada.target.classList.add('visivel');
+                observador.unobserve(entrada.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        alvos.forEach((alvo) => observador.observe(alvo));
+      } else {
+        alvos.forEach((alvo) => alvo.classList.add('visivel'));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+// Cabeçalho de seção: sobretítulo + título + subtítulo (centralizado)
+import type { TituloDestaque } from '../../content/conteudo';
+import Destaque from './Destaque.astro';
+
+interface Props {
+  sobretitulo?: string;
+  titulo: string | TituloDestaque;
+  subtitulo?: string;
+  id?: string;
+  class?: string;
+}
+const { sobretitulo, titulo, subtitulo, id, class: classe = '' } = Astro.props;
+---
+
+<div class={`mx-auto flex max-w-[900px] flex-col items-center gap-4 text-center ${classe}`} data-revelar>
+  {sobretitulo && <p class="sobretitulo">{sobretitulo}</p>}
+  <h2 id={id} class="titulo-secao">
+    {typeof titulo === 'string' ? titulo : <Destaque texto={titulo} cor="text-ciano-escuro" />}
+  </h2>
+  {subtitulo && <p class="subtitulo max-w-[800px]">{subtitulo}</p>}
+</div>

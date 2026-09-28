@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+/* Tokens da identidade visual (ver CLAUDE.md, seção 4) */
+@theme {
+  --color-branco: #ffffff;
+  --color-ciano: #29d9d5;
+  --color-ciano-escuro: #0b7a77;
+  --color-ciano-suave: #e6fafa;
+  --color-preto: #141414;
+  --color-preto-2: #202222;
+  --color-cinza-claro: #f4f7f7;
+  --color-cinza-texto: #4a5252;
+  --color-cinza-escuro-texto: #b4bdbd;
+  --color-borda: #e3e9e9;
+  --color-borda-escura: #3a3f3f;
+
+  --font-titulo: 'Poppins', system-ui, sans-serif;
+  --font-texto: 'Archivo', system-ui, sans-serif;
+
+  --radius-card: 20px;
+  --radius-pilula: 99px;
+
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+  a,
+  button,
+  summary,
+  select,
+  input,
+  label {
+    touch-action: manipulation;
+  }
+  body {
+    @apply bg-branco font-texto text-preto antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-titulo font-medium;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ciano-escuro);
+    outline-offset: 3px;
+  }
+  .fundo-escuro :focus-visible {
+    outline-color: var(--color-ciano);
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Contêiner padrão das seções */
+  .container-lp {
+    @apply mx-auto w-full max-w-[1200px] px-5 md:px-10;
+  }
+  .secao {
+    @apply py-20 md:py-28;
+  }
+  .sobretitulo {
+    @apply text-[13px] font-bold tracking-[0.08em] text-ciano-escuro uppercase md:text-sm;
+  }
+  .titulo-secao {
+    @apply text-[30px] leading-[1.15] tracking-[-0.02em] md:text-[44px];
+  }
+  .subtitulo {
+    @apply text-base leading-[1.55] text-cinza-texto md:text-lg;
+  }
+}
+
+/* Entrada suave ao rolar (só quando o JS marca a página) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-revelar] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-suave),
+      transform 0.7s var(--ease-suave);
+  }
+  .js [data-revelar].visivel {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,279 @@
+---
+// 7. Dashboard + funil clicável + equação do faturamento
+import { dashboard } from '../content/conteudo';
+import Botao from './ui/Botao.astro';
+import Cabecalho from './ui/Cabecalho.astro';
+import Icone from './ui/Icone.astro';
+
+const { painel, funil, equacao } = dashboard;
+---
+
+<section class="secao bg-cinza-claro" aria-labelledby="titulo-dashboard">
+  <div class="container-lp flex flex-col gap-10 md:gap-12">
+    <Cabecalho id="titulo-dashboard" sobretitulo={dashboard.sobretitulo} titulo={dashboard.titulo} subtitulo={dashboard.subtitulo} />
+
+    <!-- Notebook com o painel (dados ilustrativos) + cards -->
+    <div class="grid items-center gap-8 lg:grid-cols-[1fr_380px] lg:gap-12">
+      <figure class="flex flex-col items-center" data-revelar>
+        <figcaption class="sr-only">{painel.rotuloAcessivel}</figcaption>
+        <div class="w-full max-w-[700px] rounded-[14px] bg-preto p-2 shadow-[0_30px_60px_rgba(20,20,20,0.22)] md:rounded-card md:p-3.5">
+          <div class="flex overflow-hidden rounded-md bg-branco md:rounded-lg">
+            <div class="hidden w-[52px] shrink-0 flex-col items-center gap-3.5 bg-cinza-claro pt-4 sm:flex" aria-hidden="true">
+              <span class="size-6 rounded-md bg-ciano"></span>
+              <span class="h-1 w-5 rounded-sm bg-[#C9D3D3]"></span>
+              <span class="h-1 w-5 rounded-sm bg-[#C9D3D3]"></span>
+              <span class="h-1 w-5 rounded-sm bg-[#C9D3D3]"></span>
+            </div>
+            <div class="flex min-w-0 grow flex-col gap-3 p-3 md:px-[18px] md:py-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="text-xs font-bold md:text-[13px]">{painel.titulo}</p>
+                <p class="rounded-pilula border border-borda px-2 py-0.5 text-[10px] text-cinza-texto">{painel.selo}</p>
+              </div>
+              <div class="grid grid-cols-3 gap-2 md:gap-2.5">
+                {
+                  painel.indicadores.map((ind) => (
+                    <div class:list={['rounded-lg p-2 md:p-3', ind.escuro ? 'bg-preto text-branco' : 'border border-borda']}>
+                      <p class:list={['text-[9px] leading-tight md:text-[10px]', ind.escuro ? 'text-cinza-escuro-texto' : 'text-cinza-texto']}>{ind.rotulo}</p>
+                      <p class="mt-1 text-sm font-bold tabular-nums md:text-[21px]">{ind.valor}</p>
+                      <p class:list={['mt-0.5 text-[9px] leading-tight md:text-[10px]', ind.escuro ? 'text-ciano' : 'text-ciano-escuro']}>{ind.nota}</p>
+                    </div>
+                  ))
+                }
+              </div>
+              <div class="grid gap-2 sm:grid-cols-[1.2fr_1fr] md:gap-2.5">
+                <div class="flex flex-col gap-2 rounded-lg border border-borda p-3">
+                  <p class="text-[11px] font-bold">{painel.funilTitulo}</p>
+                  {
+                    painel.funil.map((barra, i) => (
+                      <div class="flex items-center gap-1.5 text-[10px]">
+                        <span class="w-[88px] shrink-0 text-cinza-texto">{barra.rotulo}</span>
+                        <span class="h-3.5 grow">
+                          <span
+                            class:list={['barra block h-full origin-left rounded-[3px]', i === 3 ? 'bg-preto' : 'bg-ciano']}
+                            style={`width:${barra.largura}%;opacity:${i === 3 ? 1 : 1 - i * 0.15};--i:${i}`}
+                          />
+                        </span>
+                      </div>
+                    ))
+                  }
+                </div>
+                <div class="flex flex-col gap-1.5 rounded-lg border border-borda p-3">
+                  <p class="text-[11px] font-bold">{painel.origemTitulo}</p>
+                  <div class="flex h-[110px] grow items-end gap-2.5 pt-1">
+                    {
+                      painel.origens.map((col, i) => (
+                        <div class="flex h-full grow flex-col items-center justify-end gap-1">
+                          <span
+                            class="coluna block w-full origin-bottom rounded-[3px]"
+                            style={`height:${col.altura * 0.85}%;background:${['#141414', '#29D9D5', '#9BEDEB', '#C9D3D3'][i]};--i:${i}`}
+                          />
+                          <span class="text-[9px] text-cinza-texto">{col.rotulo}</span>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-3 w-[calc(100%+24px)] max-w-[790px] rounded-b-[14px] bg-[#D5DDDD] md:h-[18px]" aria-hidden="true"></div>
+      </figure>
+
+      <ul class="grid gap-3 text-base leading-[1.45] sm:grid-cols-2 lg:grid-cols-1 lg:gap-3.5" data-revelar>
+        {
+          dashboard.cards.map((card) => (
+            <li class="rounded-[14px] bg-branco p-[18px]">
+              <strong>{card.forte}</strong>
+              {card.resto}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Funil clicável (abas acessíveis) -->
+    <div class="fundo-escuro flex flex-col gap-7 rounded-3xl bg-preto p-6 text-branco md:px-12 md:py-11" data-revelar>
+      <div class="flex flex-col gap-2">
+        <h3 id="titulo-funil" class="text-[22px] md:text-[28px]">{funil.titulo}</h3>
+        <p class="text-[15px] text-cinza-escuro-texto">{funil.instrucao}</p>
+      </div>
+
+      <div
+        role="tablist"
+        aria-labelledby="titulo-funil"
+        class="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0"
+        id="abas-funil"
+      >
+        {
+          funil.etapas.map((etapa, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`aba-funil-${i}`}
+              aria-controls={`painel-funil-${i}`}
+              aria-selected={i === funil.etapaInicial ? 'true' : 'false'}
+              tabindex={i === funil.etapaInicial ? 0 : -1}
+              class="min-h-11 shrink-0 snap-start rounded-[10px] border border-borda-escura bg-[#1E2020] px-4 text-sm font-bold whitespace-nowrap text-borda transition-colors duration-300 hover:border-ciano aria-selected:border-ciano aria-selected:bg-ciano aria-selected:text-preto"
+            >
+              {etapa.nome}
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        funil.etapas.map((etapa, i) => (
+          <div
+            role="tabpanel"
+            id={`painel-funil-${i}`}
+            aria-labelledby={`aba-funil-${i}`}
+            hidden={i !== funil.etapaInicial}
+            class="painel-funil grid gap-7 rounded-2xl bg-[#1E2020] p-6 md:grid-cols-3 md:gap-8 md:p-7"
+          >
+            <div class="flex flex-col gap-2.5">
+              <h4 class="text-[15px] font-bold text-ciano">{funil.colunas.olhamos}</h4>
+              <ul class="flex flex-col gap-2.5">
+                {etapa.olhamos.map((item) => (
+                  <li class="flex gap-2.5 text-[15px] leading-[1.4]">
+                    <Icone nome="check" class="mt-0.5 size-4 shrink-0 text-ciano" espessura={2.4} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="flex flex-col gap-2.5">
+              <h4 class="text-[15px] font-bold text-ciano">{funil.colunas.porque}</h4>
+              <p class="text-[17px] leading-[1.45] font-semibold">{etapa.porque}</p>
+            </div>
+            <div class="flex flex-col gap-2.5">
+              <h4 class="text-[15px] font-bold text-ciano">{funil.colunas.ajustamos}</h4>
+              <ul class="flex flex-col gap-2.5">
+                {etapa.ajustamos.map((item) => (
+                  <li class="flex gap-2.5 text-[15px] leading-[1.4]">
+                    <Icone nome="check" class="mt-0.5 size-4 shrink-0 text-ciano" espessura={2.4} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Equação do faturamento -->
+    <div class="grid items-center gap-8 rounded-3xl bg-branco p-6 md:p-11 lg:grid-cols-[420px_1fr] lg:gap-12" data-revelar>
+      <div class="flex flex-col gap-3.5">
+        <p class="sobretitulo">{equacao.sobretitulo}</p>
+        <h3 class="text-[24px] leading-tight md:text-[28px]">{equacao.titulo}</h3>
+        <p class="text-[15px] leading-normal text-cinza-texto">{equacao.texto}</p>
+        <Botao href={equacao.botao.href} tamanho="md" class="mt-2 self-stretch sm:self-start">{equacao.botao.texto}</Botao>
+      </div>
+      <div class="overflow-hidden rounded-2xl border border-borda text-sm md:text-[15px]">
+        <table class="w-full border-collapse text-left tabular-nums">
+          <caption class="sr-only">{equacao.titulo} — {equacao.nota}</caption>
+          <thead class="bg-preto text-branco">
+            <tr>
+              {equacao.colunas.map((col, i) => (
+                <th scope="col" class:list={['px-3 py-3 font-bold md:px-4', i === 2 && 'text-ciano']}>{col}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              equacao.linhas.map((linha) => (
+                <tr class="border-b border-borda">
+                  <th scope="row" class="px-3 py-[11px] font-normal text-cinza-texto md:px-4">{linha[0]}</th>
+                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4">{linha[1]}</td>
+                  <td class="px-3 py-[11px] whitespace-nowrap md:px-4">{linha[2]}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+          <tfoot>
+            <tr class="bg-ciano-suave text-base font-bold md:text-[17px]">
+              <th scope="row" class="px-3 py-3.5 md:px-4">{equacao.total[0]}</th>
+              <td class="px-3 py-3.5 whitespace-nowrap md:px-4">{equacao.total[1]}</td>
+              <td class="px-3 py-3.5 whitespace-nowrap text-ciano-escuro md:px-4">{equacao.total[2]}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <p class="px-4 py-2 text-xs text-cinza-texto">{equacao.nota}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Abas do funil: clique e setas do teclado (padrão WAI-ARIA)
+  const lista = document.getElementById('abas-funil');
+  if (lista) {
+    const abas = Array.from(lista.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+
+    const selecionar = (alvo: HTMLButtonElement, focar = false) => {
+      abas.forEach((aba) => {
+        const ativa = aba === alvo;
+        aba.setAttribute('aria-selected', String(ativa));
+        aba.tabIndex = ativa ? 0 : -1;
+        const painel = document.getElementById(aba.getAttribute('aria-controls')!);
+        if (painel) painel.hidden = !ativa;
+      });
+      if (focar) alvo.focus();
+      mostrarAba(alvo, 'smooth');
+    };
+
+    // No celular as abas rolam na horizontal: garante que a aba ativa fique visível
+    // (sem usar scrollIntoView, que também rolaria a página)
+    const mostrarAba = (aba: HTMLButtonElement, comportamento: ScrollBehavior) => {
+      if (lista.scrollWidth <= lista.clientWidth) return;
+      const esquerda = aba.offsetLeft - lista.offsetLeft - 24;
+      lista.scrollTo({ left: Math.max(0, esquerda), behavior: comportamento });
+    };
+    const inicial = abas.find((a) => a.getAttribute('aria-selected') === 'true');
+    if (inicial) mostrarAba(inicial, 'instant');
+
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => selecionar(aba));
+      aba.addEventListener('keydown', (e) => {
+        const mapa: Record<string, number> = {
+          ArrowRight: (i + 1) % abas.length,
+          ArrowLeft: (i - 1 + abas.length) % abas.length,
+          Home: 0,
+          End: abas.length - 1,
+        };
+        if (e.key in mapa) {
+          e.preventDefault();
+          selecionar(abas[mapa[e.key]], true);
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .painel-funil:not([hidden]) {
+    animation: aparece 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes aparece {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+  /* Barras do painel crescem quando o notebook entra na tela */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .barra {
+      scale: 0 1;
+      transition: scale 1s cubic-bezier(0.22, 1, 0.36, 1) calc(0.2s + var(--i) * 0.12s);
+    }
+    :global(.js) .coluna {
+      scale: 1 0;
+      transition: scale 1s cubic-bezier(0.22, 1, 0.36, 1) calc(0.4s + var(--i) * 0.12s);
+    }
+    :global(.visivel) .barra,
+    :global(.visivel) .coluna {
+      scale: 1 1;
+    }
+  }
+</style>

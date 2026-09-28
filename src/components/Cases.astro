@@ -1,0 +1,198 @@
+---
+// 8. Cases e vídeos (PROVA) — âncora "Resultados"
+import { cases } from '../content/conteudo';
+import Cabecalho from './ui/Cabecalho.astro';
+import Icone from './ui/Icone.astro';
+import Placeholder from './ui/Placeholder.astro';
+---
+
+<section id="resultados" class="secao overflow-hidden bg-branco" aria-labelledby="titulo-resultados">
+  <div class="container-lp flex flex-col gap-10 md:gap-12">
+    <Cabecalho id="titulo-resultados" sobretitulo={cases.sobretitulo} titulo={cases.titulo} />
+
+    <!-- Carrossel de cases -->
+    <div class="flex flex-col gap-6" data-revelar>
+      <div class="flex items-center gap-5">
+        <button
+          type="button"
+          class="seta-case hidden size-[52px] shrink-0 items-center justify-center rounded-full border border-borda bg-branco transition-colors hover:border-preto md:flex"
+          data-direcao="-1"
+          aria-label={cases.anterior}
+          aria-controls="trilho-cases"
+        >
+          <Icone nome="chevron-esquerda" class="size-5" espessura={2} />
+        </button>
+
+        <div
+          id="trilho-cases"
+          class="flex min-w-0 grow snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          aria-roledescription="carrossel"
+          aria-label={cases.titulo}
+          tabindex="-1"
+        >
+          {
+            cases.itens.map((c, i) => (
+              <article
+                class="slide-case grid w-full shrink-0 snap-center items-center gap-7 rounded-3xl bg-cinza-claro p-6 md:p-10 lg:grid-cols-[140px_1fr_240px] lg:gap-8 xl:grid-cols-[160px_1fr_280px] xl:gap-9"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} de ${cases.itens.length}`}
+              >
+                <div
+                  role="img"
+                  aria-label={c.logo}
+                  class="flex size-28 items-center justify-center rounded-full bg-preto p-4 text-center text-xs text-cinza-escuro-texto md:size-[140px] xl:size-40"
+                >
+                  {c.logo}
+                </div>
+                <div class="flex min-w-0 flex-col gap-3.5">
+                  <p class="self-start rounded-pilula bg-ciano px-3 py-1 text-xs font-bold">{c.especialidade}</p>
+                  <h3 class="text-[22px] leading-tight md:text-[26px]">{c.titulo}</h3>
+                  <p class="text-[15px] leading-normal text-cinza-texto">{c.resumo}</p>
+                  <dl class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                    {cases.rotulosFunil.map((rotulo, j) => (
+                      <div class="rounded-[10px] bg-branco p-2.5">
+                        <dt class="text-[11px] text-cinza-texto">{rotulo}</dt>
+                        <dd class="text-lg font-bold">{c.funil[j]}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p class="flex flex-wrap items-baseline gap-x-3">
+                    <span class="text-sm font-bold text-ciano-escuro">{cases.rotuloFaturamento}</span>
+                    <span class="text-[26px] font-bold md:text-[30px]">{c.faturamento}</span>
+                  </p>
+                </div>
+                <div class="relative h-[260px] md:h-[300px]">
+                  <Placeholder texto={cases.colagem[0]} class="absolute top-5 left-0 h-[220px] w-[60%] md:h-[260px]" />
+                  <Placeholder
+                    texto={cases.colagem[1]}
+                    class="absolute top-0 right-0 h-[160px] w-[42%] shadow-[0_10px_24px_rgba(20,20,20,0.1)] md:h-[190px]"
+                  />
+                  <Placeholder
+                    texto={cases.colagem[2]}
+                    class="absolute right-5 bottom-0 h-[100px] w-[48%] shadow-[0_10px_24px_rgba(20,20,20,0.1)] md:h-[110px]"
+                  />
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <button
+          type="button"
+          class="seta-case hidden size-[52px] shrink-0 items-center justify-center rounded-full border border-borda bg-branco transition-colors hover:border-preto md:flex"
+          data-direcao="1"
+          aria-label={cases.proximo}
+          aria-controls="trilho-cases"
+        >
+          <Icone nome="chevron-direita" class="size-5" espessura={2} />
+        </button>
+      </div>
+
+      <div class="flex items-center justify-center gap-1" id="pontos-cases">
+        {
+          cases.itens.map((_, i) => (
+            <button
+              type="button"
+              class="ponto-case group flex size-11 items-center justify-center"
+              aria-label={`${cases.irPara} ${i + 1}`}
+              aria-current={i === 0 ? 'true' : 'false'}
+              aria-controls="trilho-cases"
+            >
+              <span class="block h-2.5 w-2.5 rounded-pilula bg-[#C9D3D3] transition-[width,background-color] duration-300 ease-suave group-aria-[current=true]:w-7 group-aria-[current=true]:bg-ciano" />
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Vídeos de depoimento (carregam só no clique) -->
+    <div class="mt-6 flex flex-col items-center gap-7" data-revelar>
+      <h3 class="text-center text-2xl md:text-[30px]">{cases.videosTitulo}</h3>
+      <ul
+        class="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:w-auto sm:justify-center sm:gap-8 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+      >
+        {
+          cases.videos.map((video) => (
+            <li class="flex w-[260px] shrink-0 snap-center flex-col gap-3 sm:w-[300px]">
+              <div class="video relative aspect-9/16 w-full overflow-hidden rounded-card bg-preto" data-src={video.src}>
+                <p class="absolute top-4 left-4 text-xs text-cinza-escuro-texto">{video.capa}</p>
+                <button
+                  type="button"
+                  class="botao-video group absolute inset-0 flex items-center justify-center"
+                  aria-label={`${cases.assistir}: ${video.especialidade}`}
+                >
+                  <span class="flex size-[72px] items-center justify-center rounded-full bg-ciano pl-1 text-preto transition-transform duration-300 ease-suave group-hover:scale-110">
+                    <Icone nome="play" class="size-[26px]" />
+                  </span>
+                </button>
+                <p class="aviso-video absolute inset-x-4 bottom-4 hidden text-center text-xs text-cinza-escuro-texto" role="status">
+                  {cases.videoPendente}
+                </p>
+              </div>
+              <p class="text-base font-bold">{video.especialidade}</p>
+              <p class="text-sm text-cinza-texto">{video.autor}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Carrossel: setas, pontos e arrasto (scroll-snap nativo)
+  const trilho = document.getElementById('trilho-cases');
+  if (trilho) {
+    const slides = Array.from(trilho.querySelectorAll<HTMLElement>('.slide-case'));
+    const pontos = Array.from(document.querySelectorAll<HTMLButtonElement>('.ponto-case'));
+    let atual = 0;
+
+    const irPara = (indice: number) => {
+      atual = (indice + slides.length) % slides.length;
+      trilho.scrollTo({ left: slides[atual].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+    };
+
+    const marcar = (indice: number) => {
+      atual = indice;
+      pontos.forEach((p, i) => p.setAttribute('aria-current', String(i === indice)));
+      slides.forEach((s, i) => s.toggleAttribute('inert', i !== indice));
+    };
+
+    document.querySelectorAll<HTMLButtonElement>('.seta-case').forEach((seta) => {
+      seta.addEventListener('click', () => irPara(atual + Number(seta.dataset.direcao)));
+    });
+    pontos.forEach((ponto, i) => ponto.addEventListener('click', () => irPara(i)));
+
+    // Atualiza os pontos conforme o slide visível (inclusive no arrasto do celular)
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((e) => {
+          if (e.isIntersecting) marcar(slides.indexOf(e.target as HTMLElement));
+        });
+      },
+      { root: trilho, threshold: 0.6 },
+    );
+    slides.forEach((s) => observador.observe(s));
+    marcar(0);
+  }
+
+  // Vídeos: só cria o <video> quando a pessoa clica em play
+  document.querySelectorAll<HTMLButtonElement>('.botao-video').forEach((botao) => {
+    botao.addEventListener('click', () => {
+      const caixa = botao.closest<HTMLElement>('.video')!;
+      const src = caixa.dataset.src;
+      if (!src) {
+        caixa.querySelector('.aviso-video')?.classList.remove('hidden');
+        return;
+      }
+      const video = document.createElement('video');
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.className = 'absolute inset-0 size-full object-cover';
+      caixa.replaceChildren(video);
+      video.focus();
+    });
+  });
+</script>

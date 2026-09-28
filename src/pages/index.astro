@@ -1,0 +1,35 @@
+---
+// Monta as seções na ordem do briefing: dor → solução → oferta
+import Base from '../layouts/Base.astro';
+import Topo from '../components/Topo.astro';
+import Hero from '../components/Hero.astro';
+import Problema from '../components/Problema.astro';
+import OQueFazemos from '../components/OQueFazemos.astro';
+import Pilares from '../components/Pilares.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
+import RiseConnect from '../components/RiseConnect.astro';
+import Dashboard from '../components/Dashboard.astro';
+import Cases from '../components/Cases.astro';
+import ParaQuem from '../components/ParaQuem.astro';
+import Diagnostico from '../components/Diagnostico.astro';
+import Faq from '../components/Faq.astro';
+import Rodape from '../components/Rodape.astro';
+---
+
+<Base>
+  <Topo />
+  <main id="conteudo">
+    <Hero />
+    <Problema />
+    <OQueFazemos />
+    <Pilares />
+    <ComoFunciona />
+    <RiseConnect />
+    <Dashboard />
+    <Cases />
+    <ParaQuem />
+    <Diagnostico />
+    <Faq />
+  </main>
+  <Rodape />
+</Base>

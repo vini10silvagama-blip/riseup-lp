@@ -1,0 +1,12 @@
+---
+// Monta um título com a palavra em destaque colorida (nunca com fundo)
+import type { TituloDestaque } from '../../content/conteudo';
+
+interface Props {
+  texto: TituloDestaque;
+  cor?: string;
+}
+const { texto, cor = 'text-ciano' } = Astro.props;
+---
+
+{texto.antes}{texto.destaque && <span class={cor}>{texto.destaque}</span>}{texto.depois}

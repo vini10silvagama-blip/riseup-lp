@@ -1,0 +1,9 @@
+---
+// Etiqueta pequena em pílula (tags de serviços)
+interface Props {
+  class?: string;
+}
+const { class: classe = 'bg-cinza-claro text-preto' } = Astro.props;
+---
+
+<span class={`inline-flex items-center rounded-pilula px-2.5 py-1 text-xs font-medium ${classe}`}><slot /></span>

@@ -1,0 +1,157 @@
+---
+// 1. Hero — promessa
+import { hero } from '../content/conteudo';
+import Botao from './ui/Botao.astro';
+import Destaque from './ui/Destaque.astro';
+import Icone from './ui/Icone.astro';
+import Placeholder from './ui/Placeholder.astro';
+---
+
+<section id="inicio" class="relative overflow-hidden pt-[104px] pb-16 md:pt-[136px] md:pb-20" aria-labelledby="titulo-hero">
+  <div class="container-lp">
+    <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-10">
+      <!-- Texto -->
+      <div class="entrada flex flex-col gap-6 md:gap-7">
+        <p
+          class="inline-flex items-center gap-2 self-start rounded-pilula border border-borda py-1.5 pr-3.5 pl-1.5 text-xs font-medium md:text-[13px]"
+        >
+          <span class="shrink-0 rounded-pilula bg-ciano px-2.5 py-1 text-[11px] font-bold tracking-wide whitespace-nowrap md:text-xs">{hero.etiquetaMarca}</span>
+          {hero.etiqueta}
+        </p>
+        <h1 id="titulo-hero" class="text-[38px] leading-[1.08] tracking-[-0.025em] sm:text-5xl lg:text-[58px]">
+          <Destaque texto={hero.titulo} />
+        </h1>
+        <p class="text-[17px] leading-[1.55] text-cinza-texto md:text-[19px]">{hero.subtitulo}</p>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <Botao href={hero.botaoPrincipal.href}>{hero.botaoPrincipal.texto}</Botao>
+          <Botao href={hero.botaoSecundario.href} variante="contorno">{hero.botaoSecundario.texto}</Botao>
+        </div>
+      </div>
+
+      <!-- Sócios sobre círculos concêntricos -->
+      <div class="entrada entrada-2 relative mx-auto h-[440px] w-full max-w-[560px] sm:h-[540px] lg:h-[600px]">
+        <div class="pointer-events-none absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+          <div class="circulo size-[520px] border-ciano/20 sm:size-[680px] lg:size-[760px]"></div>
+          <div class="circulo size-[400px] border-ciano/30 [animation-delay:-2s] sm:size-[520px] lg:size-[580px]"></div>
+          <div
+            class="circulo size-[290px] border-ciano/45 bg-[radial-gradient(circle,rgba(41,217,213,0.28),rgba(41,217,213,0)_70%)] [animation-delay:-4s] sm:size-[370px] lg:size-[420px]"
+          >
+          </div>
+        </div>
+
+        <div class="absolute inset-x-0 bottom-0 flex items-end justify-center gap-2.5 sm:gap-3">
+          {
+            hero.socios.map((socio) => (
+              <Placeholder
+                texto={socio.placeholder}
+                class="h-[360px] w-[46%] max-w-[260px] rounded-t-[130px] rounded-b-2xl sm:h-[460px] lg:h-[520px]"
+              />
+            ))
+          }
+        </div>
+
+        <!-- Nomes dos sócios -->
+        <div class="absolute bottom-5 left-0 rounded-xl bg-branco px-3 py-2 shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:bottom-9 sm:px-3.5 sm:py-2.5">
+          <p class="text-[13px] font-bold sm:text-sm">{hero.socios[0].nome}</p>
+          <p class="max-w-[140px] text-[11px] leading-snug text-cinza-texto sm:max-w-none sm:text-xs">{hero.socios[0].funcao}</p>
+        </div>
+        <div class="absolute right-0 bottom-5 rounded-xl bg-branco px-3 py-2 text-right shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:bottom-9 sm:px-3.5 sm:py-2.5">
+          <p class="text-[13px] font-bold sm:text-sm">{hero.socios[1].nome}</p>
+          <p class="ml-auto max-w-[140px] text-[11px] leading-snug text-cinza-texto sm:max-w-none sm:text-xs">{hero.socios[1].funcao}</p>
+        </div>
+
+        <!-- Cards flutuantes -->
+        <div
+          class="flutua absolute top-2 left-0 flex max-w-[250px] items-center gap-2.5 rounded-[14px] bg-branco px-3.5 py-3 shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:top-10 sm:max-w-none sm:px-4 lg:-left-2.5"
+        >
+          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-ciano text-preto">
+            <Icone nome="estrela" class="size-4" espessura={2.2} />
+          </span>
+          <span>
+            <span class="block text-[12px] leading-tight font-bold sm:text-[13px]">{hero.cardEspecialistas.titulo}</span>
+            <span class="block text-[11px] text-cinza-texto">{hero.cardEspecialistas.texto}</span>
+          </span>
+        </div>
+        <div
+          class="flutua flutua-2 absolute top-[92px] right-0 flex items-center gap-2.5 rounded-[14px] bg-preto px-3.5 py-3 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] sm:top-[170px] sm:px-4 lg:-right-2.5"
+        >
+          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-ciano text-sm font-bold text-preto" aria-hidden="true">R$</span>
+          <span>
+            <span class="block text-[12px] font-bold sm:text-[13px]">{hero.cardCase.titulo}</span>
+            <span class="block text-[11px] text-cinza-escuro-texto">{hero.cardCase.texto}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logos de clientes -->
+    <div class="mt-14 flex flex-col gap-4 md:mt-16" data-revelar>
+      <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
+      <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
+        {
+          hero.clientes.map((logo) => (
+            <li class="flex h-16 items-center justify-center rounded-xl border-[1.5px] border-dashed border-[#C9D3D3] px-2 text-center text-xs text-cinza-texto">
+              {logo}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .circulo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-width: 1px;
+    border-radius: 9999px;
+    translate: -50% -50%;
+    animation: respira 9s ease-in-out infinite;
+  }
+  @keyframes respira {
+    0%,
+    100% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.035;
+    }
+  }
+  .flutua {
+    animation: flutua 6s ease-in-out infinite;
+  }
+  .flutua-2 {
+    animation-delay: -3s;
+  }
+  @keyframes flutua {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -8px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .entrada {
+      animation: sobe 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .entrada-2 {
+      animation-delay: 0.15s;
+    }
+    @keyframes sobe {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .circulo,
+    .flutua {
+      animation: none;
+    }
+  }
+</style>

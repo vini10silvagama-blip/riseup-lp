@@ -1,0 +1,64 @@
+---
+// 5. Como tudo se conecta (SOLUÇÃO em ação)
+import { comoFunciona } from '../content/conteudo';
+import Cabecalho from './ui/Cabecalho.astro';
+import Icone from './ui/Icone.astro';
+---
+
+<section id="como-funciona" class="secao bg-branco" aria-labelledby="titulo-como-funciona">
+  <div class="container-lp flex flex-col gap-10 md:gap-12">
+    <Cabecalho
+      id="titulo-como-funciona"
+      sobretitulo={comoFunciona.sobretitulo}
+      titulo={comoFunciona.titulo}
+      subtitulo={comoFunciona.subtitulo}
+    />
+
+    <div class="flex flex-col gap-4 rounded-card bg-preto p-6 text-branco sm:flex-row sm:items-center sm:gap-6 md:px-8 md:py-7" data-revelar>
+      <span class="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-ciano text-preto md:size-16">
+        <Icone nome="conversao" class="size-7" espessura={2} />
+      </span>
+      <p class="text-[17px] leading-[1.45] md:text-xl">
+        <strong>{comoFunciona.faixa.destaque}</strong>{comoFunciona.faixa.resto}
+      </p>
+    </div>
+
+    <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5" data-revelar>
+      {
+        comoFunciona.etapas.map((etapa, i) => (
+          <li class="flex flex-col gap-3 rounded-card bg-cinza-claro p-6 md:p-7">
+            <div class="flex items-center gap-3">
+              <span class="flex size-[38px] shrink-0 items-center justify-center rounded-full bg-ciano font-bold">{i + 1}</span>
+              <h3 class="text-xl">{etapa.nome}</h3>
+            </div>
+            <p class="flex gap-1.5 text-[13.5px] text-cinza-texto">
+              <Icone nome="x" class="mt-[3px] size-3.5 shrink-0" espessura={2.4} />
+              <span>
+                {comoFunciona.rotuloSemSistema} {etapa.semSistema}
+              </span>
+            </p>
+            <p class="text-[15px] leading-normal">{etapa.texto}</p>
+            <p class="text-[13px] text-cinza-texto">
+              <strong class="text-preto">{comoFunciona.rotuloSolucao}</strong> {etapa.solucao}
+            </p>
+            <p class="mt-auto rounded-[10px] bg-ciano-suave px-3 py-2.5 text-[13px]">
+              <strong>{comoFunciona.nomeExemplo}</strong> {etapa.joao}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="grid gap-4 lg:grid-cols-[1fr_340px] lg:gap-5" data-revelar>
+      <div class="flex flex-col gap-4 rounded-card bg-preto p-6 text-branco sm:flex-row sm:items-center sm:gap-5 md:px-8">
+        <span class="self-start rounded-[10px] bg-ciano px-3.5 py-2 text-sm font-bold text-preto sm:self-center">{comoFunciona.crm.etiqueta}</span>
+        <p class="text-base leading-[1.45] md:text-[17px]">{comoFunciona.crm.texto}</p>
+        <Icone nome="seta" class="hidden size-7 shrink-0 text-ciano lg:block" />
+      </div>
+      <div class="flex flex-col justify-center gap-1.5 rounded-card bg-ciano p-6">
+        <h3 class="text-xl">{comoFunciona.dashboard.titulo}</h3>
+        <p class="text-[15px] leading-[1.4]">{comoFunciona.dashboard.texto}</p>
+      </div>
+    </div>
+  </div>
+</section>

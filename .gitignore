@@ -1,0 +1,6 @@
+.vercel
+_legado/
+node_modules/
+dist/
+.astro/
+.claude/settings.local.json

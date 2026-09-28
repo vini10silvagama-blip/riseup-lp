@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>LP Rise Up — Parte 3</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;family=Poppins:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:'Archivo',system-ui,sans-serif;background:#ffffff;color:#141414}
+a{color:#0B7A77}a:hover{color:#085C5A}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 4800px; display: flex; flex-direction: column; background: #FFFFFF; font-family: 'Archivo', system-ui, sans-serif; color: #141414; overflow: hidden">
+
+<!-- 8. CASES -->
+<section id="resultados" style="padding: 112px 120px; background: #FFFFFF; display: flex; flex-direction: column; gap: 48px">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+    <div style="font-size: 14px; font-weight: 700; color: #0B7A77; letter-spacing: 0.08em; text-transform: uppercase">Resultados</div>
+    <h2 style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 44px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500; max-width: 900px">Clínicas que trocaram aposta por previsibilidade</h2>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 20px">
+    <button type="button" onClick="{{prevCase}}" aria-label="Case anterior" style="width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%; border: 1px solid #E3E9E9; background: #FFFFFF; font-size: 20px; cursor: pointer">‹</button>
+    <div style="flex-grow: 1; box-sizing: border-box; padding: 40px; border-radius: 24px; background: #F4F7F7; display: grid; grid-template-columns: 200px 1fr 360px; gap: 36px; align-items: center">
+      <div style="width: 200px; height: 200px; border-radius: 50%; background: #141414; color: #A7B1B1; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px">{{curCase.logo}}</div>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <div style="align-self: flex-start; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 99px; background: #29D9D5">{{curCase.tag}}</div>
+        <div style="font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 500; line-height: 1.25">{{curCase.title}}</div>
+        <div style="font-size: 15px; line-height: 1.5; color: #4A5252">{{curCase.story}}</div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+          <div style="padding: 10px; border-radius: 10px; background: #FFFFFF"><div style="font-size: 11px; color: #5B6363">Leads</div><div style="font-size: 18px; font-weight: 800">{{curCase.leads}}</div></div>
+          <div style="padding: 10px; border-radius: 10px; background: #FFFFFF"><div style="font-size: 11px; color: #5B6363">Agendamentos</div><div style="font-size: 18px; font-weight: 800">{{curCase.agend}}</div></div>
+          <div style="padding: 10px; border-radius: 10px; background: #FFFFFF"><div style="font-size: 11px; color: #5B6363">Comparecimentos</div><div style="font-size: 18px; font-weight: 800">{{curCase.comp}}</div></div>
+          <div style="padding: 10px; border-radius: 10px; background: #FFFFFF"><div style="font-size: 11px; color: #5B6363">Fechamentos</div><div style="font-size: 18px; font-weight: 800">{{curCase.fech}}</div></div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 12px"><span style="font-size: 14px; font-weight: 700; color: #0B7A77">Faturamento</span><span style="font-size: 30px; font-weight: 800">{{curCase.fat}}</span></div>
+      </div>
+      <div style="position: relative; height: 300px">
+        <div style="position: absolute; left: 0; top: 20px; width: 220px; height: 260px; border-radius: 14px; border: 1.5px dashed #9AA5A5; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #7A8484; text-align: center">[PRINT LANDING PAGE]</div>
+        <div style="position: absolute; right: 0; top: 0; width: 150px; height: 190px; border-radius: 14px; border: 1.5px dashed #9AA5A5; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #7A8484; text-align: center; box-shadow: 0 10px 24px rgba(20,20,20,0.1)">[CRIATIVO<br>ANÚNCIO]</div>
+        <div style="position: absolute; right: 20px; bottom: 0; width: 170px; height: 110px; border-radius: 14px; border: 1.5px dashed #9AA5A5; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #7A8484; text-align: center; box-shadow: 0 10px 24px rgba(20,20,20,0.1)">[PRINT DASHBOARD]</div>
+      </div>
+    </div>
+    <button type="button" onClick="{{nextCase}}" aria-label="Próximo case" style="width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%; border: 1px solid #E3E9E9; background: #FFFFFF; font-size: 20px; cursor: pointer">›</button>
+  </div>
+  <div style="display: flex; justify-content: center; gap: 10px">
+    <sc-for list="{{cases}}" as="c" hint-placeholder-count="3">
+      <button type="button" onClick="{{c.pick}}" aria-label="Ver case" style="{{c.dotStyle}}"></button>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 28px; margin-top: 16px">
+    <div style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 500; text-align: center">Quem viveu o processo conta</div>
+    <div style="display: flex; gap: 32px">
+      <div style="display: flex; flex-direction: column; gap: 12px; width: 300px">
+        <div style="position: relative; width: 300px; height: 533px; border-radius: 20px; background: #141414; display: flex; align-items: center; justify-content: center">
+          <div style="position: absolute; top: 16px; left: 16px; font-size: 12px; color: #A7B1B1">[VÍDEO 9:16 · CAPA]</div>
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: #29D9D5; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="#141414"><path d="M8 5v14l11-7z"></path></svg></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 700">Implantes e reabilitação oral</div>
+        <div style="font-size: 14px; color: #5B6363">[NOME DO DENTISTA · CLÍNICA]</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; width: 300px">
+        <div style="position: relative; width: 300px; height: 533px; border-radius: 20px; background: #141414; display: flex; align-items: center; justify-content: center">
+          <div style="position: absolute; top: 16px; left: 16px; font-size: 12px; color: #A7B1B1">[VÍDEO 9:16 · CAPA]</div>
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: #29D9D5; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="#141414"><path d="M8 5v14l11-7z"></path></svg></div>
+        </div>
+        <div style="font-size: 16px; font-weight: 700">Harmonização facial</div>
+        <div style="font-size: 14px; color: #5B6363">[NOME DA DENTISTA · CLÍNICA]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. É PARA VOCÊ + O QUE ASSUMIMOS -->
+<section style="padding: 112px 120px; background: #F4F7F7; display: flex; flex-direction: column; align-items: center; gap: 44px">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; max-width: 880px">
+    <div style="width: 56px; height: 4px; border-radius: 2px; background: #29D9D5"></div>
+    <h2 style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 42px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 500">Sem promessa. Sem piloto automático. Previsibilidade com método.</h2>
+    <p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4A5252">Nem toda clínica precisa da Rise Up. Se você já contratou agência e se frustrou, veja se faz sentido para você.</p>
+  </div>
+  <div style="width: 1080px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(20,20,20,0.12)">
+    <div style="padding: 44px; background: #29D9D5; display: flex; flex-direction: column; gap: 12px">
+      <div style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 500; margin-bottom: 8px">É para você se…</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.45); font-size: 15px; line-height: 1.4; font-weight: 500">✓ Sua clínica fatura acima de R$ 70 mil/mês e quer crescer com previsibilidade.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.45); font-size: 15px; line-height: 1.4; font-weight: 500">✓ Trabalha com procedimentos de alto valor.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.45); font-size: 15px; line-height: 1.4; font-weight: 500">✓ Quer tratar atendimento e conversão como parte do jogo.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.45); font-size: 15px; line-height: 1.4; font-weight: 500">✓ Aceita processo: medir → corrigir → escalar.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.45); font-size: 15px; line-height: 1.4; font-weight: 500">✓ Quer crescer sem contratar gente só para apagar incêndio.</div>
+    </div>
+    <div style="padding: 44px; background: #141414; color: #FFFFFF; display: flex; flex-direction: column; gap: 12px">
+      <div style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 500; margin-bottom: 8px">Não é para você se…</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: #202222; font-size: 15px; line-height: 1.4">✕ Procura promessa de “agenda cheia em X dias”.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: #202222; font-size: 15px; line-height: 1.4">✕ Quer só “rodar anúncio” sem olhar atendimento e venda.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: #202222; font-size: 15px; line-height: 1.4">✕ Espera um chatbot genérico que resolva tudo sozinho.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: #202222; font-size: 15px; line-height: 1.4">✕ Quer terceirizar tudo sem mudar nada na clínica.</div>
+      <div style="padding: 14px 16px; border-radius: 12px; background: #202222; font-size: 15px; line-height: 1.4">✕ Troca de estratégia toda semana.</div>
+    </div>
+  </div>
+  <div style="width: 1080px; display: flex; flex-direction: column; gap: 16px">
+    <div style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 500; text-align: center">O que a Rise Up assume com você</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; font-size: 15px; line-height: 1.45"><strong style="color: #0B7A77">✓</strong> A responsabilidade do anúncio até o tratamento fechado.</div>
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; font-size: 15px; line-height: 1.45"><strong style="color: #0B7A77">✓</strong> O diagnóstico de onde o paciente escapa no funil.</div>
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; font-size: 15px; line-height: 1.45"><strong style="color: #0B7A77">✓</strong> A receita por origem, não só métricas de mídia.</div>
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; font-size: 15px; line-height: 1.45"><strong style="color: #0B7A77">✓</strong> Processo, roteiro e treinamento para a sua equipe.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. DIAGNÓSTICO + FORMULÁRIO -->
+<section id="diagnostico" style="padding: 112px 120px; background: #29D9D5; display: grid; grid-template-columns: 1fr 520px; gap: 64px; align-items: start">
+  <div style="display: flex; flex-direction: column; gap: 22px; padding-top: 12px">
+    <div style="font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Diagnóstico gratuito</div>
+    <h2 style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 46px; line-height: 1.12; letter-spacing: -0.02em; font-weight: 500">Se você se encaixa, peça seu diagnóstico.</h2>
+    <p style="margin: 0; font-size: 18px; line-height: 1.55">Em uma reunião, mapeamos seu funil — de leads a fechamentos — e mostramos onde está o vazamento e o que corrigir primeiro.</p>
+    <div style="padding: 28px; border-radius: 20px; background: rgba(255,255,255,0.5); display: flex; flex-direction: column; gap: 10px; font-size: 16px">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px">O que analisamos</div>
+      <div>✓ Quantos leads entram e de onde vêm</div>
+      <div>✓ Tempo de resposta e taxa de agendamento</div>
+      <div>✓ Comparecimento, faltas e cancelamentos</div>
+      <div>✓ Orçamentos apresentados e parados</div>
+      <div>✓ Taxa de fechamento e ticket médio</div>
+      <div>✓ Receita por origem e base inativa</div>
+    </div>
+  </div>
+
+  <div style="padding: 40px; border-radius: 24px; background: #FFFFFF; box-shadow: 0 30px 60px rgba(20,20,20,0.18); display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <div style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 500">Solicite seu diagnóstico</div>
+      <div style="font-size: 13px; font-weight: 700; color: #0B7A77">{{stepLabel}}</div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px"><div style="height: 5px; border-radius: 3px; background: #29D9D5"></div><div style="{{bar2Style}}"></div></div>
+
+    <sc-if value="{{isStep1}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Nome<input type="text" placeholder="Seu nome" style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px"></label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">WhatsApp<input type="tel" placeholder="(00) 00000-0000" style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px"></label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Nome da clínica<input type="text" placeholder="Nome da clínica" style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px"></label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Cidade/UF<input type="text" placeholder="Cidade/UF" style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Instagram da clínica<input type="text" placeholder="@suaclinica" style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px"></label>
+        </div>
+        <button type="button" onClick="{{goStep2}}" style="height: 56px; border-radius: 99px; border: 0; background: #141414; color: #FFFFFF; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px">Continuar →</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isStep2}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Faturamento mensal da clínica
+          <select style="height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px; background: #FFFFFF">
+            <option>Selecione</option><option>Até R$ 50 mil</option><option>R$ 50 a 70 mil</option><option>R$ 70 a 100 mil</option><option>R$ 100 a 150 mil</option><option>R$ 150 a 200 mil</option><option>Acima de R$ 200 mil</option>
+          </select></label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Leads por mês
+            <select style="height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px; background: #FFFFFF">
+              <option>Selecione</option><option>Até 50</option><option>50 a 150</option><option>150 a 300</option><option>Mais de 300</option><option>Não sei</option>
+            </select></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Quem responde os leads
+            <select style="height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px; background: #FFFFFF">
+              <option>Selecione</option><option>Recepção</option><option>O dono</option><option>Equipe comercial</option><option>Ninguém definido</option>
+            </select></label>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Maior gargalo hoje
+            <select style="height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px; background: #FFFFFF">
+              <option>Selecione</option><option>Atendimento</option><option>Agenda</option><option>Fechamento</option><option>Gestão</option>
+            </select></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600">Investe em anúncios?
+            <select style="height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D3D3; font-size: 15px; background: #FFFFFF">
+              <option>Selecione</option><option>Sim, com agência</option><option>Sim, internamente</option><option>Não</option>
+            </select></label>
+        </div>
+        <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: #4A5252"><input type="checkbox" style="width: 18px; height: 18px; margin-top: 1px">Autorizo a Rise Up a usar meus dados para contato sobre o diagnóstico, conforme a LGPD.</label>
+        <button type="button" onClick="{{submitForm}}" style="height: 56px; border-radius: 99px; border: 0; background: #141414; color: #FFFFFF; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px">Quero meu diagnóstico gratuito</button>
+        <button type="button" onClick="{{goStep1}}" style="height: 44px; border: 0; background: transparent; color: #0B7A77; font-size: 14px; font-weight: 700; cursor: pointer">← Voltar</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isDone}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 40px 0">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #29D9D5; display: flex; align-items: center; justify-content: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
+        <div style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 500">Recebemos sua solicitação!</div>
+        <div style="font-size: 15px; line-height: 1.5; color: #4A5252">Retornamos em até [PRAZO] pelo WhatsApp para agendar seu diagnóstico.</div>
+        <button type="button" onClick="{{goStep1}}" style="height: 44px; border: 0; background: transparent; color: #0B7A77; font-size: 14px; font-weight: 700; cursor: pointer">Ver o formulário de novo</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<!-- 11. FAQ -->
+<section style="flex-grow: 1; padding: 112px 120px; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; gap: 40px">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+    <div style="font-size: 16px; font-weight: 700; color: #0B7A77">Perguntas que a gente ouve toda semana</div>
+    <h2 style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 42px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 500">Respostas diretas — sem promessa e sem enrolação.</h2>
+  </div>
+  <div style="width: 880px; display: flex; flex-direction: column; gap: 10px">
+    <sc-for list="{{faqs}}" as="f" hint-placeholder-count="6">
+      <div style="border-radius: 14px; background: #F4F7F7; overflow: hidden">
+        <button type="button" onClick="{{f.toggle}}" style="width: 100%; min-height: 60px; padding: 18px 24px; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 16px; text-align: left; font-size: 17px; font-weight: 700; color: #141414; cursor: pointer">{{f.q}}<span style="font-size: 22px; color: #0B7A77">{{f.mark}}</span></button>
+        <sc-if value="{{f.open}}" hint-placeholder-val="{{false}}">
+          <div style="padding: 0 24px 22px; font-size: 16px; line-height: 1.55; color: #4A5252">{{f.a}}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer style="flex-shrink: 0; padding: 40px 120px; background: #141414; color: #A7B1B1; display: flex; justify-content: space-between; align-items: center; font-size: 14px">
+  <div style="display: flex; align-items: center; gap: 10px"><div style="width: 28px; height: 28px; border-radius: 8px; background: #29D9D5"></div><span style="color: #FFFFFF; font-weight: 800">RISE UP Odonto</span></div>
+  <div style="display: flex; gap: 28px"><a href="Main.dc.html" style="color: #A7B1B1; text-decoration: none">Soluções</a><a href="#resultados" style="color: #A7B1B1; text-decoration: none">Resultados</a><a href="Main.dc.html" style="color: #A7B1B1; text-decoration: none">Sobre</a><a href="Parte2.dc.html" style="color: #A7B1B1; text-decoration: none">Rise Connect</a><span>@riseupodonto</span></div>
+  <div>© 2026 Rise Up Odonto. Todos os direitos reservados.</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4800}}'>
+var CASES = [
+  { logo: '[LOGO CLÍNICA]', tag: 'Implantes e reabilitação oral', title: 'De R$ 55 mil para R$ 115 mil/mês em 3 meses', story: 'Clínica com 3 dentistas e faturamento estagnado. Ajustamos a segmentação, otimizamos o site, organizamos o CRM com follow-up automático e implantamos o Rise Connect no pré-atendimento. Resultado: uma nova cadeira aberta.', leads: '[—]', agend: '[—]', comp: '[—]', fech: '[—]', fat: 'R$ 115 mil/mês' },
+  { logo: '[LOGO CLÍNICA 2]', tag: '[ESPECIALIDADE]', title: '[TÍTULO DO CASE 2]', story: '[Resumo: cenário antes, gargalos encontrados, o que foi entregue e o resultado.]', leads: '[—]', agend: '[—]', comp: '[—]', fech: '[—]', fat: 'R$ [—]' },
+  { logo: '[LOGO CLÍNICA 3]', tag: '[ESPECIALIDADE]', title: '[TÍTULO DO CASE 3]', story: '[Resumo: cenário antes, gargalos encontrados, o que foi entregue e o resultado.]', leads: '[—]', agend: '[—]', comp: '[—]', fech: '[—]', fat: 'R$ [—]' }
+];
+var FAQS = [
+  { q: 'Já tentei agência e não deu certo. Por que seria diferente?', a: 'Porque a gente não para no lead. Acompanhamos atendimento, agendamento, comparecimento e fechamento — e mostramos em qual etapa está a perda.' },
+  { q: 'Vocês garantem resultado?', a: 'Não prometemos número. Garantimos método: medir cada etapa, corrigir o gargalo e escalar o que funciona, com relatório claro do que foi feito.' },
+  { q: 'Eu já gero lead. Só não agenda, não comparece ou não fecha.', a: 'Então o maior ganho está no meio do funil. Organizamos atendimento, confirmação e follow-up para aproveitar a demanda que você já paga — sem aumentar o investimento em anúncios.' },
+  { q: 'O Rise Connect substitui minha recepcionista?', a: 'Não. Ele tira da recepção o atendimento de quem não vai fechar e entrega só os leads quentes, com contexto. Sua equipe foca no que precisa de pessoa.' },
+  { q: 'Preciso aumentar o investimento em anúncios?', a: 'Nem sempre. Muitas vezes dá para crescer melhorando as taxas do funil antes de aumentar a verba.' },
+  { q: 'Em quanto tempo a operação fica mais previsível?', a: 'Depende do ponto de partida da clínica. No diagnóstico, mostramos o que dá para corrigir primeiro e em que ordem.' }
+];
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { caseIdx: 0, faq: 0, formStep: 1 };
+  }
+  renderVals() {
+    var self = this;
+    var ci = this.state.caseIdx;
+    var fq = this.state.faq;
+    var fs = this.state.formStep;
+    var cases = CASES.map(function (c, i) {
+      return {
+        pick: function () { self.setState({ caseIdx: i }); },
+        dotStyle: 'width: ' + (i === ci ? '28px' : '10px') + '; height: 10px; border-radius: 99px; border: 0; padding: 0; cursor: pointer; background: ' + (i === ci ? '#29D9D5' : '#C9D3D3')
+      };
+    });
+    var faqs = FAQS.map(function (f, i) {
+      return {
+        q: f.q, a: f.a, open: i === fq, mark: i === fq ? '−' : '+',
+        toggle: function () { self.setState({ faq: fq === i ? -1 : i }); }
+      };
+    });
+    return {
+      cases: cases,
+      curCase: CASES[ci],
+      prevCase: function () { self.setState({ caseIdx: (ci + CASES.length - 1) % CASES.length }); },
+      nextCase: function () { self.setState({ caseIdx: (ci + 1) % CASES.length }); },
+      faqs: faqs,
+      isStep1: fs === 1,
+      isStep2: fs === 2,
+      isDone: fs === 3,
+      stepLabel: fs === 3 ? 'Concluído' : ('Etapa ' + fs + ' de 2'),
+      bar2Style: 'height: 5px; border-radius: 3px; background: ' + (fs >= 2 ? '#29D9D5' : '#E3E9E9'),
+      goStep1: function () { self.setState({ formStep: 1 }); },
+      goStep2: function () { self.setState({ formStep: 2 }); },
+      submitForm: function () { self.setState({ formStep: 3 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

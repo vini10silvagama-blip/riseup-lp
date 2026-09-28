@@ -1,0 +1,62 @@
+---
+// 4. Pilares — âncora "Soluções" (SOLUÇÃO)
+import { pilares } from '../content/conteudo';
+import Cabecalho from './ui/Cabecalho.astro';
+import Icone from './ui/Icone.astro';
+import Tag from './ui/Tag.astro';
+---
+
+<section id="solucoes" class="secao bg-cinza-claro" aria-labelledby="titulo-solucoes">
+  <div class="container-lp flex flex-col gap-12 md:gap-14">
+    <Cabecalho id="titulo-solucoes" sobretitulo={pilares.sobretitulo} titulo={pilares.titulo} subtitulo={pilares.subtitulo} />
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" data-revelar>
+      {
+        pilares.itens.map((pilar, i) => (
+          <li
+            class:list={[
+              'flex flex-col gap-4 rounded-card border-2 bg-branco p-6 transition-[transform,box-shadow] duration-500 ease-suave hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(20,20,20,0.4)] md:p-7',
+              pilar.destaque ? 'border-ciano' : 'border-transparent',
+            ]}
+          >
+            <div class="flex items-center justify-between">
+              <span class="flex size-[52px] items-center justify-center rounded-[14px] bg-ciano-suave text-ciano-escuro">
+                <Icone nome={pilar.icone as 'estrela'} class="size-[26px]" />
+              </span>
+              <span class="rounded-pilula bg-ciano px-3.5 py-1.5 text-[13px] font-bold">
+                {pilares.rotuloPilar} {i + 1}
+              </span>
+            </div>
+            <h3 class="font-texto text-sm font-bold tracking-[0.06em] text-ciano-escuro uppercase">{pilar.nome}</h3>
+            <p class="font-titulo text-xl leading-[1.35] font-medium">{pilar.frase}</p>
+
+            {pilar.destaque && (
+              <div class="flex flex-col gap-1.5 rounded-xl bg-ciano-suave p-3">
+                <a
+                  href={pilar.destaque.href}
+                  class="group inline-flex min-h-9 items-center gap-1.5 self-start rounded-pilula bg-ciano px-3.5 text-[13px] font-bold text-preto transition-colors hover:bg-[#4be3df]"
+                >
+                  {pilar.destaque.botao}
+                  <Icone nome="seta" class="size-4 transition-transform group-hover:translate-x-0.5" espessura={2.2} />
+                </a>
+                <p class="text-xs leading-[1.4] text-cinza-texto">{pilar.destaque.texto}</p>
+              </div>
+            )}
+
+            <ul class="flex flex-wrap gap-1.5" aria-label="Serviços">
+              {pilar.tags.map((tag) => (
+                <li>
+                  <Tag>{tag}</Tag>
+                </li>
+              ))}
+            </ul>
+
+            <p class="mt-auto rounded-xl bg-preto p-4 text-sm leading-[1.45] text-branco">
+              <strong class="text-ciano">{pilares.rotuloPrevisibilidade}</strong> {pilar.previsibilidade}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

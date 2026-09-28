@@ -1,0 +1,61 @@
+---
+// 9. Para quem é + o que assumimos (FILTRO)
+import { paraQuem } from '../content/conteudo';
+import Icone from './ui/Icone.astro';
+---
+
+<section class="secao bg-cinza-claro" aria-labelledby="titulo-para-quem">
+  <div class="container-lp flex flex-col items-center gap-11">
+    <div class="flex max-w-[880px] flex-col items-center gap-4 text-center" data-revelar>
+      <span class="h-1 w-14 rounded-sm bg-ciano" aria-hidden="true"></span>
+      <h2 id="titulo-para-quem" class="text-[30px] leading-[1.18] tracking-[-0.02em] md:text-[42px]">{paraQuem.titulo}</h2>
+      <p class="subtitulo">{paraQuem.subtitulo}</p>
+    </div>
+
+    <div
+      class="grid w-full max-w-[1080px] overflow-hidden rounded-3xl shadow-[0_30px_60px_rgba(20,20,20,0.12)] md:grid-cols-2"
+      data-revelar
+    >
+      <div class="flex flex-col gap-3 bg-ciano p-6 md:p-11">
+        <h3 class="mb-2 text-[22px]">{paraQuem.sim.titulo}</h3>
+        <ul class="flex flex-col gap-3">
+          {
+            paraQuem.sim.itens.map((item) => (
+              <li class="flex gap-2.5 rounded-xl bg-branco/45 px-4 py-3.5 text-[15px] leading-[1.4] font-medium">
+                <Icone nome="check" class="mt-0.5 size-[18px] shrink-0" espessura={2.4} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="fundo-escuro flex flex-col gap-3 bg-preto p-6 text-branco md:p-11">
+        <h3 class="mb-2 text-[22px]">{paraQuem.nao.titulo}</h3>
+        <ul class="flex flex-col gap-3">
+          {
+            paraQuem.nao.itens.map((item) => (
+              <li class="flex gap-2.5 rounded-xl bg-preto-2 px-4 py-3.5 text-[15px] leading-[1.4]">
+                <Icone nome="x" class="mt-0.5 size-[18px] shrink-0 text-ciano" espessura={2.4} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex w-full max-w-[1080px] flex-col gap-4" data-revelar>
+      <h3 class="text-center text-[22px]">{paraQuem.assumimosTitulo}</h3>
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-3.5">
+        {
+          paraQuem.assumimos.map((item) => (
+            <li class="flex gap-2.5 rounded-[14px] bg-branco p-[18px] text-[15px] leading-[1.45]">
+              <Icone nome="check" class="mt-0.5 size-[18px] shrink-0 text-ciano-escuro" espessura={2.4} />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

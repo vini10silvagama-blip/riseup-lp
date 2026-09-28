@@ -1,0 +1,31 @@
+---
+// 3. O que fazemos pela sua clínica — âncora "Sobre" (ponte DOR → SOLUÇÃO)
+import { oQueFazemos } from '../content/conteudo';
+import Cabecalho from './ui/Cabecalho.astro';
+import Destaque from './ui/Destaque.astro';
+---
+
+<section id="sobre" class="secao bg-branco" aria-labelledby="titulo-sobre">
+  <div class="container-lp flex flex-col gap-10">
+    <Cabecalho id="titulo-sobre" sobretitulo={oQueFazemos.sobretitulo} titulo={oQueFazemos.titulo} />
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" data-revelar>
+      {
+        oQueFazemos.cards.map((card) => (
+          <li class="group flex flex-col gap-3.5 rounded-card bg-cinza-claro p-6 transition-[transform,box-shadow] duration-500 ease-suave hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(20,20,20,0.35)] md:p-7">
+            <p class="text-[15px] text-cinza-texto italic">{card.dor}</p>
+            <span class="h-[3px] w-8 bg-ciano transition-[width] duration-500 ease-suave group-hover:w-14" aria-hidden="true" />
+            <p class="text-[17px] leading-[1.4] font-bold">{card.solucao}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p
+      class="rounded-card bg-preto px-6 py-8 text-center font-titulo text-xl leading-[1.45] text-branco md:px-10 md:text-[23px]"
+      data-revelar
+    >
+      <Destaque texto={oQueFazemos.manifesto} cor="font-medium text-ciano" />
+    </p>
+  </div>
+</section>

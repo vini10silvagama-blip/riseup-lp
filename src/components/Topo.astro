@@ -1,0 +1,99 @@
+---
+// 0. Cabeçalho fixo no topo, com menu hambúrguer no celular
+import { cabecalho, site } from '../content/conteudo';
+import Icone from './ui/Icone.astro';
+---
+
+<header
+  id="topo"
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-branco/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300 [&.rolado]:border-borda [&.rolado]:shadow-[0_6px_24px_-18px_rgba(20,20,20,0.35)]"
+>
+  <div class="container-lp flex h-[72px] items-center justify-between gap-4 md:h-[88px]">
+    <a href="#inicio" class="shrink-0" aria-label={`${site.nomeMarca} — início`}>
+      <img src="/img/logo-riseup.png" alt={site.nomeMarca} width="600" height="174" fetchpriority="high" class="h-8 w-auto sm:h-9 md:h-11" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-10 text-[15px] font-medium">
+        {
+          cabecalho.menu.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="relative py-2 text-preto transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-ciano after:transition-transform after:duration-300 hover:after:scale-x-100"
+              >
+                {item.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={cabecalho.botao.href}
+        class="inline-flex min-h-11 items-center rounded-pilula bg-preto px-4 text-sm font-semibold text-branco transition-colors hover:bg-[#2a2d2d] md:min-h-12 md:px-6 md:text-[15px]"
+      >
+        {cabecalho.botao.texto}
+      </a>
+      <button
+        type="button"
+        id="botao-menu"
+        class="group inline-flex size-11 items-center justify-center rounded-full border border-borda text-preto lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-celular"
+        aria-label={cabecalho.abrirMenu}
+        data-abrir={cabecalho.abrirMenu}
+        data-fechar={cabecalho.fecharMenu}
+      >
+        <Icone nome="menu" class="size-5 group-aria-expanded:hidden" espessura={2} />
+        <Icone nome="fechar" class="hidden size-5 group-aria-expanded:block" espessura={2} />
+      </button>
+    </div>
+  </div>
+
+  <nav id="menu-celular" aria-label="Menu do celular" class="hidden border-t border-borda bg-branco lg:hidden">
+    <ul class="container-lp flex flex-col py-3">
+      {
+        cabecalho.menu.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="flex min-h-14 items-center justify-between border-b border-borda text-lg font-medium last:border-0"
+            >
+              {item.texto}
+              <Icone nome="seta" class="size-5 text-ciano-escuro" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const topo = document.getElementById('topo')!;
+  const botao = document.getElementById('botao-menu')!;
+  const menu = document.getElementById('menu-celular')!;
+
+  const alternar = (abrir: boolean) => {
+    botao.setAttribute('aria-expanded', String(abrir));
+    botao.setAttribute('aria-label', (abrir ? botao.dataset.fechar : botao.dataset.abrir) ?? '');
+    menu.classList.toggle('hidden', !abrir);
+  };
+
+  botao.addEventListener('click', () => alternar(botao.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => alternar(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && botao.getAttribute('aria-expanded') === 'true') {
+      alternar(false);
+      botao.focus();
+    }
+  });
+
+  // Borda e sombra no cabeçalho depois que a página rola
+  const marcar = () => topo.classList.toggle('rolado', window.scrollY > 8);
+  marcar();
+  window.addEventListener('scroll', marcar, { passive: true });
+</script>

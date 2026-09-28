@@ -1,0 +1,55 @@
+---
+// Botão em pílula. Vira <a> quando recebe href, senão <button>.
+import Icone from './Icone.astro';
+
+interface Props {
+  href?: string;
+  variante?: 'ciano' | 'escuro' | 'contorno' | 'contorno-claro';
+  tamanho?: 'md' | 'lg';
+  seta?: boolean;
+  type?: 'button' | 'submit';
+  class?: string;
+  [atributo: string]: unknown;
+}
+
+const {
+  href,
+  variante = 'ciano',
+  tamanho = 'lg',
+  seta = false,
+  type = 'button',
+  class: classe = '',
+  ...resto
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 rounded-pilula font-bold text-center transition-[background-color,color,border-color,transform,box-shadow] duration-300 ease-suave active:scale-[0.98] touch-manipulation';
+
+const tamanhos = {
+  md: 'min-h-12 px-6 text-[15px]',
+  lg: 'min-h-14 px-7 text-base md:px-8',
+};
+
+const variantes = {
+  ciano: 'bg-ciano text-preto hover:bg-[#4be3df] hover:shadow-[0_10px_30px_-10px_rgba(41,217,213,0.8)]',
+  escuro: 'bg-preto text-branco hover:bg-[#2a2d2d]',
+  contorno: 'border-[1.5px] border-preto text-preto hover:bg-preto hover:text-branco',
+  'contorno-claro': 'border-[1.5px] border-branco/70 text-branco hover:bg-branco hover:text-preto',
+};
+
+const classes = [base, tamanhos[tamanho], variantes[variante], classe].join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes} {...resto}>
+      <slot />
+      {seta && <Icone nome="seta" class="size-[18px] transition-transform duration-300 ease-suave group-hover:translate-x-1" espessura={2} />}
+    </a>
+  ) : (
+    <button type={type} class={classes} {...resto}>
+      <slot />
+      {seta && <Icone nome="seta" class="size-[18px] transition-transform duration-300 ease-suave group-hover:translate-x-1" espessura={2} />}
+    </button>
+  )
+}

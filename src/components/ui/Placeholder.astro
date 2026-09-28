@@ -1,0 +1,19 @@
+---
+// Caixa identificada para imagens/arquivos que ainda não chegaram
+interface Props {
+  texto: string;
+  class?: string;
+  escuro?: boolean;
+}
+const { texto, class: classe = '', escuro = false } = Astro.props;
+---
+
+<div
+  role="img"
+  aria-label={texto}
+  class={`flex items-center justify-center rounded-[14px] border-[1.5px] border-dashed p-3 text-center text-xs leading-snug ${
+    escuro ? 'border-borda-escura text-cinza-escuro-texto' : 'border-[#9AA5A5] bg-branco/85 text-cinza-texto'
+  } ${classe}`}
+>
+  {texto}
+</div>
