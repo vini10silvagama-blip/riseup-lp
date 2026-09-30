@@ -15,7 +15,11 @@ const imagemOg = new URL('/img/logo-riseup.png', urlBase);
     <title>{site.titulo}</title>
     <meta name="description" content={site.descricao} />
     <meta name="theme-color" content="#FFFFFF" />
-    <link rel="icon" type="image/png" href="/img/logo-riseup.png" />
+    <!-- Favicon: só o símbolo circular do dente (gerado a partir de LOGO/LOGO RISEUP.png) -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Open Graph (compartilhamento em redes e WhatsApp) -->
     <meta property="og:type" content="website" />
