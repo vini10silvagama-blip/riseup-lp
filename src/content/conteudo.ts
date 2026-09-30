@@ -63,13 +63,15 @@ export const hero = {
   botaoPrincipal: { texto: 'Quero meu diagnóstico gratuito', href: links.diagnostico },
   botaoSecundario: { texto: 'Ver como funciona', href: links.comoFunciona },
   socios: [
-    { nome: 'Vinicius Gama', funcao: 'Tráfego, tecnologia e automação', placeholder: '[FOTO VINICIUS – PNG sem fundo, meio corpo]' },
-    { nome: 'Felipe Costa', funcao: 'Marketing odontológico e comercial', placeholder: '[FOTO FELIPE – PNG sem fundo, meio corpo]' },
+    // "foto" é o nome do arquivo em src/assets/socios/ (sem extensão)
+    { nome: 'Vinicius Gama', funcao: 'Tráfego, tecnologia e automação', foto: 'vinicius', alt: 'Vinicius Gama, sócio da Rise Up Odonto' },
+    { nome: 'Felipe Costa', funcao: 'Marketing odontológico e comercial', foto: 'felipe', alt: 'Felipe Costa, sócio da Rise Up Odonto' },
   ],
   cardEspecialistas: { titulo: 'Especialistas em clínicas odontológicas', texto: 'Procedimentos de alto valor' },
   cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
   clientesTitulo: 'Clínicas que já trabalham com a gente',
-  // Trocar pelos logos reais quando chegarem
+  // Os logos reais vêm sozinhos da pasta src/assets/clientes/ (o nome do arquivo vira o texto alternativo).
+  // Estes placeholders só aparecem enquanto a pasta estiver vazia.
   clientes: [
     '[LOGO CLIENTE 1]',
     '[LOGO CLIENTE 2]',
