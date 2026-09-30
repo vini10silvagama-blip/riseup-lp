@@ -114,9 +114,9 @@ public/
 
 ## 7. Fluxo de trabalho no GitHub (Vinicius e Felipe)
 
-- **Nunca** fazer commit direto na `main`.
-- Cada alteração em uma **branch** nova: `ajuste/<descricao-curta>` (ex.: `ajuste/copy-hero`) ou `secao/<nome>`.
-- Ao terminar: commit com mensagem em português, `git push` e abrir um **pull request** para a `main` com descrição do que mudou.
-- O outro sócio revisa pelo **link de prévia da Vercel** e aprova; só então é feito o merge (publicação).
-- Antes de começar qualquer tarefa: `git checkout main && git pull` para pegar a versão mais recente.
+- Trabalhamos **direto na `main`**, sem branches e sem pull requests. Cada push na `main` publica o site automaticamente na Vercel (riseup-lp-two.vercel.app).
+- **Antes de qualquer tarefa:** `git checkout main && git pull` — para pegar o que o outro sócio publicou.
+- **Ao terminar:** rode `npm run build` (se der erro, corrija antes de enviar), confira em 390px e 1440px, faça commit com mensagem em português explicando o que mudou e `git push`.
+- Se o push for recusado porque o outro sócio publicou antes: `git pull --rebase`, resolva conflitos se houver, rode o build de novo e faça o push.
+- Não reescreva o histórico (`git push --force` é proibido).
 - A pasta `_legado/` (LP antiga e referências antigas) fica só no computador e não sobe para o repositório.

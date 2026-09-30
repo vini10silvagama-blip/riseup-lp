@@ -34,5 +34,5 @@ Se algo do briefing estiver ambíguo, pergunte antes de decidir. Me explique em 
 ## Prompt para ajustes do dia a dia (Vinicius ou Felipe)
 
 ```
-Leia o CLAUDE.md. Atualize a main (git checkout main && git pull), crie uma branch ajuste/<nome-curto> e faça o seguinte: <descreva o ajuste>. Confira no celular e no computador, rode npm run build, faça commit em português, envie e abra um pull request. Não faça merge.
+Leia o CLAUDE.md. Atualize a main (git checkout main && git pull) e faça o seguinte: <descreva o ajuste>. Confira no celular e no computador, rode npm run build, faça commit em português e dê push na main para publicar.
 ```
