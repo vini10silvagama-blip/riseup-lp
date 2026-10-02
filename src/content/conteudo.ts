@@ -65,11 +65,11 @@ export const hero = {
   botaoSecundario: { texto: 'Ver como funciona', href: links.comoFunciona },
   socios: [
     // "foto" é o nome do arquivo em src/assets/socios/ (sem extensão)
-    { nome: 'Vinicius Gama', funcao: 'Tráfego, tecnologia e automação', foto: 'vinicius', alt: 'Vinicius Gama, sócio da Rise Up Odonto' },
-    { nome: 'Felipe Costa', funcao: 'Marketing odontológico e comercial', foto: 'felipe', alt: 'Felipe Costa, sócio da Rise Up Odonto' },
+    { nome: 'Vinicius Gama', funcao: 'Tráfego e automação', foto: 'vinicius', alt: 'Vinicius Gama, sócio da Rise Up Odonto' },
+    { nome: 'Felipe Costa', funcao: 'Marketing e comercial', foto: 'felipe', alt: 'Felipe Costa, sócio da Rise Up Odonto' },
   ],
-  // Texto que gira em volta do selo circular entre as fotos (decorativo)
-  selo: 'CAPTAÇÃO · CONVERSÃO · RETENÇÃO ·',
+  // Texto do selo circular (decorativo), em dois arcos para nada ficar de cabeça para baixo
+  selo: { arcoCima: 'CAPTAÇÃO · CONVERSÃO', arcoBaixo: 'RETENÇÃO' },
   cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
   // Os logos vêm sozinhos da pasta public/img/clientes/ (SVG ou PNG; o nome do arquivo vira o texto alternativo).
   // Com a pasta vazia, a faixa inteira (título incluído) some.

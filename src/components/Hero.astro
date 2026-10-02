@@ -15,8 +15,18 @@ const nomeDoArquivo = (caminho: string) => caminho.split('/').pop()!.replace(/\.
 const fotos: Arquivos = import.meta.glob('../assets/socios/*.{png,jpg,jpeg,webp}', { eager: true });
 const fotoDe = (nome: string) => Object.entries(fotos).find(([caminho]) => nomeDoArquivo(caminho) === nome)?.[1].default;
 
+// Enquadramento de cada foto (em % do cartão, que é 3:4): calculado para os olhos ficarem
+// a 38% da altura e os dois rostos no mesmo tamanho (mesma distância entre as pupilas).
+// Se trocar uma foto, refaça estes números.
+const enquadramento: Record<string, { largura: number; esquerda: number; topo: number }> = {
+  vinicius: { largura: 104.9, esquerda: -2.66, topo: -15.4 },
+  felipe: { largura: 113.2, esquerda: -8.5, topo: -14.85 },
+};
+
 // Título: o "\n" do conteúdo vira quebra de linha só no computador
 const linhasTitulo = hero.titulo.antes.split('\n');
+// "R$" e números nunca ficam sozinhos no fim da linha ("R$ 115", "3 meses")
+const semQuebraNoValor = (texto: string) => texto.replace(/(R\$|\d) /g, '$1 ');
 
 // Logos de clientes: lidos de public/img/clientes/ na hora do build (só SVG e PNG).
 // O nome do arquivo vira o nome da clínica: "clinica-sorriso.png" → "Clinica Sorriso";
@@ -43,13 +53,14 @@ const faixaRola = logos.length >= 4;
 const colunas = Math.min(logos.length, 6);
 ---
 
-<section id="inicio" class="relative overflow-hidden pt-[104px] pb-16 md:pt-[136px] md:pb-20" aria-labelledby="titulo-hero">
+<!-- Topo: 72px abaixo do cabeçalho fixo (72px de cabeçalho no celular, 88px a partir de 768px) -->
+<section id="inicio" class="relative overflow-hidden pt-[104px] pb-16 md:pt-[136px] lg:pt-[160px] lg:pb-24" aria-labelledby="titulo-hero">
   <div class="container-lp">
-    <div class="grid items-center gap-12 xl:grid-cols-[minmax(0,680px)_1fr] xl:gap-8">
-      <!-- Texto -->
-      <div class="entrada flex max-w-[680px] flex-col gap-6 md:gap-7">
-        <p class="self-start rounded-pilula border border-borda px-3.5 py-1.5 text-xs font-medium md:text-[13px]">{hero.etiqueta}</p>
-        <h1 id="titulo-hero" class="text-[38px] leading-[1.08] tracking-[-0.025em] sm:text-5xl lg:text-[48px]">
+    <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,600px)_440px] lg:justify-between lg:gap-x-12 xl:gap-x-20">
+      <!-- Texto: tudo na mesma borda esquerda -->
+      <div class="entrada @container flex flex-col items-start">
+        <p class="rounded-pilula border border-borda px-3.5 py-1.5 text-xs font-medium md:text-[13px]">{hero.etiqueta}</p>
+        <h1 id="titulo-hero" class="titulo-hero mt-6 text-[34px] leading-[1.12] tracking-[-0.025em] text-balance">
           {
             linhasTitulo.map((linha, i) => (
               <>
@@ -57,87 +68,94 @@ const colunas = Math.min(logos.length, 6);
                 {i < linhasTitulo.length - 1 && <br class="hidden lg:block" />}
               </>
             ))
-          }<span class="text-ciano-escuro">{hero.titulo.destaque}</span>
+          }<br class="hidden lg:block" /><span class="text-ciano-escuro">{hero.titulo.destaque}</span>
         </h1>
-        <p class="max-w-[520px] text-[17px] leading-[1.55] text-cinza-texto md:text-[19px]">{hero.subtitulo}</p>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-          <div class="flex flex-col items-center gap-2">
-            <Botao href={hero.botaoPrincipal.href} shimmerAuto class="w-full sm:w-auto">{hero.botaoPrincipal.texto}</Botao>
-            <p class="text-[13px] text-cinza-texto">{hero.notaBotao}</p>
-          </div>
+        <p class="mt-6 max-w-[500px] text-[17px] leading-[1.6] text-cinza-texto lg:text-lg">{hero.subtitulo}</p>
+        <div class="mt-8 flex w-full flex-col gap-4 lg:w-auto lg:flex-row">
+          <Botao href={hero.botaoPrincipal.href} shimmerAuto class="shadow-[0_6px_18px_rgba(41,217,213,0.28)]!">{hero.botaoPrincipal.texto}</Botao>
           <Botao href={hero.botaoSecundario.href} variante="contorno">{hero.botaoSecundario.texto}</Botao>
         </div>
+        <p class="mt-4 flex items-center gap-2 text-sm text-cinza-texto">
+          <Icone nome="check" class="size-4 shrink-0 text-ciano-escuro" espessura={2} />
+          {hero.notaBotao}
+        </p>
       </div>
 
-      <!-- Sócios sobre círculos concêntricos -->
-      <div class="entrada entrada-2 relative mx-auto w-full max-w-[520px] pb-8 xl:max-w-none">
-        <div class="pointer-events-none absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
-          <div class="circulo size-[460px] border-ciano/20 sm:size-[640px] xl:size-[620px]"></div>
-          <div class="circulo size-[350px] border-ciano/30 [animation-delay:-2s] sm:size-[490px] xl:size-[470px]"></div>
+      <!-- Fotos: lado a lado no celular/tablet; escalonadas num bloco de 440×420 a partir de 1024px -->
+      <div class="entrada entrada-2 relative isolate mx-auto w-full max-w-[560px] pt-9 lg:mx-0 lg:h-[420px] lg:w-[440px] lg:max-w-none lg:pt-0">
+        <!-- Dois círculos centralizados atrás do bloco, sem chegar na coluna de texto -->
+        <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+          <div class="circulo aspect-square w-[min(520px,100%)] border-ciano/25 lg:w-[520px]"></div>
           <div
-            class="circulo size-[250px] border-ciano/45 bg-[radial-gradient(circle,rgba(41,217,213,0.28),rgba(41,217,213,0)_70%)] [animation-delay:-4s] sm:size-[350px] xl:size-[340px]"
+            class="circulo aspect-square w-[min(400px,72%)] border-ciano/40 lg:w-[400px] bg-[radial-gradient(circle,rgba(41,217,213,0.2),rgba(41,217,213,0)_70%)] [animation-delay:-4s]"
           >
           </div>
         </div>
 
-        <div class="relative flex gap-2.5 sm:gap-3">
+        <!-- O cartão B fica por cima do A, com contorno branco de 6px do lado da sobreposição -->
+        <div class="flex justify-between lg:block">
           {
             hero.socios.map((socio, i) => {
               const foto = fotoDe(socio.foto);
-              return (
-                <div class="relative h-[380px] flex-1 overflow-hidden rounded-[20px] border-[1.5px] border-ciano bg-cinza-claro sm:h-[420px] xl:h-[440px]">
+              const quadro = enquadramento[socio.foto] ?? { largura: 100, esquerda: 0, topo: 0 };
+              const cartao = (
+                <div class="relative aspect-[3/4] w-full overflow-hidden rounded-[20px] bg-cinza-claro lg:aspect-auto lg:h-[310px] lg:w-[232px]">
                   {foto && (
                     <Image
                       src={foto}
                       alt={socio.alt}
                       widths={[400, 800]}
                       format="webp"
-                      sizes="(min-width:1024px) 395px, 45vw"
+                      sizes="(min-width:1024px) 264px, 54vw"
                       loading="eager"
                       fetchpriority={i === 0 ? 'high' : 'auto'}
-                      class:list={[
-                        'absolute inset-0 size-full object-cover',
-                        // Rostos levemente afastados do centro, para o selo não encostar neles
-                        i === 0 ? 'object-[85%_50%]' : 'object-[15%_50%]',
-                      ]}
+                      class="absolute h-auto max-w-none"
+                      style={`width:${quadro.largura}%;left:${quadro.esquerda}%;top:${quadro.topo}%`}
                     />
                   )}
-                  <!-- Etiqueta de nome: mesma posição nas duas fotos, acima da faixa do cartão do case -->
-                  <div class="absolute inset-x-2 bottom-10 rounded-xl bg-branco/95 px-3 py-2 shadow-[0_8px_24px_rgba(20,20,20,0.12)] sm:inset-x-3">
-                    <p class="text-sm leading-tight font-bold">{socio.nome}</p>
-                    <p class="mt-0.5 min-h-[3lh] text-[13px] leading-snug text-cinza-texto sm:min-h-[2lh]">{socio.funcao}</p>
+                  <!-- Nome e cargo na base da foto, sobre degradê escuro -->
+                  <div class="absolute inset-x-0 bottom-0 flex h-24 flex-col justify-end bg-linear-to-t from-[rgba(20,20,20,0.75)] to-transparent p-3 text-branco sm:p-4">
+                    <p class="text-[15px] leading-tight font-semibold">{socio.nome}</p>
+                    <p class="mt-0.5 truncate text-[13px] text-branco/90">{socio.funcao}</p>
                   </div>
                 </div>
               );
+              return i === 0 ? (
+                <div class="w-[48%] lg:absolute lg:top-0 lg:left-0 lg:w-auto">{cartao}</div>
+              ) : (
+                <div class="w-[48%] lg:absolute lg:right-0 lg:bottom-0 lg:z-10 lg:w-auto lg:rounded-[26px] lg:bg-branco lg:pt-1.5 lg:pl-1.5">{cartao}</div>
+              );
             })
           }
-
-          <!-- Selo circular no encontro das fotos, na altura dos ombros (decorativo) -->
-          <div
-            class="absolute top-[53%] left-1/2 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ciano bg-branco shadow-[0_10px_28px_rgba(20,20,20,0.12)] sm:top-[60%] xl:top-[62%] xl:size-[104px]"
-            aria-hidden="true"
-          >
-            <svg viewBox="0 0 100 100" class="selo-texto absolute inset-0 size-full">
-              <defs>
-                <path id="selo-circulo" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"></path>
-              </defs>
-              <text class="fill-preto font-semibold" font-size="9.5">
-                <textPath href="#selo-circulo" textLength="230" lengthAdjust="spacing">{hero.selo}</textPath>
-              </text>
-            </svg>
-            <img src="/icon-192.png" alt="" width="192" height="192" class="absolute top-1/2 left-1/2 size-[42%] -translate-x-1/2 -translate-y-1/2" />
-          </div>
         </div>
 
-        <!-- Cartão do case: canto inferior direito, metade para fora da moldura -->
+        <!-- Selo (decorativo): na divisa das fotos no celular; no canto vazio acima do cartão B no computador -->
         <div
-          class="flutua absolute right-0 bottom-0 flex items-center gap-2.5 rounded-[14px] bg-preto px-3.5 py-2.5 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] sm:-right-4 sm:px-4 xl:-right-6"
+          class="absolute top-9 left-1/2 z-20 size-[72px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ciano bg-branco lg:top-0 lg:right-6 lg:left-auto lg:size-[92px] lg:translate-x-0 lg:translate-y-0"
+          aria-hidden="true"
         >
-          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-ciano text-sm font-bold text-preto" aria-hidden="true">R$</span>
-          <span>
-            <span class="block text-[13px] font-bold tabular-nums" data-contar>{hero.cardCase.titulo}</span>
-            <span class="block text-[13px] text-cinza-escuro-texto">{hero.cardCase.texto}</span>
-          </span>
+          <svg viewBox="0 0 92 92" class="absolute inset-0 size-full">
+            <defs>
+              <!-- Arco de cima passa por cima do círculo; o de baixo vai da esquerda para a direita por baixo -->
+              <path id="selo-arco-cima" d="M14.82,64 A36,36 0 1,1 77.18,64"></path>
+              <path id="selo-arco-baixo" d="M9.19,67.25 A42.5,42.5 0 0,0 82.81,67.25"></path>
+            </defs>
+            <text class="fill-preto font-semibold" font-size="9" letter-spacing="1.5" text-anchor="middle">
+              <textPath href="#selo-arco-cima" startOffset="50%">{hero.selo.arcoCima}</textPath>
+            </text>
+            <text class="fill-preto font-semibold" font-size="9" letter-spacing="1.5" text-anchor="middle">
+              <textPath href="#selo-arco-baixo" startOffset="50%">{hero.selo.arcoBaixo}</textPath>
+            </text>
+          </svg>
+          <img src="/icon-192.png" alt="" width="192" height="192" class="absolute top-1/2 left-1/2 size-[36%] -translate-x-1/2 -translate-y-1/2" />
+        </div>
+
+        <!-- Cartão do case: abaixo das fotos no celular; no canto vazio abaixo do cartão A no computador -->
+        <div
+          class="cartao-case mt-4 rounded-[14px] bg-preto px-4 py-3 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] lg:absolute lg:bottom-0 lg:left-0 lg:mt-0 lg:w-[184px] lg:px-3.5 lg:py-2.5"
+        >
+          <p class="text-[13px] leading-snug font-bold tabular-nums" data-contar>{semQuebraNoValor(hero.cardCase.titulo)}</p>
+          <p class="text-[13px] leading-snug text-balance text-cinza-escuro-texto">{semQuebraNoValor(hero.cardCase.texto)}</p>
         </div>
       </div>
     </div>
@@ -218,26 +236,32 @@ const colunas = Math.min(logos.length, 6);
       scale: 1.035;
     }
   }
-  .flutua {
-    animation: flutua 6s ease-in-out infinite;
-  }
-  @keyframes flutua {
-    0%,
-    100% {
-      translate: 0 0;
-    }
-    50% {
-      translate: 0 -6px;
+  /* Título: 34px com quebra automática no celular/tablet. A partir de 1024px, exatamente 3 linhas
+     (quebras pelo <br>): encolhe junto com a coluna até 1279px e fica em 46px no computador */
+  @media (min-width: 1024px) {
+    .titulo-hero {
+      font-size: min(46px, calc(100cqi / 13.8));
+      white-space: nowrap;
     }
   }
-  /* Selo: só o texto em volta gira, bem devagar; o dente fica parado */
-  @media (prefers-reduced-motion: no-preference) {
-    .selo-texto {
-      animation: gira 30s linear infinite;
+  @media (min-width: 1280px) {
+    .titulo-hero {
+      font-size: 46px;
     }
-    @keyframes gira {
-      to {
-        rotate: 360deg;
+  }
+
+  /* Cartão do case flutua de leve só no computador (no celular fica parado, abaixo das fotos) */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .cartao-case {
+      animation: flutua 6s ease-in-out infinite;
+    }
+    @keyframes flutua {
+      0%,
+      100% {
+        translate: 0 0;
+      }
+      50% {
+        translate: 0 -6px;
       }
     }
   }
@@ -305,8 +329,7 @@ const colunas = Math.min(logos.length, 6);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .circulo,
-    .flutua {
+    .circulo {
       animation: none;
     }
   }
