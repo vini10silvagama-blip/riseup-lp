@@ -6,3 +6,5 @@ dist/
 .claude/settings.local.json
 # Logos recortados automaticamente no build (gerados de src/assets/clientes/)
 src/assets/clientes-recortados/
+# Símbolo do selo recortado da logo no build (quando não existe src/assets/selo/simbolo-riseup.png)
+src/assets/selo-gerado/
