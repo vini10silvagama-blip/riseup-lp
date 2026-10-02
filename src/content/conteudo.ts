@@ -113,15 +113,37 @@ export const problema = {
 export const oQueFazemos = {
   sobretitulo: 'A Rise Up',
   titulo: 'O que muda quando a Rise Up assume',
+  rotuloSolucao: 'Com a Rise Up',
+  // Cada cartão: ícone do tema, fala do dono, resposta e os textos da mini ilustração da base
   cards: [
-    { dor: '“Não sei se o problema é o anúncio ou a equipe.”', solucao: 'Mostramos o funil inteiro em um dashboard em tempo real, etapa por etapa.' },
-    { dor: '“Os leads esfriam antes de alguém responder.”', solucao: 'Respondemos, qualificamos e agendamos cada lead enquanto o interesse está quente.' },
-    { dor: '“Faço avaliações e o paciente não fecha.”', solucao: 'Treinamos sua equipe para quebrar objeções e acompanhamos cada orçamento até a decisão.' },
-    { dor: '“Tudo depende de mim, e crescer só aumenta o caos.”', solucao: 'Organizamos processo, CRM e indicadores para a clínica crescer sem depender de você.' },
+    {
+      icone: 'grafico',
+      dor: '“Não sei se o problema é o anúncio ou a equipe.”',
+      solucao: 'Mostramos o funil inteiro em um dashboard em tempo real, etapa por etapa.',
+      ilustracao: { tipo: 'funil', itens: ['Leads', 'Agend.', 'Comp.', 'Fech.'] },
+    },
+    {
+      icone: 'mensagem',
+      dor: '“Os leads esfriam antes de alguém responder.”',
+      solucao: 'Respondemos, qualificamos e agendamos cada lead enquanto o interesse está quente.',
+      ilustracao: { tipo: 'conversa', itens: ['Quanto fica? · 22:40', 'Resposta · 22:40'] },
+    },
+    {
+      icone: 'lista-check',
+      dor: '“Faço avaliações e o paciente não fecha.”',
+      solucao: 'Treinamos sua equipe para quebrar objeções e acompanhamos cada orçamento até a decisão.',
+      ilustracao: { tipo: 'acompanhamento', itens: ['D+1', 'D+3', 'D+7', 'D+15'] },
+    },
+    {
+      icone: 'organograma',
+      dor: '“Tudo depende de mim, e crescer só aumenta o caos.”',
+      solucao: 'Organizamos processo, CRM e indicadores para a clínica crescer sem depender de você.',
+      ilustracao: { tipo: 'checklist', itens: ['Processo', 'CRM', 'Indicadores'] },
+    },
   ],
   manifesto: {
     antes: 'Não somos uma agência de tráfego para dentistas. ',
-    destaque: 'Somos o time que responde pelo resultado depois que o lead chega.',
+    destaque: 'Somos o time que transforma a demanda da sua clínica em faturamento previsível.',
   } as TituloDestaque,
   botao: { texto: 'Quero meu diagnóstico gratuito', href: links.diagnostico },
 };

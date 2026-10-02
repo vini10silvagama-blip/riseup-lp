@@ -3,23 +3,89 @@
 import { oQueFazemos } from '../content/conteudo';
 import Botao from './ui/Botao.astro';
 import Destaque from './ui/Destaque.astro';
+import Icone from './ui/Icone.astro';
+
+type NomeIcone = Parameters<typeof Icone>[0]['nome'];
+// Alturas decrescentes das barras do funil (em % da altura máxima) — só forma, sem números
+const alturasFunil = [100, 72, 48, 30];
 ---
 
 <section id="sobre" class="bg-branco py-16 md:py-24" aria-labelledby="titulo-sobre">
   <div class="container-lp">
-    <div class="mx-auto flex max-w-[900px] flex-col items-center gap-4 text-center" data-revelar>
-      <p class="sobretitulo text-sm!">{oQueFazemos.sobretitulo}</p>
+    <div class="mx-auto flex max-w-[900px] flex-col items-center text-center" data-revelar>
+      <span
+        class="mb-6 flex size-[52px] items-center justify-center rounded-full border border-borda bg-branco shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
+        aria-hidden="true"
+      >
+        <Icone nome="brilho" class="size-6 text-ciano-escuro" espessura={1.75} />
+      </span>
       <h2 id="titulo-sobre" class="titulo-secao text-balance">{oQueFazemos.titulo}</h2>
     </div>
 
-    <!-- Subgrid: fala, traço e resposta ficam alinhados entre os cartões da mesma linha -->
-    <ul class="mt-10 grid gap-5 sm:grid-cols-2 md:mt-12 lg:grid-cols-4" data-revelar-filhos>
+    <!-- Subgrid: ícone, fala, rótulo, resposta e ilustração ficam alinhados entre os cartões da mesma linha;
+         a ilustração estica até a base, então todas têm a mesma altura e terminam juntas -->
+    <ul class="grade-sobre mt-12 grid gap-5 min-[640px]:grid-cols-2 min-[1200px]:grid-cols-4">
       {
-        oQueFazemos.cards.map((card) => (
-          <li class="group card-hover row-span-3 grid grid-rows-subgrid gap-y-4 rounded-card bg-cinza-claro p-7">
-            <p class="text-[15px] leading-[1.5] text-cinza-texto">{card.dor}</p>
-            <span class="h-[3px] w-8 origin-left bg-ciano transition-[scale] duration-300 ease-suave group-hover:scale-x-[1.75]" aria-hidden="true" />
+        oQueFazemos.cards.map((card, i) => (
+          <li
+            class="cartao-sobre row-span-5 grid grid-rows-subgrid gap-y-4 rounded-card border border-borda bg-branco p-6"
+            style={`--i:${i}`}
+          >
+            <span class="flex size-11 items-center justify-center rounded-full bg-[#E3FAF8]" aria-hidden="true">
+              <Icone nome={card.icone as NomeIcone} class="size-[22px] text-ciano-escuro" espessura={1.75} />
+            </span>
+
+            <blockquote class="rounded-[16px_16px_16px_4px] bg-cinza-claro px-4 py-3 text-[15px] leading-[1.5] text-cinza-texto">
+              {card.dor}
+            </blockquote>
+
+            <p class="self-end text-[13px] font-semibold text-ciano-escuro">{oQueFazemos.rotuloSolucao}</p>
+
             <p class="text-[17px] leading-[1.4] font-semibold text-preto">{card.solucao}</p>
+
+            <div class="ilustracao flex min-h-[72px] flex-col justify-center rounded-xl bg-cinza-claro p-3.5" aria-hidden="true">
+              {card.ilustracao.tipo === 'funil' && (
+                <div class="grid grid-cols-4 gap-2">
+                  {card.ilustracao.itens.map((rotulo, n) => (
+                    <div class="flex flex-col items-center gap-1">
+                      <div class="flex h-10 w-full items-end">
+                        <span class="w-full rounded-t-[4px] bg-ciano" style={`height:${alturasFunil[n]}%`} />
+                      </div>
+                      <span class="text-[11px] leading-none text-cinza-texto">{rotulo}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {card.ilustracao.tipo === 'conversa' && (
+                <div class="flex flex-col gap-1.5 text-[12px] leading-tight text-preto">
+                  <span class="self-start rounded-[10px_10px_10px_3px] bg-branco px-2.5 py-1.5">{card.ilustracao.itens[0]}</span>
+                  <span class="self-end rounded-[10px_10px_3px_10px] bg-ciano px-2.5 py-1.5">{card.ilustracao.itens[1]}</span>
+                </div>
+              )}
+
+              {card.ilustracao.tipo === 'acompanhamento' && (
+                <div class="relative flex items-center justify-between">
+                  <span class="absolute inset-x-2 top-1/2 h-px bg-ciano" />
+                  {card.ilustracao.itens.map((dia) => (
+                    <span class="relative rounded-pilula border border-ciano bg-branco px-1.5 py-1 text-[12px] leading-none font-semibold text-preto">
+                      {dia}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {card.ilustracao.tipo === 'checklist' && (
+                <div class="flex flex-wrap gap-1.5">
+                  {card.ilustracao.itens.map((item) => (
+                    <span class="inline-flex items-center gap-1 rounded-pilula border border-ciano bg-branco py-1 pr-2.5 pl-2 text-[12px] leading-none font-semibold text-preto">
+                      <Icone nome="check" class="size-3 text-ciano-escuro" espessura={2.4} />
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </li>
         ))
       }
@@ -37,3 +103,57 @@ import Destaque from './ui/Destaque.astro';
     </div>
   </div>
 </section>
+
+<style>
+  .cartao-sobre {
+    transition:
+      translate 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-color 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  /* Hover só com mouse (em telas de toque o cartão fica parado) */
+  @media (hover: hover) and (pointer: fine) {
+    .cartao-sobre:hover {
+      translate: 0 -4px;
+      border-color: var(--color-ciano);
+      box-shadow: 0 16px 36px rgba(20, 20, 20, 0.08);
+    }
+  }
+
+  /* Entrada em sequência: o estado inicial só existe quando o JS adiciona .preparada */
+  @media (prefers-reduced-motion: no-preference) {
+    .grade-sobre.preparada:not(.ativa) > .cartao-sobre {
+      opacity: 0;
+    }
+    /* Animação (e não transição) para o atraso não interferir no hover depois */
+    .grade-sobre.ativa > .cartao-sobre {
+      animation: entra-cartao 0.45s ease-out calc(var(--i) * 120ms) backwards;
+    }
+    @keyframes entra-cartao {
+      from {
+        opacity: 0;
+        translate: 0 16px;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Cartões entram em sequência quando 20% da grade aparece na tela (uma vez só)
+  const grade = document.querySelector<HTMLElement>('.grade-sobre');
+  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (grade && !semMovimento && 'IntersectionObserver' in window) {
+    grade.classList.add('preparada');
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) {
+          observador.disconnect();
+          grade.classList.add('ativa');
+        }
+      },
+      { threshold: 0.2 },
+    );
+    observador.observe(grade);
+  }
+</script>
