@@ -1,7 +1,5 @@
 ---
 // 1. Hero — promessa
-import fs from 'node:fs';
-import path from 'node:path';
 import { hero } from '../content/conteudo';
 import Botao from './ui/Botao.astro';
 import Icone from './ui/Icone.astro';
@@ -65,32 +63,22 @@ const linhasTitulo = hero.titulo.antes.split('\n');
 // "R$" e números nunca ficam sozinhos no fim da linha ("R$ 115", "3 meses")
 const semQuebraNoValor = (texto: string) => texto.replace(/(R\$|\d) /g, '$1 ');
 
-// Logos de clientes: lidos de public/img/clientes/ na hora do build (SVG ou PNG, até 10), em ordem
-// alfabética do nome do arquivo. O texto alternativo vem do nome, sem o número inicial e com hífens
-// virando espaços: "01-clinica-sorriso.svg" → "Clinica Sorriso"; nomes com maiúsculas/acentos ficam como estão.
-const pastaLogos = path.join(process.cwd(), 'public', 'img', 'clientes');
-const arquivosLogos = fs.existsSync(pastaLogos)
-  ? fs
-      .readdirSync(pastaLogos)
-      .filter((a) => /\.(svg|png)$/i.test(a))
-      .sort((a, b) => a.localeCompare(b, 'pt-BR', { numeric: true }))
-      .slice(0, 10)
-  : [];
-// Largura e altura reais, para o navegador reservar o espaço antes de carregar
-const medidas = (arquivo: string) => {
-  const conteudo = fs.readFileSync(path.join(pastaLogos, arquivo));
-  if (/\.png$/i.test(arquivo)) return { largura: conteudo.readUInt32BE(16), altura: conteudo.readUInt32BE(20) };
-  const caixa = conteudo.toString('utf8').match(/viewBox=["'][\d.\-]+[\s,]+[\d.\-]+[\s,]+([\d.]+)[\s,]+([\d.]+)/);
-  return caixa ? { largura: Math.round(+caixa[1]), altura: Math.round(+caixa[2]) } : {};
-};
-const logos = arquivosLogos.map((arquivo) => {
-  const nome = nomeDoArquivo(arquivo)
-    .replace(/^\d+[\s._-]*/, '')
-    .replace(/[-_]+/g, ' ')
-    .trim();
-  const alt = nome === nome.toLowerCase() ? nome.replace(/(^|\s)\S/g, (l) => l.toUpperCase()) : nome;
-  return { src: `/img/clientes/${encodeURIComponent(arquivo)}`, alt, ...medidas(arquivo) };
-});
+// Logos de clientes: lidos de src/assets/clientes/ na hora do build (SVG ou PNG, até 10), em ordem
+// alfabética do nome do arquivo, e otimizados pelo componente de imagem do Astro. O texto alternativo
+// vem do nome, sem o número inicial e com hífens virando espaços: "01-clinica-sorriso.png" → "Clinica Sorriso";
+// nomes com maiúsculas/acentos ficam como estão ("04-Ateliê Miraz.png" → "Ateliê Miraz").
+const arquivosLogos: Arquivos = import.meta.glob('../assets/clientes/*.{svg,png,SVG,PNG}', { eager: true });
+const logos = Object.entries(arquivosLogos)
+  .sort(([a], [b]) => a.localeCompare(b, 'pt-BR', { numeric: true }))
+  .slice(0, 10)
+  .map(([caminho, modulo]) => {
+    const nome = decodeURIComponent(nomeDoArquivo(caminho))
+      .replace(/^\d+[\s._-]*/, '')
+      .replace(/[-_]+/g, ' ')
+      .trim();
+    const alt = nome === nome.toLowerCase() ? nome.replace(/(^|\s)\S/g, (l) => l.toUpperCase()) : nome;
+    return { imagem: modulo.default, alt };
+  });
 // Posições do carrossel: os logos reais primeiro; com menos de 6, os marcadores completam
 const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.length) }, (_, i) => logos[i] ?? hero.clientes[i]);
 ---
@@ -259,12 +247,14 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
                     </li>
                   ) : (
                     <li class="caixa-logo flex h-16 shrink-0 items-center justify-center px-3">
-                      <img
-                        src={posicao.src}
+                      <!-- PNG vira WebP em 2 tamanhos (tela comum e retina); SVG é usado como está.
+                           Carregamento imediato: dentro da faixa com overflow escondido, o "lazy" só baixaria
+                           o logo quando ele já estivesse entrando (aparecendo em branco por um instante) -->
+                      <Image
+                        src={posicao.imagem}
                         alt={copia === 1 ? '' : posicao.alt}
-                        width={posicao.largura}
-                        height={posicao.altura}
-                        loading="lazy"
+                        {...(posicao.imagem.format === 'svg' ? {} : { widths: [120, 240], sizes: '120px' })}
+                        loading="eager"
                         decoding="async"
                         draggable="false"
                         class="logo-real h-auto max-h-10 w-auto max-w-full object-contain"
