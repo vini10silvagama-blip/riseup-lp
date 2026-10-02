@@ -1,93 +1,41 @@
 ---
-// 2. O problema real — mapa do vazamento (DOR)
+// 2. O problema real — onde o faturamento vaza (DOR)
 import { problema } from '../content/conteudo';
-import Cabecalho from './ui/Cabecalho.astro';
-import Icone from './ui/Icone.astro';
 ---
 
-<section class="secao bg-cinza-claro" aria-labelledby="titulo-problema">
-  <div class="container-lp flex flex-col gap-12 md:gap-14">
-    <Cabecalho id="titulo-problema" icone="gota" sobretitulo={problema.sobretitulo} titulo={problema.titulo} subtitulo={problema.subtitulo} />
-
-    <div class="flex flex-col gap-4" data-revelar>
-      <h3 class="font-texto text-sm font-bold text-cinza-texto">{problema.jornadaTitulo}</h3>
-
-      <!-- Celular: linha vertical · Computador: linha horizontal com 7 etapas -->
-      <ol
-        class="linha-tempo relative grid gap-5 pt-2 before:absolute before:top-6 before:bottom-6 before:left-[21px] before:w-0.5 before:bg-preto lg:grid-cols-7 lg:gap-3.5 lg:before:top-[30px] lg:before:right-[calc(100%/14)] lg:before:bottom-auto lg:before:left-[calc(100%/14)] lg:before:h-0.5 lg:before:w-auto"
+<section class="bg-cinza-claro py-16 md:py-24" aria-labelledby="titulo-problema">
+  <!-- Computador: texto fixo à esquerda (5/12) e jornada à direita (7/12) · Celular: uma coluna -->
+  <div class="container-lp grid items-start gap-12 lg:grid-cols-12 lg:gap-[72px]">
+    <div class="lg:sticky lg:top-[120px] lg:col-span-5" data-revelar>
+      <p class="sobretitulo text-sm!">{problema.sobretitulo}</p>
+      <h2 id="titulo-problema" class="titulo-secao mt-4 text-balance">{problema.titulo}</h2>
+      <p class="mt-5 text-lg leading-[1.55] text-cinza-texto">{problema.subtitulo}</p>
+      <a
+        href={problema.link.href}
+        class="mt-7 inline-flex min-h-11 items-center text-base font-semibold text-preto underline decoration-1 underline-offset-[6px] transition-colors duration-200 hover:text-ciano-escuro"
       >
+        {problema.link.texto}
+      </a>
+    </div>
+
+    <div class="lg:col-span-7">
+      <h3 class="mb-2 font-texto text-[15px] font-semibold text-cinza-texto">{problema.jornadaTitulo}</h3>
+      <ol data-revelar-filhos>
         {
           problema.etapas.map((etapa, i) => (
-            <li class="etapa relative grid grid-cols-[44px_1fr] gap-x-4 lg:flex lg:flex-col lg:items-center lg:gap-3 lg:text-center" style={`--i:${i}`}>
-              <span class="relative z-[1] row-span-2 flex size-11 items-center justify-center rounded-full border-2 border-preto bg-branco font-bold">
+            <li class="grid grid-cols-[36px_1fr] gap-x-4 border-b border-borda py-[18px] last:border-b-0">
+              <span
+                class="row-span-2 flex size-9 items-center justify-center rounded-full border-[1.5px] border-ciano bg-branco text-[15px] font-semibold text-preto"
+                aria-hidden="true"
+              >
                 {i + 1}
               </span>
-              <span class="flex items-center gap-2 self-center lg:flex-col lg:gap-3">
-                <span class="text-[15px] font-bold lg:flex lg:min-h-[2.9em] lg:items-center lg:leading-snug">{etapa.nome}</span>
-                <Icone nome="gota" class="gota size-5 fill-ciano/35 text-ciano-escuro lg:size-6" espessura={1.6} />
-              </span>
-              <p class="mt-2 rounded-xl border border-borda bg-branco px-3.5 py-3 text-sm leading-[1.45] lg:mt-0 lg:w-full lg:grow lg:px-3 lg:text-[13.5px]">
-                {etapa.texto}
-              </p>
+              <span class="self-center text-[17px] leading-snug font-semibold text-preto">{etapa.nome}</span>
+              <span class="mt-1 text-base leading-[1.5] text-cinza-texto">{etapa.texto}</span>
             </li>
           ))
         }
       </ol>
     </div>
-
-    <div class="fundo-escuro flex flex-col gap-4 rounded-card bg-preto p-6 text-branco md:px-8 md:py-7" data-revelar>
-      <h3 class="font-texto text-[15px] font-bold text-ciano">{problema.porTrasTitulo}</h3>
-      <ul class="grid gap-3 text-[15px] leading-[1.45] sm:grid-cols-2 lg:grid-cols-4 lg:gap-3.5" data-revelar-filhos>
-        {problema.porTras.map((item) => <li class="rounded-xl bg-preto-2 p-4">{item}</li>)}
-      </ul>
-    </div>
   </div>
 </section>
-
-<style>
-  @media (prefers-reduced-motion: no-preference) {
-    /* A linha do tempo se desenha (de cima para baixo no celular, da esquerda para a direita no computador) */
-    :global(.js) .linha-tempo::before {
-      scale: 1 0;
-      transform-origin: top;
-      transition: scale 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
-    }
-    @media (min-width: 1024px) {
-      :global(.js) .linha-tempo::before {
-        scale: 0 1;
-        transform-origin: left;
-      }
-    }
-    :global(.visivel) .linha-tempo::before {
-      scale: 1 1;
-    }
-
-    /* As gotas caem em sequência e depois "pingam" devagar, sugerindo o vazamento */
-    :global(.js [data-revelar]:not(.visivel)) .gota {
-      opacity: 0;
-    }
-    :global(.visivel) .gota {
-      animation:
-        cai 0.55s cubic-bezier(0.3, 0, 0.3, 1.4) calc(0.5s + var(--i) * 0.18s) backwards,
-        pinga 3.6s ease-in-out calc(2.2s + var(--i) * 0.35s) infinite;
-    }
-    @keyframes cai {
-      from {
-        opacity: 0;
-        translate: 0 -14px;
-      }
-    }
-    @keyframes pinga {
-      0%,
-      70%,
-      100% {
-        translate: 0 0;
-        opacity: 1;
-      }
-      82% {
-        translate: 0 4px;
-        opacity: 0.55;
-      }
-    }
-  }
-</style>

@@ -1,31 +1,39 @@
 ---
-// 3. O que fazemos pela sua clínica — âncora "Sobre" (ponte DOR → SOLUÇÃO)
+// 3. O que muda quando a Rise Up assume — âncora "Sobre" (ponte DOR → SOLUÇÃO)
 import { oQueFazemos } from '../content/conteudo';
-import Cabecalho from './ui/Cabecalho.astro';
+import Botao from './ui/Botao.astro';
 import Destaque from './ui/Destaque.astro';
 ---
 
-<section id="sobre" class="secao bg-branco" aria-labelledby="titulo-sobre">
-  <div class="container-lp flex flex-col gap-10">
-    <Cabecalho id="titulo-sobre" icone="lupa" sobretitulo={oQueFazemos.sobretitulo} titulo={oQueFazemos.titulo} />
+<section id="sobre" class="bg-branco py-16 md:py-24" aria-labelledby="titulo-sobre">
+  <div class="container-lp">
+    <div class="mx-auto flex max-w-[900px] flex-col items-center gap-4 text-center" data-revelar>
+      <p class="sobretitulo text-sm!">{oQueFazemos.sobretitulo}</p>
+      <h2 id="titulo-sobre" class="titulo-secao text-balance">{oQueFazemos.titulo}</h2>
+    </div>
 
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" data-revelar-filhos>
+    <!-- Subgrid: fala, traço e resposta ficam alinhados entre os cartões da mesma linha -->
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 md:mt-12 lg:grid-cols-4" data-revelar-filhos>
       {
         oQueFazemos.cards.map((card) => (
-          <li class="group card-hover flex flex-col gap-3.5 rounded-card bg-cinza-claro p-6 md:p-7">
-            <p class="text-[15px] text-cinza-texto italic">{card.dor}</p>
-            <span class="h-[3px] w-8 bg-ciano origin-left transition-[scale] duration-300 ease-suave group-hover:scale-x-[1.75]" aria-hidden="true" />
-            <p class="text-[17px] leading-[1.4] font-bold">{card.solucao}</p>
+          <li class="group card-hover row-span-3 grid grid-rows-subgrid gap-y-4 rounded-card bg-cinza-claro p-7">
+            <p class="text-[15px] leading-[1.5] text-cinza-texto">{card.dor}</p>
+            <span class="h-[3px] w-8 origin-left bg-ciano transition-[scale] duration-300 ease-suave group-hover:scale-x-[1.75]" aria-hidden="true" />
+            <p class="text-[17px] leading-[1.4] font-semibold text-preto">{card.solucao}</p>
           </li>
         ))
       }
     </ul>
 
     <p
-      class="rounded-card bg-linear-to-br from-preto to-[#1E2020] px-6 py-8 text-center font-titulo text-xl leading-[1.45] text-branco md:px-10 md:text-[23px]"
+      class="mt-8 rounded-card bg-preto p-10 text-center font-titulo text-[19px] leading-[1.4] font-medium text-branco text-balance md:text-2xl"
       data-revelar
     >
-      <Destaque texto={oQueFazemos.manifesto} cor="font-medium text-ciano" />
+      <Destaque texto={oQueFazemos.manifesto} cor="text-ciano md:block" />
     </p>
+
+    <div class="mt-8 flex justify-center">
+      <Botao href={oQueFazemos.botao.href} class="w-full shadow-[0_6px_18px_rgba(41,217,213,0.28)]! sm:w-auto">{oQueFazemos.botao.texto}</Botao>
+    </div>
   </div>
 </section>

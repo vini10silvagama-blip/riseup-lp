@@ -94,22 +94,16 @@ export const problema = {
   titulo: 'Previsibilidade não vem de mais leads. Vem de parar de perder os que já chegam.',
   subtitulo:
     'Em uma clínica acima de R$ 70 mil/mês, pequenas perdas entre o lead e o faturamento viram muito dinheiro. E quase sempre o que o dono sente não é o que está travando.',
+  link: { texto: 'Descobrir onde minha clínica perde', href: links.diagnostico },
   jornadaTitulo: 'Onde o faturamento vaza na jornada do paciente',
   etapas: [
-    { nome: 'Lead', texto: 'Muito “curioso” e nenhum critério para separar quem tem intenção.' },
-    { nome: 'Resposta', texto: 'As primeiras mensagens demoram, o lead esfria e vai para o concorrente.' },
-    { nome: 'Agendamento', texto: 'O paciente pergunta o preço, recebe só o valor e ninguém investiga a real necessidade.' },
-    { nome: 'Comparecimento', texto: 'Faltas e cancelamentos deixam buracos na agenda.' },
-    { nome: 'Avaliação e orçamento', texto: 'Sem atendimento encantador e boa condução, medo, preço e falta de urgência vencem o valor.' },
-    { nome: 'Fechamento', texto: '“Vou pensar.” Sem follow-up, o orçamento vai para o cemitério.' },
-    { nome: 'Retorno', texto: 'Pacientes antigos e orçamentos parados, esquecidos na base.' },
-  ],
-  porTrasTitulo: 'E por trás de toda a jornada:',
-  porTras: [
-    'Recepção sobrecarregada entre WhatsApp, telefone, agenda e paciente presencial.',
-    'O comercial vive na memória de uma recepcionista, sem processo nem CRM.',
-    'Ninguém sabe de onde vem o faturamento — nem onde ele vaza.',
-    'Sem processo e autonomia da equipe, crescer significa apenas aumentar o caos.',
+    { nome: 'Lead', texto: 'Curiosos demais e nenhum critério para filtrar.' },
+    { nome: 'Resposta', texto: 'A mensagem demora e o lead esfria.' },
+    { nome: 'Agendamento', texto: 'Passam o preço sem investigar a necessidade.' },
+    { nome: 'Comparecimento', texto: 'Faltas e cancelamentos abrem buracos na agenda.' },
+    { nome: 'Avaliação e orçamento', texto: 'Medo e preço vencem o valor do tratamento.' },
+    { nome: 'Fechamento', texto: '“Vou pensar”, e ninguém acompanha.' },
+    { nome: 'Retorno', texto: 'Pacientes e orçamentos antigos esquecidos.' },
   ],
 };
 
@@ -118,17 +112,18 @@ export const problema = {
 // ---------------------------------------------------------------------
 export const oQueFazemos = {
   sobretitulo: 'A Rise Up',
-  titulo: 'O que fazemos pela sua clínica',
+  titulo: 'O que muda quando a Rise Up assume',
   cards: [
     { dor: '“Não sei se o problema é o anúncio ou a equipe.”', solucao: 'Mostramos o funil inteiro em um dashboard em tempo real, etapa por etapa.' },
-    { dor: '“Os leads esfriam antes de alguém responder.”', solucao: 'Não é só atendimento: qualificação, classificação, agendamento e reativação de leads perdidos.' },
-    { dor: '“Faço avaliações e o paciente não fecha.”', solucao: 'Quebra de objeções, condições de pagamento e follow-up estruturado.' },
-    { dor: '“Tudo depende de mim, e crescer só aumenta o caos.”', solucao: 'Processo, CRM e indicadores para crescer sem contratar gente só para compensar processo ruim.' },
+    { dor: '“Os leads esfriam antes de alguém responder.”', solucao: 'Respondemos, qualificamos e agendamos cada lead enquanto o interesse está quente.' },
+    { dor: '“Faço avaliações e o paciente não fecha.”', solucao: 'Treinamos sua equipe para quebrar objeções e acompanhamos cada orçamento até a decisão.' },
+    { dor: '“Tudo depende de mim, e crescer só aumenta o caos.”', solucao: 'Organizamos processo, CRM e indicadores para a clínica crescer sem depender de você.' },
   ],
   manifesto: {
     antes: 'Não somos uma agência de tráfego para dentistas. ',
-    destaque: 'Somos o time que transforma a demanda da sua clínica em faturamento previsível.',
+    destaque: 'Somos o time que responde pelo resultado depois que o lead chega.',
   } as TituloDestaque,
+  botao: { texto: 'Quero meu diagnóstico gratuito', href: links.diagnostico },
 };
 
 // ---------------------------------------------------------------------
