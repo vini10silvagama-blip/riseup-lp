@@ -4,3 +4,5 @@ node_modules/
 dist/
 .astro/
 .claude/settings.local.json
+# Logos recortados automaticamente no build (gerados de src/assets/clientes/)
+src/assets/clientes-recortados/

@@ -63,11 +63,13 @@ const linhasTitulo = hero.titulo.antes.split('\n');
 // "R$" e números nunca ficam sozinhos no fim da linha ("R$ 115", "3 meses")
 const semQuebraNoValor = (texto: string) => texto.replace(/(R\$|\d) /g, '$1 ');
 
-// Logos de clientes: lidos de src/assets/clientes/ na hora do build (SVG ou PNG, até 10), em ordem
-// alfabética do nome do arquivo, e otimizados pelo componente de imagem do Astro. O texto alternativo
+// Logos de clientes: os arquivos ficam em src/assets/clientes/ (SVG ou PNG, até 10). No build, a
+// integração integracoes/recortar-logos.mjs tira a margem branca/transparente de cada um e salva em
+// src/assets/clientes-recortados/, que é lida aqui em ordem alfabética do nome do arquivo e otimizada
+// pelo componente de imagem do Astro. O texto alternativo
 // vem do nome, sem o número inicial e com hífens virando espaços: "01-clinica-sorriso.png" → "Clinica Sorriso";
 // nomes com maiúsculas/acentos ficam como estão ("04-Ateliê Miraz.png" → "Ateliê Miraz").
-const arquivosLogos: Arquivos = import.meta.glob('../assets/clientes/*.{svg,png,SVG,PNG}', { eager: true });
+const arquivosLogos: Arquivos = import.meta.glob('../assets/clientes-recortados/*.{svg,png,SVG,PNG}', { eager: true });
 const logos = Object.entries(arquivosLogos)
   .sort(([a], [b]) => a.localeCompare(b, 'pt-BR', { numeric: true }))
   .slice(0, 10)
@@ -96,7 +98,13 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       <div class="entrada @container relative z-10 flex flex-col items-start">
         <p class="inline-flex items-center gap-2.5 rounded-pilula border border-ciano bg-[#E3FAF8] py-2 pr-4 pl-2 text-sm leading-snug font-semibold text-preto">
           <span class="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-ciano" aria-hidden="true">
-            <span class="dente-icone size-4 bg-preto"></span>
+            <!-- Dente em traço, no estilo do ícone "tooth" do Phosphor (peso regular) -->
+            <svg viewBox="0 0 256 256" class="size-4" fill="none" stroke="#141414" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M86,40C58,40,40,62,40,94c0,38,22,56,30,88c6,24,12,42,30,42c18,0,18-24,22-40c2-8,3-14,6-14s4,6,6,14c4,16,4,40,22,40c18,0,24-18,30-42c8-32,30-50,30-88c0-32-18-54-46-54c-18,0-28,10-42,10S104,40,86,40Z"
+              ></path>
+              <path d="M128,50c12,8,26,12,42,12"></path>
+            </svg>
           </span>
           {semQuebraNoValor(hero.etiqueta)}
         </p>
@@ -135,11 +143,11 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       <!-- Fotos: lado a lado no celular/tablet; escalonadas a partir de 1024px
            (bloco de 440×420 até 1279px; 510×514 a partir de 1280px, avançando 40px além do container) -->
       <div
-        class="entrada entrada-2 relative isolate mx-auto w-full max-w-[560px] pt-10 lg:mx-0 lg:h-[420px] lg:w-[440px] lg:max-w-none lg:pt-0 xl:-mr-10 xl:h-[514px] xl:w-[510px]"
+        class="entrada entrada-2 relative isolate mx-auto w-full max-w-[560px] pt-[90px] lg:mx-0 lg:h-[420px] lg:w-[440px] lg:max-w-none lg:pt-0 xl:-mr-10 xl:h-[514px] xl:w-[510px]"
       >
         <!-- Fundo com movimento (decorativo): brilho que se desloca e quatro anéis em onda,
              centralizados nas fotos. Só transform e opacity. -->
-        <div class="pointer-events-none absolute inset-x-0 top-10 -z-10 h-0 pb-[64%] lg:inset-0 lg:h-auto lg:pb-0" aria-hidden="true">
+        <div class="pointer-events-none absolute inset-x-0 top-[90px] -z-10 h-0 pb-[64%] lg:inset-0 lg:h-auto lg:pb-0" aria-hidden="true">
           <div class="brilho-fotos absolute top-1/2 left-1/2 size-[380px] rounded-full bg-ciano/30 blur-[60px] lg:size-[520px]"></div>
           {
             [1, 2, 3, 4].map((n) => (
@@ -167,7 +175,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
                 })
                 .join(';');
               const cartao = (
-                <div class="relative aspect-[3/4] w-full overflow-hidden rounded-[20px] bg-cinza-claro lg:aspect-auto lg:h-[310px] lg:w-[232px] xl:h-[384px] xl:w-[268px]">
+                <div class="moldura-foto relative aspect-[3/4] w-full overflow-hidden rounded-[20px] bg-cinza-claro lg:aspect-auto lg:h-[310px] lg:w-[232px] xl:h-[384px] xl:w-[268px]">
                   {foto && (
                     <Image
                       src={foto}
@@ -189,17 +197,21 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
                 </div>
               );
               return i === 0 ? (
-                <div class="w-[48%] lg:absolute lg:top-0 lg:left-0 lg:w-auto">{cartao}</div>
+                <div class="cartao-socio relative w-[48%] rounded-[20px] lg:absolute lg:top-0 lg:left-0 lg:w-auto">{cartao}</div>
               ) : (
-                <div class="w-[48%] lg:absolute lg:right-0 lg:bottom-0 lg:z-10 lg:w-auto lg:rounded-[26px] lg:bg-branco lg:pt-1.5 lg:pl-1.5">{cartao}</div>
+                <div class="cartao-socio relative w-[48%] rounded-[20px] lg:absolute lg:right-0 lg:bottom-0 lg:z-10 lg:w-auto lg:rounded-[26px] lg:bg-branco lg:pt-1.5 lg:pl-1.5">
+                  {cartao}
+                </div>
               );
             })
           }
         </div>
 
-        <!-- Selo (decorativo): na divisa das fotos no celular; no canto superior direito do bloco no computador -->
+        <!-- Selo (decorativo, transparente): nunca sobre as fotos. No celular, centralizado acima delas,
+             10px antes do topo; no computador, no canto vazio acima do cartão B
+             (a partir de 1280px: 10px à direita do cartão A e 10px acima do cartão B) -->
         <div
-          class="selo absolute top-10 left-1/2 z-20 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-ciano bg-branco shadow-[0_4px_14px_rgba(20,20,20,0.08)] lg:top-0 lg:right-6 lg:left-auto lg:size-[92px] lg:translate-x-0 lg:translate-y-0 xl:top-10 xl:right-auto xl:left-[262px] xl:size-[104px]"
+          class="selo absolute top-0 left-1/2 z-20 size-20 -translate-x-1/2 rounded-full border-[1.5px] border-ciano lg:right-6 lg:left-auto lg:size-[92px] lg:translate-x-0 xl:top-4 xl:right-auto xl:left-[278px] xl:size-[104px]"
           aria-hidden="true"
         >
           <svg viewBox="0 0 104 104" class="absolute inset-0 size-full">
@@ -221,7 +233,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
         <!-- Cartão do case: abaixo das fotos no celular; no canto abaixo do cartão A no computador
              (entre 1024 e 1279px, letra e padding um pouco menores para não encostar no cartão B) -->
         <div
-          class="cartao-case mt-4 rounded-[14px] bg-preto px-[18px] py-3.5 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] lg:absolute lg:bottom-0 lg:left-0 lg:mt-0 lg:max-w-[226px] lg:px-3 lg:py-3 xl:top-[400px] xl:bottom-auto xl:px-[18px] xl:py-3.5"
+          class="cartao-case relative z-20 mt-4 rounded-[14px] bg-preto px-[18px] py-3.5 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] lg:absolute lg:bottom-0 lg:left-0 lg:mt-0 lg:max-w-[226px] lg:px-3 lg:py-3 xl:top-[400px] xl:bottom-auto xl:px-[18px] xl:py-3.5"
         >
           <p class="text-sm leading-snug font-semibold whitespace-nowrap tabular-nums lg:text-[13px] xl:text-sm" data-contar>{semQuebraNoValor(hero.cardCase.titulo)}</p>
           <p class="mt-0.5 text-[12.5px] leading-snug whitespace-nowrap text-branco/75 lg:text-[11.5px] xl:text-[12.5px]">{semQuebraNoValor(hero.cardCase.texto)}</p>
@@ -231,9 +243,9 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
 
     <!-- Logos de clientes em carrossel contínuo (decorativo). Pausa com o mouse por cima, enquanto o
          usuário segura o clique/toque e com foco pelo teclado. Cada posição mostra o logo real de
-         public/img/clientes/ (em cinza) ou, sem arquivo, o marcador provisório. -->
-    <div class="mt-14 flex flex-col gap-4" data-revelar>
-      <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
+         src/assets/clientes/ (em cinza) ou, sem arquivo, o marcador provisório. -->
+    <div class="mt-16" data-revelar>
+      <p class="mb-5 text-[15px] font-semibold text-preto">{hero.clientesTitulo}</p>
       <!-- tabindex: pelo teclado, o foco na faixa também pausa (e permite rolar com animações reduzidas) -->
       <div class="faixa-logos" style={`--quantidade: ${posicoes.length}`} tabindex="0" role="region" aria-label={hero.clientesTitulo}>
         <div class="trilho-logos flex w-max">
@@ -242,22 +254,22 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
               <ul class:list={['lista-logos flex', copia === 1 && 'copia-logos']} aria-hidden={copia === 1 ? 'true' : undefined}>
                 {posicoes.map((posicao) =>
                   typeof posicao === 'string' ? (
-                    <li class="logo-cliente caixa-logo flex h-16 shrink-0 items-center justify-center rounded-xl border-[1.5px] border-dashed border-[#C9D3D3] px-2 text-center text-xs text-cinza-texto">
+                    <li class="logo-cliente caixa-logo flex shrink-0 items-center justify-center rounded-2xl border-[1.5px] border-dashed border-[#C9D3D3] bg-branco px-2 text-center text-xs text-cinza-texto">
                       {posicao}
                     </li>
                   ) : (
-                    <li class="caixa-logo flex h-16 shrink-0 items-center justify-center px-3">
+                    <li class="caixa-logo flex shrink-0 items-center justify-center rounded-2xl border border-borda bg-branco px-4">
                       <!-- PNG vira WebP em 2 tamanhos (tela comum e retina); SVG é usado como está.
                            Carregamento imediato: dentro da faixa com overflow escondido, o "lazy" só baixaria
                            o logo quando ele já estivesse entrando (aparecendo em branco por um instante) -->
                       <Image
                         src={posicao.imagem}
                         alt={copia === 1 ? '' : posicao.alt}
-                        {...(posicao.imagem.format === 'svg' ? {} : { widths: [120, 240], sizes: '120px' })}
+                        {...(posicao.imagem.format === 'svg' ? {} : { widths: [176, 352], sizes: '176px' })}
                         loading="eager"
                         decoding="async"
                         draggable="false"
-                        class="logo-real h-auto max-h-10 w-auto max-w-full object-contain"
+                        class="logo-real h-auto max-h-14 w-auto max-w-[min(176px,100%)] object-contain"
                       />
                     </li>
                   ),
@@ -370,11 +382,6 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
     }
   }
 
-  /* Dente da logo como ícone de uma cor (a cor vem do fundo do elemento) */
-  .dente-icone {
-    mask: url('/img/dente-ciano.png') center / contain no-repeat;
-  }
-
   /* Cartão do case flutua de leve só no computador (no celular fica parado, abaixo das fotos) */
   @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
     .cartao-case {
@@ -391,24 +398,23 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
     }
   }
 
-  /* Carrossel de logos: 2 caixas e meia visíveis no celular, 5 no computador; bordas esmaecidas */
+  /* Carrossel de logos: 1 caixa e meia visível no celular, 4 no computador; bordas esmaecidas */
   .faixa-logos {
-    --vao: 12px;
-    --visiveis: 2.5;
-    --vaos-visiveis: 2;
+    --vao: 20px;
+    --visiveis: 1.5;
+    --vaos-visiveis: 1;
     container-type: inline-size;
     overflow: hidden;
-    border-radius: 12px;
-    mask-image: linear-gradient(to right, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+    border-radius: 16px;
+    mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
     /* segurar o clique/toque pausa: sem selecionar texto nem abrir o menu de imagem */
     user-select: none;
     -webkit-touch-callout: none;
   }
   @media (min-width: 1024px) {
     .faixa-logos {
-      --vao: 20px;
-      --visiveis: 5;
-      --vaos-visiveis: 4;
+      --visiveis: 4;
+      --vaos-visiveis: 3;
     }
   }
   .lista-logos {
@@ -418,11 +424,12 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
   }
   .caixa-logo {
     width: calc((100cqi - var(--vaos-visiveis) * var(--vao)) / var(--visiveis));
+    height: 104px;
   }
   @media (prefers-reduced-motion: no-preference) {
     .trilho-logos {
-      /* cerca de 4s por logo, velocidade constante */
-      animation: faixa calc(var(--quantidade) * 4s) linear infinite;
+      /* cerca de 5s por logo, velocidade constante */
+      animation: faixa calc(var(--quantidade) * 5s) linear infinite;
     }
     .faixa-logos:hover .trilho-logos,
     .faixa-logos:focus-visible .trilho-logos,
@@ -446,24 +453,66 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
     }
   }
 
-  /* Marcadores e logos em escala de cinza e 60% de opacidade; cor e opacidade total no hover.
-     Nos logos reais, o multiply faz o fundo branco dos PNG sumir. */
-  .logo-cliente,
-  .logo-real {
+  /* Marcadores provisórios em cinza e 60% de opacidade; cor e opacidade total no hover */
+  .logo-cliente {
     filter: grayscale(1);
     opacity: 0.6;
     transition:
       filter 0.3s ease,
       opacity 0.3s ease;
   }
+  /* Logos reais: escala de cinza com um pouco mais de contraste, sem opacidade reduzida.
+     O multiply funde o fundo branco dos PNG com o fundo branco da caixa. */
   .logo-real {
+    filter: grayscale(1) contrast(1.15);
     mix-blend-mode: multiply;
+    transition: filter 0.3s ease;
   }
   @media (hover: hover) {
-    .logo-cliente:hover,
-    .caixa-logo:hover .logo-real {
+    .logo-cliente:hover {
       filter: none;
       opacity: 1;
+    }
+    .caixa-logo:hover .logo-real {
+      filter: none;
+    }
+  }
+
+  /* Hover no lado direito do hero (só com mouse): cartões das fotos, selo e cartão do case crescem
+     um pouco. O cartão em hover sobe acima do outro, mas fica abaixo do selo e do cartão do case (z 20). */
+  .cartao-socio,
+  .foto-socio,
+  .selo,
+  .cartao-case {
+    transform-origin: center;
+    transition:
+      scale 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .cartao-socio:hover {
+      z-index: 15;
+      scale: 1.03;
+      box-shadow: 0 18px 40px rgba(20, 20, 20, 0.14);
+    }
+    .cartao-socio:hover .foto-socio {
+      scale: 1.05;
+    }
+    .selo:hover {
+      scale: 1.08;
+    }
+    .cartao-case:hover {
+      scale: 1.05;
+      box-shadow: 0 18px 40px rgba(20, 20, 20, 0.3);
+    }
+  }
+  /* Animações reduzidas: sem escala, só a sombra */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+    .cartao-socio:hover,
+    .cartao-socio:hover .foto-socio,
+    .selo:hover,
+    .cartao-case:hover {
+      scale: none;
     }
   }
 
