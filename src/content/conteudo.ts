@@ -68,8 +68,8 @@ export const hero = {
     { nome: 'Vinicius Gama', funcao: 'Tráfego e automação', foto: 'vinicius', alt: 'Vinicius Gama, sócio da Rise Up Odonto' },
     { nome: 'Felipe Costa', funcao: 'Marketing e comercial', foto: 'felipe', alt: 'Felipe Costa, sócio da Rise Up Odonto' },
   ],
-  // Texto do selo circular (decorativo), em dois arcos para nada ficar de cabeça para baixo
-  selo: { arcoCima: 'CAPTAÇÃO · CONVERSÃO', arcoBaixo: 'RETENÇÃO' },
+  // Texto do selo circular (decorativo): um anel contínuo que gira devagar
+  selo: { anel: 'CAPTAÇÃO • CONVERSÃO • RETENÇÃO • ' },
   // Números ilustrativos (o único case real é R$ 55 mil → R$ 115 mil/mês em 3 meses)
   cardCase: { titulo: 'R$ 70 mil → R$ 125 mil/mês', texto: 'Exemplo ilustrativo' },
   clientesTitulo: 'Clínicas que já trabalham com a gente',
