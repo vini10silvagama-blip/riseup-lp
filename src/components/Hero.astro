@@ -98,7 +98,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
 <!-- Topo: 72px abaixo do cabeçalho fixo (72px de cabeçalho no celular, 88px a partir de 768px) -->
 <section id="inicio" class="relative isolate overflow-x-clip pt-[104px] pb-[72px] md:pt-[136px] lg:pt-[160px]" aria-labelledby="titulo-hero">
   <!-- Brilho discreto no canto superior esquerdo (decorativo) -->
-  <div class="brilho-canto pointer-events-none absolute -top-24 -left-28 -z-10 size-[380px] rounded-full bg-ciano/8 blur-[80px]" aria-hidden="true"></div>
+  <div class="brilho-canto pointer-events-none absolute -top-24 -left-28 -z-10 size-[380px] rounded-full bg-ciano/16 blur-[80px]" aria-hidden="true"></div>
 
   <div class="container-lp">
     <div
@@ -106,7 +106,12 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
     >
       <!-- Texto: tudo na mesma borda esquerda (acima dos efeitos de fundo) -->
       <div class="entrada @container relative z-10 flex flex-col items-start">
-        <p class="rounded-pilula border border-borda bg-branco/70 px-3.5 py-1.5 text-xs font-medium md:text-[13px]">{hero.etiqueta}</p>
+        <p class="inline-flex items-center gap-2.5 rounded-pilula border border-ciano bg-[#E3FAF8] py-2 pr-4 pl-2 text-sm leading-snug font-semibold text-preto">
+          <span class="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-ciano" aria-hidden="true">
+            <span class="dente-icone size-4 bg-preto"></span>
+          </span>
+          {semQuebraNoValor(hero.etiqueta)}
+        </p>
         <h1 id="titulo-hero" class="titulo-hero mt-6 text-[34px] leading-[1.12] tracking-[-0.025em] text-balance">
           {
             linhasTitulo.map((linha, i) => (
@@ -118,20 +123,25 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
           }<br class="hidden lg:block" /><span class="text-ciano-escuro">{hero.titulo.destaque}</span>
         </h1>
         <p class="mt-6 max-w-[500px] text-[17px] leading-[1.6] text-cinza-texto lg:text-lg">{hero.subtitulo}</p>
-        <div class="mt-8 flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center lg:gap-0">
-          <Botao href={hero.botaoPrincipal.href} shimmerAuto class="shadow-[0_6px_18px_rgba(41,217,213,0.28)]!">{hero.botaoPrincipal.texto}</Botao>
-          <!-- Secundário como link de texto (área clicável de 44px de altura) -->
+        <div class="mt-8 flex w-full flex-col items-center gap-3 lg:w-auto lg:flex-row lg:items-start lg:gap-0">
+          <!-- Botão principal com a linha "Gratuito e sem compromisso." centralizada logo abaixo -->
+          <div class="flex w-full flex-col items-center lg:w-auto">
+            <Botao href={hero.botaoPrincipal.href} shimmerAuto class="w-full shadow-[0_6px_18px_rgba(41,217,213,0.28)]! lg:w-auto">{hero.botaoPrincipal.texto}</Botao>
+            <p class="mt-3.5 flex items-center gap-2 text-[15px] font-semibold text-preto">
+              <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#E3FAF8]" aria-hidden="true">
+                <Icone nome="check" class="size-[18px] text-ciano-escuro" espessura={2.2} />
+              </span>
+              {hero.notaBotao}
+            </p>
+          </div>
+          <!-- Secundário como link de texto (área clicável de 44px; no computador, na altura do centro do botão) -->
           <a
             href={hero.botaoSecundario.href}
-            class="inline-flex min-h-11 items-center self-center text-base font-semibold text-preto underline decoration-[1.5px] underline-offset-[6px] transition-colors duration-200 hover:text-ciano-escuro lg:ml-7"
+            class="inline-flex min-h-11 items-center text-base font-semibold text-preto underline decoration-[1.5px] underline-offset-[6px] transition-colors duration-200 hover:text-ciano-escuro lg:ml-7 lg:h-14"
           >
             {hero.botaoSecundario.texto}
           </a>
         </div>
-        <p class="mt-4 flex items-center gap-2 text-sm text-cinza-texto">
-          <Icone nome="check" class="size-4 shrink-0 text-ciano-escuro" espessura={2} />
-          {hero.notaBotao}
-        </p>
       </div>
 
       <!-- Fotos: lado a lado no celular/tablet; escalonadas a partir de 1024px
@@ -139,13 +149,15 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       <div
         class="entrada entrada-2 relative isolate mx-auto w-full max-w-[560px] pt-10 lg:mx-0 lg:h-[420px] lg:w-[440px] lg:max-w-none lg:pt-0 xl:-mr-10 xl:h-[514px] xl:w-[510px]"
       >
-        <!-- Fundo com movimento (decorativo): brilho que se desloca e três anéis em onda,
+        <!-- Fundo com movimento (decorativo): brilho que se desloca e quatro anéis em onda,
              centralizados nas fotos. Só transform e opacity. -->
         <div class="pointer-events-none absolute inset-x-0 top-10 -z-10 h-0 pb-[64%] lg:inset-0 lg:h-auto lg:pb-0" aria-hidden="true">
-          <div class="brilho-fotos absolute top-1/2 left-1/2 size-[340px] rounded-full bg-ciano/16 blur-[60px] lg:size-[460px]"></div>
-          <div class="onda absolute top-1/2 left-1/2 size-[340px] rounded-full border border-ciano lg:size-[520px]"></div>
-          <div class="onda onda-2 absolute top-1/2 left-1/2 size-[340px] rounded-full border border-ciano lg:size-[520px]"></div>
-          <div class="onda onda-3 absolute top-1/2 left-1/2 size-[340px] rounded-full border border-ciano lg:size-[520px]"></div>
+          <div class="brilho-fotos absolute top-1/2 left-1/2 size-[380px] rounded-full bg-ciano/30 blur-[60px] lg:size-[520px]"></div>
+          {
+            [1, 2, 3, 4].map((n) => (
+              <div class:list={['onda absolute top-1/2 left-1/2 size-[340px] rounded-full border-[1.5px] border-ciano lg:size-[520px]', n > 1 && `onda-${n}`]} />
+            ))
+          }
         </div>
 
         <!-- O cartão B fica por cima do A, com contorno branco de 6px do lado da sobreposição -->
@@ -199,7 +211,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
 
         <!-- Selo (decorativo): na divisa das fotos no celular; no canto superior direito do bloco no computador -->
         <div
-          class="selo absolute top-10 left-1/2 z-20 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-preto shadow-[0_10px_28px_rgba(20,20,20,0.18)] lg:top-0 lg:right-6 lg:left-auto lg:size-[92px] lg:translate-x-0 lg:translate-y-0 xl:top-10 xl:right-auto xl:left-[262px] xl:size-[104px]"
+          class="selo absolute top-10 left-1/2 z-20 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-ciano bg-branco shadow-[0_4px_14px_rgba(20,20,20,0.08)] lg:top-0 lg:right-6 lg:left-auto lg:size-[92px] lg:translate-x-0 lg:translate-y-0 xl:top-10 xl:right-auto xl:left-[262px] xl:size-[104px]"
           aria-hidden="true"
         >
           <svg viewBox="0 0 104 104" class="absolute inset-0 size-full">
@@ -208,10 +220,10 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
               <path id="selo-arco-cima" d="M31.5,87.51 A41,41 0 1,1 72.5,87.51"></path>
               <path id="selo-arco-baixo" d="M6.42,68.59 A48.5,48.5 0 0,0 97.58,68.59"></path>
             </defs>
-            <text class="fill-branco font-semibold" font-size="10.5" letter-spacing="2" text-anchor="middle">
+            <text class="fill-preto font-semibold" font-size="10.5" letter-spacing="2" text-anchor="middle">
               <textPath href="#selo-arco-cima" startOffset="50%">{hero.selo.arcoCima}</textPath>
             </text>
-            <text class="fill-branco font-semibold" font-size="10.5" letter-spacing="2" text-anchor="middle">
+            <text class="fill-preto font-semibold" font-size="10.5" letter-spacing="2" text-anchor="middle">
               <textPath href="#selo-arco-baixo" startOffset="50%">{hero.selo.arcoBaixo}</textPath>
             </text>
           </svg>
@@ -229,22 +241,11 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       </div>
     </div>
 
-    <!-- Logos de clientes em carrossel contínuo (decorativo, pausável). Cada posição mostra o logo real
-         de public/img/clientes/ (em cinza) ou, sem arquivo, o marcador provisório. -->
+    <!-- Logos de clientes em carrossel contínuo (decorativo). Pausa com o mouse por cima, enquanto o
+         usuário segura o clique/toque e com foco pelo teclado. Cada posição mostra o logo real de
+         public/img/clientes/ (em cinza) ou, sem arquivo, o marcador provisório. -->
     <div class="mt-14 flex flex-col gap-4" data-revelar>
-      <div class="flex items-center justify-between gap-3">
-        <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
-        <button
-          type="button"
-          id="pausar-logos"
-          class="botao-pausa group inline-flex size-10 items-center justify-center rounded-full border border-borda text-preto"
-          aria-pressed="false"
-          aria-label="Pausar a faixa de logos"
-        >
-          <Icone nome="pausa" class="size-4 group-aria-pressed:hidden" espessura={2.2} />
-          <Icone nome="play" class="hidden size-4 group-aria-pressed:block" />
-        </button>
-      </div>
+      <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
       <!-- tabindex: pelo teclado, o foco na faixa também pausa (e permite rolar com animações reduzidas) -->
       <div class="faixa-logos" style={`--quantidade: ${posicoes.length}`} tabindex="0" role="region" aria-label={hero.clientesTitulo}>
         <div class="trilho-logos flex w-max">
@@ -257,7 +258,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
                       {posicao}
                     </li>
                   ) : (
-                    <li class="logo-cliente caixa-logo flex h-16 shrink-0 items-center justify-center px-3">
+                    <li class="caixa-logo flex h-16 shrink-0 items-center justify-center px-3">
                       <img
                         src={posicao.src}
                         alt={copia === 1 ? '' : posicao.alt}
@@ -265,7 +266,8 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
                         height={posicao.altura}
                         loading="lazy"
                         decoding="async"
-                        class="h-auto max-h-10 w-auto max-w-full object-contain"
+                        draggable="false"
+                        class="logo-real h-auto max-h-10 w-auto max-w-full object-contain"
                       />
                     </li>
                   ),
@@ -334,10 +336,13 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       animation: onda 9s linear infinite;
     }
     .onda-2 {
-      animation-delay: 3s;
+      animation-delay: 2.25s;
     }
     .onda-3 {
-      animation-delay: 6s;
+      animation-delay: 4.5s;
+    }
+    .onda-4 {
+      animation-delay: 6.75s;
     }
   }
   @keyframes brilho-fotos {
@@ -353,7 +358,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
   @keyframes onda {
     0% {
       transform: translate(-50%, -50%) scale(0.55);
-      opacity: 0.45;
+      opacity: 0.8;
     }
     65% {
       opacity: 0;
@@ -369,9 +374,15 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       opacity: 0.3;
     }
     .onda-2,
-    .onda-3 {
+    .onda-3,
+    .onda-4 {
       display: none;
     }
+  }
+
+  /* Dente da logo como ícone de uma cor (a cor vem do fundo do elemento) */
+  .dente-icone {
+    mask: url('/img/dente-ciano.png') center / contain no-repeat;
   }
 
   /* Cartão do case flutua de leve só no computador (no celular fica parado, abaixo das fotos) */
@@ -399,6 +410,9 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
     overflow: hidden;
     border-radius: 12px;
     mask-image: linear-gradient(to right, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+    /* segurar o clique/toque pausa: sem selecionar texto nem abrir o menu de imagem */
+    user-select: none;
+    -webkit-touch-callout: none;
   }
   @media (min-width: 1024px) {
     .faixa-logos {
@@ -421,7 +435,7 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       animation: faixa calc(var(--quantidade) * 4s) linear infinite;
     }
     .faixa-logos:hover .trilho-logos,
-    .faixa-logos:focus-within .trilho-logos,
+    .faixa-logos:focus-visible .trilho-logos,
     :global(.faixa-pausada) .trilho-logos {
       animation-play-state: paused;
     }
@@ -437,22 +451,27 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
       overflow-x: auto;
       mask-image: none;
     }
-    .copia-logos,
-    .botao-pausa {
+    .copia-logos {
       display: none;
     }
   }
 
-  /* Logos: escala de cinza e 60% de opacidade; cor e opacidade total no hover */
-  .logo-cliente {
+  /* Marcadores e logos em escala de cinza e 60% de opacidade; cor e opacidade total no hover.
+     Nos logos reais, o multiply faz o fundo branco dos PNG sumir. */
+  .logo-cliente,
+  .logo-real {
     filter: grayscale(1);
     opacity: 0.6;
     transition:
       filter 0.3s ease,
       opacity 0.3s ease;
   }
+  .logo-real {
+    mix-blend-mode: multiply;
+  }
   @media (hover: hover) {
-    .logo-cliente:hover {
+    .logo-cliente:hover,
+    .caixa-logo:hover .logo-real {
       filter: none;
       opacity: 1;
     }
@@ -475,14 +494,12 @@ const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.lengt
 </style>
 
 <script>
-  // Botão de pausa da faixa de logos
-  const botaoPausa = document.getElementById('pausar-logos');
+  // Faixa de logos: pausa enquanto o usuário segura o clique ou o toque em qualquer ponto
   const faixa = document.querySelector('.faixa-logos');
-  if (botaoPausa && faixa) {
-    botaoPausa.addEventListener('click', () => {
-      const pausado = botaoPausa.getAttribute('aria-pressed') !== 'true';
-      botaoPausa.setAttribute('aria-pressed', String(pausado));
-      faixa.classList.toggle('faixa-pausada', pausado);
-    });
+  if (faixa) {
+    faixa.addEventListener('pointerdown', () => faixa.classList.add('faixa-pausada'));
+    for (const evento of ['pointerup', 'pointercancel', 'pointerleave']) {
+      faixa.addEventListener(evento, () => faixa.classList.remove('faixa-pausada'));
+    }
   }
 </script>

@@ -70,7 +70,8 @@ export const hero = {
   ],
   // Texto do selo circular (decorativo), em dois arcos para nada ficar de cabeça para baixo
   selo: { arcoCima: 'CAPTAÇÃO · CONVERSÃO', arcoBaixo: 'RETENÇÃO' },
-  cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
+  // Números ilustrativos (o único case real é R$ 55 mil → R$ 115 mil/mês em 3 meses)
+  cardCase: { titulo: 'R$ 70 mil → R$ 125 mil/mês', texto: 'Exemplo ilustrativo' },
   clientesTitulo: 'Clínicas que já trabalham com a gente',
   // A faixa nunca some. Os logos (até 10) vêm sozinhos da pasta public/img/clientes/, em ordem
   // alfabética (SVG ou PNG). O texto alternativo vem do nome do arquivo, sem o número inicial:
