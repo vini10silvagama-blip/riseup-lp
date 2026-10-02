@@ -52,34 +52,28 @@ export const cabecalho = {
 // 1. Hero
 // ---------------------------------------------------------------------
 export const hero = {
-  etiquetaMarca: 'RISE UP',
-  etiqueta: 'Para clínicas odontológicas acima de R$ 70 mil/mês',
+  etiqueta: 'Para clínicas odontológicas acima de R$ 70 mil/mês',
   titulo: {
-    antes: 'Transformamos a demanda da sua clínica em ',
+    // O "\n" marca onde o título quebra a linha no computador (no celular ele quebra sozinho)
+    antes: 'Transformamos a demanda \nda sua clínica em ',
     destaque: 'faturamento previsível.',
   } as TituloDestaque,
   subtitulo:
-    'Um sistema de captação, conversão e retenção para clínicas que já faturam acima de R$ 70 mil/mês e querem crescer sem aumentar o caos — e sem depender do dono em cada decisão.',
+    'Um sistema de captação, conversão e retenção para a sua clínica crescer sem aumentar o caos e sem depender de você em cada decisão.',
   botaoPrincipal: { texto: 'Quero meu diagnóstico gratuito', href: links.diagnostico },
+  notaBotao: 'Gratuito e sem compromisso.',
   botaoSecundario: { texto: 'Ver como funciona', href: links.comoFunciona },
   socios: [
     // "foto" é o nome do arquivo em src/assets/socios/ (sem extensão)
     { nome: 'Vinicius Gama', funcao: 'Tráfego, tecnologia e automação', foto: 'vinicius', alt: 'Vinicius Gama, sócio da Rise Up Odonto' },
     { nome: 'Felipe Costa', funcao: 'Marketing odontológico e comercial', foto: 'felipe', alt: 'Felipe Costa, sócio da Rise Up Odonto' },
   ],
-  cardEspecialistas: { titulo: 'Especialistas em clínicas odontológicas', texto: 'Procedimentos de alto valor' },
-  cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
+  // Texto que gira em volta do selo circular entre as fotos (decorativo)
+  selo: 'CAPTAÇÃO · CONVERSÃO · RETENÇÃO ·',
+  cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
+  // Os logos vêm sozinhos da pasta public/img/clientes/ (SVG ou PNG; o nome do arquivo vira o texto alternativo).
+  // Com a pasta vazia, a faixa inteira (título incluído) some.
   clientesTitulo: 'Clínicas que já trabalham com a gente',
-  // Os logos reais vêm sozinhos da pasta src/assets/clientes/ (o nome do arquivo vira o texto alternativo).
-  // Estes placeholders só aparecem enquanto a pasta estiver vazia.
-  clientes: [
-    '[LOGO CLIENTE 1]',
-    '[LOGO CLIENTE 2]',
-    '[LOGO CLIENTE 3]',
-    '[LOGO CLIENTE 4]',
-    '[LOGO CLIENTE 5]',
-    '[LOGO CLIENTE 6]',
-  ],
 };
 
 // ---------------------------------------------------------------------

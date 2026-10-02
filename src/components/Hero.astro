@@ -1,8 +1,9 @@
 ---
 // 1. Hero — promessa
+import fs from 'node:fs';
+import path from 'node:path';
 import { hero } from '../content/conteudo';
 import Botao from './ui/Botao.astro';
-import Destaque from './ui/Destaque.astro';
 import Icone from './ui/Icone.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -14,185 +15,187 @@ const nomeDoArquivo = (caminho: string) => caminho.split('/').pop()!.replace(/\.
 const fotos: Arquivos = import.meta.glob('../assets/socios/*.{png,jpg,jpeg,webp}', { eager: true });
 const fotoDe = (nome: string) => Object.entries(fotos).find(([caminho]) => nomeDoArquivo(caminho) === nome)?.[1].default;
 
-// Logos de clientes (src/assets/clientes/): o nome do arquivo vira o nome da clínica.
-// "clinica-sorriso.png" → "Clinica Sorriso"; nomes já com maiúsculas/acentos ficam como estão.
-const arquivosLogos: Arquivos = import.meta.glob('../assets/clientes/*.{png,jpg,jpeg,webp,svg}', { eager: true });
-const logos = Object.entries(arquivosLogos)
-  .map(([caminho, modulo]) => {
-    const nome = nomeDoArquivo(caminho).replace(/[-_]+/g, ' ').trim();
+// Título: o "\n" do conteúdo vira quebra de linha só no computador
+const linhasTitulo = hero.titulo.antes.split('\n');
+
+// Logos de clientes: lidos de public/img/clientes/ na hora do build (só SVG e PNG).
+// O nome do arquivo vira o nome da clínica: "clinica-sorriso.png" → "Clinica Sorriso";
+// nomes já com maiúsculas/acentos ficam como estão.
+const pastaLogos = path.join(process.cwd(), 'public', 'img', 'clientes');
+const arquivosLogos = fs.existsSync(pastaLogos) ? fs.readdirSync(pastaLogos).filter((a) => /\.(svg|png)$/i.test(a)) : [];
+// Largura e altura reais, para o navegador reservar o espaço antes de carregar
+const medidas = (arquivo: string) => {
+  const conteudo = fs.readFileSync(path.join(pastaLogos, arquivo));
+  if (/\.png$/i.test(arquivo)) return { largura: conteudo.readUInt32BE(16), altura: conteudo.readUInt32BE(20) };
+  const caixa = conteudo.toString('utf8').match(/viewBox=["'][\d.\-]+[\s,]+[\d.\-]+[\s,]+([\d.]+)[\s,]+([\d.]+)/);
+  return caixa ? { largura: Math.round(+caixa[1]), altura: Math.round(+caixa[2]) } : {};
+};
+const logos = arquivosLogos
+  .map((arquivo) => {
+    const nome = nomeDoArquivo(arquivo).replace(/[-_]+/g, ' ').trim();
     const alt = nome === nome.toLowerCase() ? nome.replace(/(^|\s)\S/g, (l) => l.toUpperCase()) : nome;
-    return { imagem: modulo.default, alt };
+    return { src: `/img/clientes/${encodeURIComponent(arquivo)}`, alt, ...medidas(arquivo) };
   })
   .sort((a, b) => a.alt.localeCompare(b.alt, 'pt-BR'));
 const temLogos = logos.length > 0;
-const totalLogos = temLogos ? logos.length : hero.clientes.length;
 // Com poucos logos a faixa não rola no celular: fica uma grade parada
-const faixaRola = totalLogos >= 4;
-const colunas = Math.min(totalLogos, 6);
+const faixaRola = logos.length >= 4;
+const colunas = Math.min(logos.length, 6);
 ---
 
 <section id="inicio" class="relative overflow-hidden pt-[104px] pb-16 md:pt-[136px] md:pb-20" aria-labelledby="titulo-hero">
   <div class="container-lp">
-    <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-10">
+    <div class="grid items-center gap-12 xl:grid-cols-[minmax(0,680px)_1fr] xl:gap-8">
       <!-- Texto -->
-      <div class="entrada flex flex-col gap-6 md:gap-7">
-        <p
-          class="inline-flex items-center gap-2 self-start rounded-pilula border border-borda py-1.5 pr-3.5 pl-1.5 text-xs font-medium md:text-[13px]"
-        >
-          <span class="shrink-0 rounded-pilula bg-ciano px-2.5 py-1 text-[11px] font-bold tracking-wide whitespace-nowrap md:text-xs">{hero.etiquetaMarca}</span>
-          {hero.etiqueta}
-        </p>
-        <h1 id="titulo-hero" class="text-[38px] leading-[1.08] tracking-[-0.025em] sm:text-5xl lg:text-[58px]">
-          <Destaque texto={hero.titulo} cor="text-ciano-escuro" />
+      <div class="entrada flex max-w-[680px] flex-col gap-6 md:gap-7">
+        <p class="self-start rounded-pilula border border-borda px-3.5 py-1.5 text-xs font-medium md:text-[13px]">{hero.etiqueta}</p>
+        <h1 id="titulo-hero" class="text-[38px] leading-[1.08] tracking-[-0.025em] sm:text-5xl lg:text-[48px]">
+          {
+            linhasTitulo.map((linha, i) => (
+              <>
+                {linha}
+                {i < linhasTitulo.length - 1 && <br class="hidden lg:block" />}
+              </>
+            ))
+          }<span class="text-ciano-escuro">{hero.titulo.destaque}</span>
         </h1>
-        <p class="text-[17px] leading-[1.55] text-cinza-texto md:text-[19px]">{hero.subtitulo}</p>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <Botao href={hero.botaoPrincipal.href} shimmerAuto>{hero.botaoPrincipal.texto}</Botao>
+        <p class="max-w-[520px] text-[17px] leading-[1.55] text-cinza-texto md:text-[19px]">{hero.subtitulo}</p>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+          <div class="flex flex-col items-center gap-2">
+            <Botao href={hero.botaoPrincipal.href} shimmerAuto class="w-full sm:w-auto">{hero.botaoPrincipal.texto}</Botao>
+            <p class="text-[13px] text-cinza-texto">{hero.notaBotao}</p>
+          </div>
           <Botao href={hero.botaoSecundario.href} variante="contorno">{hero.botaoSecundario.texto}</Botao>
         </div>
       </div>
 
       <!-- Sócios sobre círculos concêntricos -->
-      <div class="entrada entrada-2 relative mx-auto h-[440px] w-full max-w-[560px] sm:h-[540px] lg:h-[600px]">
-        <div class="pointer-events-none absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
-          <div class="circulo size-[520px] border-ciano/20 sm:size-[680px] lg:size-[760px]"></div>
-          <div class="circulo size-[400px] border-ciano/30 [animation-delay:-2s] sm:size-[520px] lg:size-[580px]"></div>
+      <div class="entrada entrada-2 relative mx-auto w-full max-w-[520px] pb-8 xl:max-w-none">
+        <div class="pointer-events-none absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+          <div class="circulo size-[460px] border-ciano/20 sm:size-[640px] xl:size-[620px]"></div>
+          <div class="circulo size-[350px] border-ciano/30 [animation-delay:-2s] sm:size-[490px] xl:size-[470px]"></div>
           <div
-            class="circulo size-[290px] border-ciano/45 bg-[radial-gradient(circle,rgba(41,217,213,0.28),rgba(41,217,213,0)_70%)] [animation-delay:-4s] sm:size-[370px] lg:size-[420px]"
+            class="circulo size-[250px] border-ciano/45 bg-[radial-gradient(circle,rgba(41,217,213,0.28),rgba(41,217,213,0)_70%)] [animation-delay:-4s] sm:size-[350px] xl:size-[340px]"
           >
           </div>
         </div>
 
-        <div class="absolute inset-x-0 bottom-0 flex items-end justify-center gap-2.5 sm:gap-3">
+        <div class="relative flex gap-2.5 sm:gap-3">
           {
             hero.socios.map((socio, i) => {
               const foto = fotoDe(socio.foto);
               return (
-              <div class="relative h-[360px] w-[46%] max-w-[260px] sm:h-[460px] lg:h-[520px]">
-                <!-- Moldura deslocada atrás da foto (ciano no primeiro, grafite no segundo) -->
-                <span
-                  class:list={[
-                    'moldura absolute inset-0 rounded-t-[130px] rounded-b-2xl border-2',
-                    i === 0 ? 'moldura-1 border-ciano' : 'moldura-2 border-preto',
-                  ]}
-                  aria-hidden="true"
-                />
-                <!-- A foto tem faixas transparentes em cima e embaixo (123px de 1300): ampliamos
-                     e subimos a imagem para que só o retrato apareça dentro do arco -->
-                <div class="relative size-full overflow-hidden rounded-t-[130px] rounded-b-2xl bg-[#161718]">
+                <div class="relative h-[380px] flex-1 overflow-hidden rounded-[20px] border-[1.5px] border-ciano bg-cinza-claro sm:h-[420px] xl:h-[440px]">
                   {foto && (
                     <Image
                       src={foto}
                       alt={socio.alt}
-                      widths={[280, 400, 600, 800]}
-                      sizes="(min-width: 1024px) 395px, (min-width: 640px) 350px, 275px"
+                      widths={[400, 800]}
+                      format="webp"
+                      sizes="(min-width:1024px) 395px, 45vw"
                       loading="eager"
                       fetchpriority={i === 0 ? 'high' : 'auto'}
-                      class="absolute top-[-11.67%] left-1/2 h-[123.34%] w-auto max-w-none -translate-x-1/2"
+                      class:list={[
+                        'absolute inset-0 size-full object-cover',
+                        // Rostos levemente afastados do centro, para o selo não encostar neles
+                        i === 0 ? 'object-[85%_50%]' : 'object-[15%_50%]',
+                      ]}
                     />
                   )}
+                  <!-- Etiqueta de nome: mesma posição nas duas fotos, acima da faixa do cartão do case -->
+                  <div class="absolute inset-x-2 bottom-10 rounded-xl bg-branco/95 px-3 py-2 shadow-[0_8px_24px_rgba(20,20,20,0.12)] sm:inset-x-3">
+                    <p class="text-sm leading-tight font-bold">{socio.nome}</p>
+                    <p class="mt-0.5 min-h-[3lh] text-[13px] leading-snug text-cinza-texto sm:min-h-[2lh]">{socio.funcao}</p>
+                  </div>
                 </div>
-              </div>
               );
             })
           }
+
+          <!-- Selo circular no encontro das fotos, na altura dos ombros (decorativo) -->
+          <div
+            class="absolute top-[53%] left-1/2 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ciano bg-branco shadow-[0_10px_28px_rgba(20,20,20,0.12)] sm:top-[60%] xl:top-[62%] xl:size-[104px]"
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 100 100" class="selo-texto absolute inset-0 size-full">
+              <defs>
+                <path id="selo-circulo" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"></path>
+              </defs>
+              <text class="fill-preto font-semibold" font-size="9.5">
+                <textPath href="#selo-circulo" textLength="230" lengthAdjust="spacing">{hero.selo}</textPath>
+              </text>
+            </svg>
+            <img src="/icon-192.png" alt="" width="192" height="192" class="absolute top-1/2 left-1/2 size-[42%] -translate-x-1/2 -translate-y-1/2" />
+          </div>
         </div>
 
-        <!-- Nomes dos sócios -->
-        <div class="absolute bottom-5 left-0 rounded-xl bg-branco px-3 py-2 shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:bottom-9 sm:px-3.5 sm:py-2.5">
-          <p class="text-[13px] font-bold sm:text-sm">{hero.socios[0].nome}</p>
-          <p class="max-w-[140px] text-[11px] leading-snug text-cinza-texto sm:max-w-none sm:text-xs">{hero.socios[0].funcao}</p>
-        </div>
-        <div class="absolute right-0 bottom-5 rounded-xl bg-branco px-3 py-2 text-right shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:bottom-9 sm:px-3.5 sm:py-2.5">
-          <p class="text-[13px] font-bold sm:text-sm">{hero.socios[1].nome}</p>
-          <p class="ml-auto max-w-[140px] text-[11px] leading-snug text-cinza-texto sm:max-w-none sm:text-xs">{hero.socios[1].funcao}</p>
-        </div>
-
-        <!-- Cards flutuantes -->
+        <!-- Cartão do case: canto inferior direito, metade para fora da moldura -->
         <div
-          class="flutua absolute top-2 left-0 flex max-w-[250px] items-center gap-2.5 rounded-[14px] bg-branco px-3.5 py-3 shadow-[0_12px_30px_rgba(20,20,20,0.14)] sm:top-10 sm:max-w-none sm:px-4 lg:-left-2.5"
-        >
-          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-ciano text-preto">
-            <Icone nome="estrela" class="size-4" espessura={2.2} />
-          </span>
-          <span>
-            <span class="block text-[12px] leading-tight font-bold sm:text-[13px]">{hero.cardEspecialistas.titulo}</span>
-            <span class="block text-[11px] text-cinza-texto">{hero.cardEspecialistas.texto}</span>
-          </span>
-        </div>
-        <div
-          class="flutua flutua-2 absolute top-[92px] right-0 flex items-center gap-2.5 rounded-[14px] bg-preto px-3.5 py-3 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] sm:top-[170px] sm:px-4 lg:-right-2.5"
+          class="flutua absolute right-0 bottom-0 flex items-center gap-2.5 rounded-[14px] bg-preto px-3.5 py-2.5 text-branco shadow-[0_12px_30px_rgba(20,20,20,0.2)] sm:-right-4 sm:px-4 xl:-right-6"
         >
           <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-ciano text-sm font-bold text-preto" aria-hidden="true">R$</span>
           <span>
-            <span class="block text-[12px] font-bold tabular-nums sm:text-[13px]" data-contar>{hero.cardCase.titulo}</span>
-            <span class="block text-[11px] text-cinza-escuro-texto">{hero.cardCase.texto}</span>
+            <span class="block text-[13px] font-bold tabular-nums" data-contar>{hero.cardCase.titulo}</span>
+            <span class="block text-[13px] text-cinza-escuro-texto">{hero.cardCase.texto}</span>
           </span>
         </div>
       </div>
     </div>
 
-    <!-- Logos de clientes: em cinza e 60% de opacidade; no celular, faixa que rola sozinha (pausável) -->
-    <div class="mt-14 flex flex-col gap-4 md:mt-16" data-revelar>
-      <div class="flex items-center justify-between gap-3">
-        <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
-        {
-          faixaRola && (
-            <button
-              type="button"
-              id="pausar-logos"
-              class="botao-pausa group inline-flex size-10 items-center justify-center rounded-full border border-borda text-preto lg:hidden"
-              aria-pressed="false"
-              aria-label="Pausar a faixa de logos"
-            >
-              <Icone nome="pausa" class="size-4 group-aria-pressed:hidden" espessura={2.2} />
-              <Icone nome="play" class="hidden size-4 group-aria-pressed:block" />
-            </button>
-          )
-        }
-      </div>
-      <div
-        class:list={['faixa-logos', faixaRola ? 'faixa-rola -mx-5 overflow-hidden px-5 lg:mx-0 lg:overflow-visible lg:px-0' : '']}
-        style={`--colunas: ${colunas}`}
-      >
-        <div class:list={['trilho-logos flex gap-3', faixaRola ? 'w-max lg:w-full' : 'w-full']}>
-          {
-            (faixaRola ? [0, 1] : [0]).map((copia) => (
-              <ul
-                class:list={[
-                  'gap-3 lg:grid lg:w-full lg:grid-cols-[repeat(var(--colunas),minmax(0,1fr))] lg:gap-5',
-                  faixaRola ? 'flex' : 'grid w-full grid-cols-[repeat(var(--colunas),minmax(0,1fr))]',
-                  copia === 1 && 'copia-logos lg:hidden',
-                ]}
-                aria-hidden={copia === 1 ? 'true' : undefined}
+    <!-- Logos de clientes (public/img/clientes/): em cinza; no celular, faixa que rola sozinha (pausável).
+         Sem nenhum arquivo na pasta, a faixa inteira não é exibida. -->
+    {
+      temLogos && (
+        <div class="mt-14 flex flex-col gap-4 md:mt-16" data-revelar>
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
+            {faixaRola && (
+              <button
+                type="button"
+                id="pausar-logos"
+                class="botao-pausa group inline-flex size-10 items-center justify-center rounded-full border border-borda text-preto lg:hidden"
+                aria-pressed="false"
+                aria-label="Pausar a faixa de logos"
               >
-                {temLogos
-                  ? logos.map((logo) => (
-                      <li class:list={['logo-cliente flex h-16 shrink-0 items-center justify-center px-3 lg:w-auto', faixaRola && 'w-[150px]']}>
-                        <Image
-                          src={logo.imagem}
-                          alt={copia === 1 ? '' : logo.alt}
-                          {...(logo.imagem.format === 'svg' ? {} : { widths: [160, 320], sizes: '160px' })}
-                          class="max-h-10 w-auto max-w-full object-contain"
-                        />
-                      </li>
-                    ))
-                  : hero.clientes.map((logo) => (
-                      <li
-                        class:list={[
-                          'logo-cliente flex h-16 shrink-0 items-center justify-center rounded-xl border-[1.5px] border-dashed border-[#C9D3D3] px-2 text-center text-xs text-cinza-texto lg:w-auto',
-                          faixaRola && 'w-[150px]',
-                        ]}
-                      >
-                        {logo}
-                      </li>
-                    ))}
-              </ul>
-            ))
-          }
+                <Icone nome="pausa" class="size-4 group-aria-pressed:hidden" espessura={2.2} />
+                <Icone nome="play" class="hidden size-4 group-aria-pressed:block" />
+              </button>
+            )}
+          </div>
+          <div
+            class:list={['faixa-logos', faixaRola ? 'faixa-rola -mx-5 overflow-hidden px-5 lg:mx-0 lg:overflow-visible lg:px-0' : '']}
+            style={`--colunas: ${colunas}`}
+          >
+            <div class:list={['trilho-logos flex gap-3', faixaRola ? 'w-max lg:w-full' : 'w-full']}>
+              {(faixaRola ? [0, 1] : [0]).map((copia) => (
+                <ul
+                  class:list={[
+                    'gap-3 lg:grid lg:w-full lg:grid-cols-[repeat(var(--colunas),minmax(0,1fr))] lg:gap-5',
+                    faixaRola ? 'flex' : 'grid w-full grid-cols-[repeat(var(--colunas),minmax(0,1fr))]',
+                    copia === 1 && 'copia-logos lg:hidden',
+                  ]}
+                  aria-hidden={copia === 1 ? 'true' : undefined}
+                >
+                  {logos.map((logo) => (
+                    <li class:list={['logo-cliente flex h-16 shrink-0 items-center justify-center px-3 lg:w-auto', faixaRola && 'w-[150px]']}>
+                      <img
+                        src={logo.src}
+                        alt={copia === 1 ? '' : logo.alt}
+                        width={logo.largura}
+                        height={logo.altura}
+                        loading="lazy"
+                        decoding="async"
+                        class="h-auto max-h-10 w-auto max-w-full object-contain"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )
+    }
   </div>
 </section>
 
@@ -218,9 +221,6 @@ const colunas = Math.min(totalLogos, 6);
   .flutua {
     animation: flutua 6s ease-in-out infinite;
   }
-  .flutua-2 {
-    animation-delay: -3s;
-  }
   @keyframes flutua {
     0%,
     100% {
@@ -230,21 +230,14 @@ const colunas = Math.min(totalLogos, 6);
       translate: 0 -6px;
     }
   }
-  /* Molduras entram deslizando até a posição deslocada */
-  .moldura-1 {
-    translate: -12px -12px;
-  }
-  .moldura-2 {
-    translate: 12px 12px;
-  }
+  /* Selo: só o texto em volta gira, bem devagar; o dente fica parado */
   @media (prefers-reduced-motion: no-preference) {
-    .entrada .moldura {
-      animation: moldura 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s backwards;
+    .selo-texto {
+      animation: gira 30s linear infinite;
     }
-    @keyframes moldura {
-      from {
-        translate: 0 0;
-        opacity: 0;
+    @keyframes gira {
+      to {
+        rotate: 360deg;
       }
     }
   }
