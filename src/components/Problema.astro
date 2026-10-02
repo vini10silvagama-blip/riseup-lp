@@ -1,37 +1,42 @@
 ---
 // 2. O problema real — onde o faturamento vaza (DOR)
 import { problema } from '../content/conteudo';
+import Botao from './ui/Botao.astro';
+import Icone from './ui/Icone.astro';
 ---
 
-<section class="bg-cinza-claro py-16 md:py-24" aria-labelledby="titulo-problema">
-  <!-- Computador: texto fixo à esquerda (5/12) e jornada à direita (7/12) · Celular: uma coluna -->
-  <div class="container-lp grid items-start gap-12 lg:grid-cols-12 lg:gap-[72px]">
-    <div class="lg:sticky lg:top-[120px] lg:col-span-5" data-revelar>
-      <p class="sobretitulo text-sm!">{problema.sobretitulo}</p>
-      <h2 id="titulo-problema" class="titulo-secao mt-4 text-balance">{problema.titulo}</h2>
-      <p class="mt-5 text-lg leading-[1.55] text-cinza-texto">{problema.subtitulo}</p>
-      <a
-        href={problema.link.href}
-        class="mt-7 inline-flex min-h-11 items-center text-base font-semibold text-preto underline decoration-1 underline-offset-[6px] transition-colors duration-200 hover:text-ciano-escuro"
+<section class="problema bg-cinza-claro py-16 lg:py-24" aria-labelledby="titulo-problema">
+  <!-- Computador: texto (5/12) centralizado na altura do cartão da jornada (7/12) · Celular: uma coluna -->
+  <div class="container-lp grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+    <div class="coluna-texto flex flex-col items-start lg:col-span-5">
+      <span
+        class="mb-6 flex size-[52px] items-center justify-center rounded-full border border-borda bg-branco shadow-[0_4px_12px_rgba(20,20,20,0.06)]"
+        aria-hidden="true"
       >
+        <Icone nome="filtro" class="size-6 text-ciano-escuro" espessura={1.75} />
+      </span>
+      <h2 id="titulo-problema" class="titulo-secao text-balance">{problema.titulo}</h2>
+      <p class="mt-5 text-lg leading-[1.55] text-cinza-texto">{problema.subtitulo}</p>
+      <Botao href={problema.link.href} class="mt-8 w-full py-4 font-semibold! shadow-[0_6px_18px_rgba(41,217,213,0.28)]! lg:w-auto">
         {problema.link.texto}
-      </a>
+      </Botao>
     </div>
 
-    <div class="lg:col-span-7">
-      <h3 class="mb-2 font-texto text-[15px] font-semibold text-cinza-texto">{problema.jornadaTitulo}</h3>
-      <ol data-revelar-filhos>
+    <div
+      class="cartao-jornada rounded-card border border-borda bg-branco px-5 py-6 shadow-[0_12px_32px_rgba(20,20,20,0.06)] lg:col-span-7 lg:px-10 lg:py-9"
+    >
+      <h3 class="mb-6 font-texto text-[15px] font-semibold text-ciano-escuro">{problema.jornadaTitulo}</h3>
+      <ol class="linha-tempo flex flex-col gap-6">
         {
           problema.etapas.map((etapa, i) => (
-            <li class="grid grid-cols-[36px_1fr] gap-x-4 border-b border-borda py-[18px] last:border-b-0">
-              <span
-                class="row-span-2 flex size-9 items-center justify-center rounded-full border-[1.5px] border-ciano bg-branco text-[15px] font-semibold text-preto"
-                aria-hidden="true"
-              >
+            <li class="etapa relative grid grid-cols-[var(--circulo)_1fr] gap-x-4">
+              <span class="numero relative z-[1] flex size-(--circulo) items-center justify-center rounded-full border-[1.5px] border-ciano bg-ciano text-base font-bold text-preto">
                 {i + 1}
               </span>
-              <span class="self-center text-[17px] leading-snug font-semibold text-preto">{etapa.nome}</span>
-              <span class="mt-1 text-base leading-[1.5] text-cinza-texto">{etapa.texto}</span>
+              <div class="texto pt-[7px] lg:pt-2">
+                <p class="text-[17px] leading-snug font-semibold text-preto lg:text-lg">{etapa.nome}</p>
+                <p class="mt-1 text-base leading-[1.5] text-cinza-texto">{etapa.texto}</p>
+              </div>
             </li>
           ))
         }
@@ -39,3 +44,116 @@ import { problema } from '../content/conteudo';
     </div>
   </div>
 </section>
+
+<style>
+  .linha-tempo {
+    --circulo: 36px;
+  }
+  @media (min-width: 1024px) {
+    .linha-tempo {
+      --circulo: 40px;
+    }
+  }
+
+  /* Trecho da linha vertical: do centro deste círculo ao centro do próximo (altura da etapa + 24px de espaço).
+     Fica atrás dos círculos; a última etapa não tem trecho. */
+  .etapa:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--circulo) / 2);
+    left: calc(var(--circulo) / 2 - 1px);
+    width: 2px;
+    height: calc(100% + 24px);
+    background: var(--color-ciano);
+    transform-origin: top;
+  }
+
+  /* Efeito de entrada: o estado inicial só existe quando o JS adiciona .preparada
+     (sem JS ou com movimento reduzido, tudo aparece no estado final) */
+  @media (prefers-reduced-motion: no-preference) {
+    .problema.preparada .coluna-texto {
+      opacity: 0;
+    }
+    .problema.preparada .etapa::before {
+      transform: scaleY(0);
+    }
+    .problema.preparada .numero {
+      background-color: var(--color-branco);
+    }
+    .problema.preparada .texto {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .problema .coluna-texto.entrou {
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
+    }
+    /* A linha desce em ritmo constante; cada trecho dura proporcionalmente ao seu tamanho (--dur e --atraso vêm do JS) */
+    .problema.ativa .etapa::before {
+      transform: scaleY(1);
+      transition: transform var(--dur, 0.35s) linear var(--atraso, 0s);
+    }
+    .problema.ativa .numero {
+      background-color: var(--color-ciano);
+      transition: background-color 0.25s ease-out var(--atraso, 0s);
+    }
+    .problema.ativa .texto {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.4s ease-out var(--atraso, 0s),
+        transform 0.4s ease-out var(--atraso, 0s);
+    }
+  }
+</style>
+
+<script>
+  // Linha do tempo: dispara uma vez quando 25% do cartão entra na tela
+  const secao = document.querySelector<HTMLElement>('.problema');
+  const cartao = secao?.querySelector<HTMLElement>('.cartao-jornada');
+  const coluna = secao?.querySelector<HTMLElement>('.coluna-texto');
+  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (secao && cartao && coluna && !semMovimento && 'IntersectionObserver' in window) {
+    secao.classList.add('preparada');
+    const DURACAO = 2.1; // segundos para a linha ir do 1 ao 7
+
+    const iniciar = () => {
+      // Cada etapa entra quando a linha chega ao seu círculo
+      const etapas = Array.from(secao.querySelectorAll<HTMLElement>('.etapa'));
+      const centros = etapas.map((e) => e.offsetTop);
+      const total = centros[centros.length - 1] - centros[0] || 1;
+      etapas.forEach((etapa, i) => {
+        const atraso = ((centros[i] - centros[0]) / total) * DURACAO;
+        const trecho = i < etapas.length - 1 ? ((centros[i + 1] - centros[i]) / total) * DURACAO : 0;
+        etapa.style.setProperty('--atraso', `${atraso}s`);
+        etapa.style.setProperty('--dur', `${trecho}s`);
+      });
+      secao.classList.add('ativa');
+      coluna.classList.add('entrou');
+    };
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) {
+          observador.disconnect();
+          iniciar();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observador.observe(cartao);
+
+    // No celular o texto fica acima do cartão: entra sozinho, assim que aparece na tela
+    if (!window.matchMedia('(min-width: 1024px)').matches) {
+      const observadorTexto = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) {
+          observadorTexto.disconnect();
+          coluna.classList.add('entrou');
+        }
+      });
+      observadorTexto.observe(coluna);
+    }
+  }
+</script>
