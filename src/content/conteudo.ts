@@ -59,7 +59,7 @@ export const hero = {
     destaque: 'faturamento previsível.',
   } as TituloDestaque,
   subtitulo:
-    'Um sistema de captação, conversão e retenção para a sua clínica crescer sem aumentar o caos e sem depender de você em cada decisão.',
+    'Do anúncio ao tratamento fechado: um sistema de captação, conversão e retenção para a sua clínica crescer sem depender de você em cada decisão.',
   botaoPrincipal: { texto: 'Quero meu diagnóstico gratuito', href: links.diagnostico },
   notaBotao: 'Gratuito e sem compromisso.',
   botaoSecundario: { texto: 'Ver como funciona', href: links.comoFunciona },
@@ -72,9 +72,9 @@ export const hero = {
   selo: { arcoCima: 'CAPTAÇÃO · CONVERSÃO', arcoBaixo: 'RETENÇÃO' },
   cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
   clientesTitulo: 'Clínicas que já trabalham com a gente',
-  // A faixa tem 6 posições e nunca some. Os logos vêm sozinhos da pasta public/img/clientes/
-  // (SVG ou PNG; o nome do arquivo vira o texto alternativo) e ocupam as primeiras posições.
-  // Posição sem logo mostra o marcador abaixo.
+  // A faixa nunca some. Os logos (até 10) vêm sozinhos da pasta public/img/clientes/, em ordem
+  // alfabética (SVG ou PNG). O texto alternativo vem do nome do arquivo, sem o número inicial:
+  // "01-clinica-sorriso.svg" → "Clinica Sorriso". Com menos de 6 logos, os marcadores abaixo completam.
   clientes: [
     '[LOGO CLIENTE 1]',
     '[LOGO CLIENTE 2]',
