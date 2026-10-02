@@ -71,9 +71,18 @@ export const hero = {
   // Texto do selo circular (decorativo), em dois arcos para nada ficar de cabeça para baixo
   selo: { arcoCima: 'CAPTAÇÃO · CONVERSÃO', arcoBaixo: 'RETENÇÃO' },
   cardCase: { titulo: 'R$ 55 mil → R$ 115 mil/mês', texto: 'Case real · 3 meses de contrato' },
-  // Os logos vêm sozinhos da pasta public/img/clientes/ (SVG ou PNG; o nome do arquivo vira o texto alternativo).
-  // Com a pasta vazia, a faixa inteira (título incluído) some.
   clientesTitulo: 'Clínicas que já trabalham com a gente',
+  // A faixa tem 6 posições e nunca some. Os logos vêm sozinhos da pasta public/img/clientes/
+  // (SVG ou PNG; o nome do arquivo vira o texto alternativo) e ocupam as primeiras posições.
+  // Posição sem logo mostra o marcador abaixo.
+  clientes: [
+    '[LOGO CLIENTE 1]',
+    '[LOGO CLIENTE 2]',
+    '[LOGO CLIENTE 3]',
+    '[LOGO CLIENTE 4]',
+    '[LOGO CLIENTE 5]',
+    '[LOGO CLIENTE 6]',
+  ],
 };
 
 // ---------------------------------------------------------------------

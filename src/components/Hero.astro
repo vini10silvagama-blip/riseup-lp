@@ -47,14 +47,12 @@ const logos = arquivosLogos
     return { src: `/img/clientes/${encodeURIComponent(arquivo)}`, alt, ...medidas(arquivo) };
   })
   .sort((a, b) => a.alt.localeCompare(b.alt, 'pt-BR'));
-const temLogos = logos.length > 0;
-// Com poucos logos a faixa não rola no celular: fica uma grade parada
-const faixaRola = logos.length >= 4;
-const colunas = Math.min(logos.length, 6);
+// Posições da faixa: os logos reais ocupam as primeiras; as que sobram mostram o marcador provisório
+const posicoes = Array.from({ length: Math.max(hero.clientes.length, logos.length) }, (_, i) => logos[i] ?? hero.clientes[i]);
 ---
 
 <!-- Topo: 72px abaixo do cabeçalho fixo (72px de cabeçalho no celular, 88px a partir de 768px) -->
-<section id="inicio" class="relative overflow-hidden pt-[104px] pb-16 md:pt-[136px] lg:pt-[160px] lg:pb-24" aria-labelledby="titulo-hero">
+<section id="inicio" class="relative overflow-hidden pt-[104px] pb-[72px] md:pt-[136px] lg:pt-[160px]" aria-labelledby="titulo-hero">
   <div class="container-lp">
     <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,600px)_440px] lg:justify-between lg:gap-x-12 xl:gap-x-20">
       <!-- Texto: tudo na mesma borda esquerda -->
@@ -160,60 +158,59 @@ const colunas = Math.min(logos.length, 6);
       </div>
     </div>
 
-    <!-- Logos de clientes (public/img/clientes/): em cinza; no celular, faixa que rola sozinha (pausável).
-         Sem nenhum arquivo na pasta, a faixa inteira não é exibida. -->
-    {
-      temLogos && (
-        <div class="mt-14 flex flex-col gap-4 md:mt-16" data-revelar>
-          <div class="flex items-center justify-between gap-3">
-            <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
-            {faixaRola && (
-              <button
-                type="button"
-                id="pausar-logos"
-                class="botao-pausa group inline-flex size-10 items-center justify-center rounded-full border border-borda text-preto lg:hidden"
-                aria-pressed="false"
-                aria-label="Pausar a faixa de logos"
+    <!-- Logos de clientes: 6 posições, sempre visíveis. Cada posição mostra o logo real de
+         public/img/clientes/ (em cinza) ou, sem arquivo, o marcador provisório.
+         No celular, faixa que rola sozinha (pausável). -->
+    <div class="mt-14 flex flex-col gap-4" data-revelar>
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-[13px] font-medium text-cinza-texto">{hero.clientesTitulo}</p>
+        <button
+          type="button"
+          id="pausar-logos"
+          class="botao-pausa group inline-flex size-10 items-center justify-center rounded-full border border-borda text-preto lg:hidden"
+          aria-pressed="false"
+          aria-label="Pausar a faixa de logos"
+        >
+          <Icone nome="pausa" class="size-4 group-aria-pressed:hidden" espessura={2.2} />
+          <Icone nome="play" class="hidden size-4 group-aria-pressed:block" />
+        </button>
+      </div>
+      <div class="faixa-logos faixa-rola -mx-5 overflow-hidden px-5 lg:mx-0 lg:overflow-visible lg:px-0" style={`--colunas: ${posicoes.length}`}>
+        <div class="trilho-logos flex w-max gap-3 lg:w-full">
+          {
+            [0, 1].map((copia) => (
+              <ul
+                class:list={[
+                  'flex gap-3 lg:grid lg:w-full lg:grid-cols-[repeat(var(--colunas),minmax(0,1fr))] lg:gap-5',
+                  copia === 1 && 'copia-logos lg:hidden',
+                ]}
+                aria-hidden={copia === 1 ? 'true' : undefined}
               >
-                <Icone nome="pausa" class="size-4 group-aria-pressed:hidden" espessura={2.2} />
-                <Icone nome="play" class="hidden size-4 group-aria-pressed:block" />
-              </button>
-            )}
-          </div>
-          <div
-            class:list={['faixa-logos', faixaRola ? 'faixa-rola -mx-5 overflow-hidden px-5 lg:mx-0 lg:overflow-visible lg:px-0' : '']}
-            style={`--colunas: ${colunas}`}
-          >
-            <div class:list={['trilho-logos flex gap-3', faixaRola ? 'w-max lg:w-full' : 'w-full']}>
-              {(faixaRola ? [0, 1] : [0]).map((copia) => (
-                <ul
-                  class:list={[
-                    'gap-3 lg:grid lg:w-full lg:grid-cols-[repeat(var(--colunas),minmax(0,1fr))] lg:gap-5',
-                    faixaRola ? 'flex' : 'grid w-full grid-cols-[repeat(var(--colunas),minmax(0,1fr))]',
-                    copia === 1 && 'copia-logos lg:hidden',
-                  ]}
-                  aria-hidden={copia === 1 ? 'true' : undefined}
-                >
-                  {logos.map((logo) => (
-                    <li class:list={['logo-cliente flex h-16 shrink-0 items-center justify-center px-3 lg:w-auto', faixaRola && 'w-[150px]']}>
+                {posicoes.map((posicao) =>
+                  typeof posicao === 'string' ? (
+                    <li class="logo-cliente flex h-16 w-[150px] shrink-0 items-center justify-center rounded-xl border-[1.5px] border-dashed border-[#C9D3D3] px-2 text-center text-xs text-cinza-texto lg:w-auto">
+                      {posicao}
+                    </li>
+                  ) : (
+                    <li class="logo-cliente flex h-16 w-[150px] shrink-0 items-center justify-center px-3 lg:w-auto">
                       <img
-                        src={logo.src}
-                        alt={copia === 1 ? '' : logo.alt}
-                        width={logo.largura}
-                        height={logo.altura}
+                        src={posicao.src}
+                        alt={copia === 1 ? '' : posicao.alt}
+                        width={posicao.largura}
+                        height={posicao.altura}
                         loading="lazy"
                         decoding="async"
                         class="h-auto max-h-10 w-auto max-w-full object-contain"
                       />
                     </li>
-                  ))}
-                </ul>
-              ))}
-            </div>
-          </div>
+                  ),
+                )}
+              </ul>
+            ))
+          }
         </div>
-      )
-    }
+      </div>
+    </div>
   </div>
 </section>
 
